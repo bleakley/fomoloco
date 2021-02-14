@@ -1,3 +1,4 @@
+const { strict } = require("assert");
 const cors = require("cors");
 const express = require("express");
 const app = express();
@@ -125,13 +126,15 @@ function sell(symbol, trader, socket) {
 }
 
 function generateShillMessage(symbol) {
-  let asset = getAssetBySymbol(symbol);
-  let name = _.sample([symbol, asset.name.split(" ")[0]]);
   return _.sample([
-    `${name} is going to the moon!`,
-    `I took out a mortage to put \$150K into ${name.toLowerCase()}`,
-    `short interest on ${name} is STILL GOING UP`,
-    `HOLD ${name.toUpperCase()}!!! APES TOGETHER STRONG`,
+    `short interest on \$${symbol} is STILL GOING UP`,
+    `HOLD \$${symbol}!!! APES TOGETHER STRONG`,
+    `BUY BUY \$${symbol} to the fucking M${"O".repeat(
+      _.sample([3, 4, 5, 8])
+    )}N ${"🚀".repeat(_.sample([3, 4, 5, 8]))}`,
+    `🤑 Just sold my house- gotta buy more \$${symbol} 🤑`,
+    `I'm so HORNY for \$${symbol} 😍🥵🥵💦`,
+    `APES STRONGER TOGETHER - BUY \$${symbol} 🍌🍌🍌🐵🐵🐵`,
   ]);
 }
 
@@ -154,10 +157,6 @@ class User {
 }
 
 let users = [];
-
-function getUser(username) {
-  return users.filter((u) => u.username === username)[0];
-}
 
 io.on("connection", function (socket) {
   let user = new User(getUsername(socket));
@@ -191,20 +190,32 @@ io.on("connection", function (socket) {
 
 class Bot {
   constructor() {
-    this.name = "bot";
+    this.name =
+      _.sample(["Sexy", "Diamond", "Juicy", "Horny", "Paper"]) +
+      _.sample(["Hands", "Slut", "Tendies"]) +
+      Math.floor(Math.random() * 100 + 10).toString();
     this.cash = 100;
     this.shares = {};
     for (let asset of assets) {
-      this.shares[asset.symbol] = 0;
+      this.shares[asset.symbol] = 1;
     }
+  }
+
+  tick() {
+    sell(_.sample(assets).symbol, this);
+    buy(_.sample(assets).symbol, this);
+    shill(_.sample(assets).symbol, this);
   }
 }
 
-bot = new Bot();
+const NUM_BOTS = 3;
+let bots = [];
+for (let i = 0; i < NUM_BOTS; i++) {
+  bots.push(new Bot());
+}
+
 function tickBots() {
-  sell(_.sample(assets).symbol, bot);
-  buy(_.sample(assets).symbol, bot);
-  shill(_.sample(assets).symbol, bot);
+  bots.forEach((b) => b.tick());
 }
 
 function generateNews() {
