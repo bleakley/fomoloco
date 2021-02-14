@@ -74,9 +74,10 @@ function broadcastPrices() {
   io.emit("prices", data);
 }
 
-function buy(symbol, username, socket) {
+function buy(symbol, trader, socket) {
+  let buyValue = Math.min(10, trader.cash);
   asset = getAssetBySymbol(symbol);
-  let buyValue = 10;
+
   let numShares =
     asset.poolShares -
     (asset.poolCash * asset.poolShares) / (asset.poolCash + buyValue);
@@ -84,6 +85,9 @@ function buy(symbol, username, socket) {
   asset.poolShares -= numShares;
   asset.poolCash += buyValue;
   asset.price = asset.poolCash / asset.poolShares;
+
+  trader.shares[symbol] += numShares;
+  trader.cash -= buyValue;
 
   if (socket) {
     socket.emit("order-result", {
@@ -95,9 +99,10 @@ function buy(symbol, username, socket) {
   }
 }
 
-function sell(symbol, username, socket) {
+function sell(symbol, trader, socket) {
+  let numShares = Math.min(10, trader.shares[symbol]);
+
   asset = getAssetBySymbol(symbol);
-  let numShares = 10;
   let sellValue =
     asset.poolCash -
     (asset.poolCash * asset.poolShares) / (asset.poolShares + numShares);
@@ -105,6 +110,10 @@ function sell(symbol, username, socket) {
   asset.poolShares += numShares;
   asset.poolCash -= sellValue;
   asset.price = asset.poolCash / asset.poolShares;
+
+  trader.shares[symbol] -= numShares;
+  trader.cash += sellValue;
+
   if (socket) {
     socket.emit("order-result", {
       status: "success",
@@ -126,46 +135,76 @@ function generateShillMessage(symbol) {
   ]);
 }
 
-function shill(symbol, username) {
+function shill(symbol, trader) {
   io.emit("hype-message", {
     message: generateShillMessage(symbol),
-    username: username,
+    username: trader.name,
   });
 }
 
+class User {
+  constructor(name) {
+    this.name = name;
+    this.cash = 100;
+    this.shares = {};
+    for (let asset of assets) {
+      this.shares[asset.symbol] = 0;
+    }
+  }
+}
+
+let users = [];
+
+function getUser(username) {
+  return users.filter((u) => u.username === username)[0];
+}
+
 io.on("connection", function (socket) {
-  let username = getUsername(socket);
-  console.log(`user ${username} has connected`);
+  let user = new User(getUsername(socket));
+  users.push(user);
+  console.log(`user ${user.name} has connected`);
   socket.emit("assets", assets);
 
   socket.on("buy-asset", (symbol) => {
-    console.log(`${username} requested to buy ${symbol}`);
-    buy(symbol, username, socket);
+    console.log(`${user.name} requested to buy ${symbol}`);
+    buy(symbol, user, socket);
   });
 
   socket.on("sell-asset", (symbol) => {
-    console.log(`${username} requested to sell ${symbol}`);
-    sell(symbol, username, socket);
+    console.log(`${user.name} requested to sell ${symbol}`);
+    sell(symbol, user, socket);
   });
 
   socket.on("shill-asset", (symbol) => {
-    console.log(`${username} requested to shill ${symbol}`);
-    shill(symbol, username);
+    console.log(`${user.name} requested to shill ${symbol}`);
+    shill(symbol, user);
   });
 
   socket.on("buy-upgrade", (upgrade) => {
-    console.log(`${username} requested upgrade ${upgrade}`);
+    console.log(`${user.name} requested upgrade ${upgrade}`);
   });
 
   socket.on("buy-powerup", (powerup) => {
-    console.log(`${username} requested powerup ${upgrade}`);
+    console.log(`${user.name} requested powerup ${upgrade}`);
   });
 });
 
+class Bot {
+  constructor() {
+    this.name = "bot";
+    this.cash = 100;
+    this.shares = {};
+    for (let asset of assets) {
+      this.shares[asset.symbol] = 0;
+    }
+  }
+}
+
+bot = new Bot();
 function tickBots() {
-  sell(_.sample(assets).symbol, "bot");
-  buy(_.sample(assets).symbol, "bot");
-  shill(_.sample(assets).symbol, "bot");
+  sell(_.sample(assets).symbol, bot);
+  buy(_.sample(assets).symbol, bot);
+  shill(_.sample(assets).symbol, bot);
 }
 
 function generateNews() {
