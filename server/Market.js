@@ -7,6 +7,7 @@ class Market {
 
     setInterval(() => this.broadcastPrices(), 1000);
     setInterval(() => this.generateNews(), 10000);
+    setInterval(() => this.updateMarketMetrics(), 1000);
   }
 
   generateInitialAssets() {
@@ -15,28 +16,44 @@ class Market {
         name: "Agricorp Conglomerated Holdings",
         symbol: "ACH",
         price: 10,
+        previousPrice: 10,
         poolShares: 100,
         poolCash: 100,
+        hype: 0,
+        velocity: 0,
       },
       {
         name: "Mooncoin",
         symbol: "MNC",
         price: 0.2,
+        previousPrice: 10,
         poolShares: 100,
         poolCash: 100,
+        hype: 0,
       },
       {
         name: "Brook Video Rental",
         symbol: "BVR",
         price: 60,
+        previousPrice: 60,
         poolShares: 100,
         poolCash: 100,
+        hype: 0,
+        velocity: 0,
       },
     ];
   }
 
   getAssetBySymbol(symbol) {
     return this.assets.filter((a) => a.symbol === symbol)[0];
+  }
+
+  updateMarketMetrics() {
+    this.assets.forEach((asset) => {
+      asset.velocity =
+        (asset.price - asset.previousPrice) / asset.previousPrice;
+      asset.hype = asset.hype * 0.95;
+    });
   }
 
   buy(symbol, trader, socket) {
@@ -103,6 +120,8 @@ class Market {
   }
 
   shill(symbol, trader) {
+    let asset = this.getAssetBySymbol(symbol);
+    asset.hype = 1 - (1 - asset.hype) * 0.95;
     this.io.emit("hype-message", {
       message: this.generateShillMessage(symbol),
       username: trader.name,
