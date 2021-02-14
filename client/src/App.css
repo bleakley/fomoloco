@@ -41,7 +41,7 @@
   display: grid;
   background-color: gray;
   grid-template-rows: 200px 500px 60px;
-  grid-template-columns: 500px 150px 500px 300px;
+  grid-template-columns: 500px 150px 400px 350px;
 }
 
 .CashLeaderboard {

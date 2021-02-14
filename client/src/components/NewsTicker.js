@@ -10,7 +10,7 @@ class Leaderboard extends Component {
   render() {
 
     return (
-      <Ticker offset="100%">
+      <Ticker>
         {({ index }) => (
           <span><b>{this.props.news[index % this.props.news.length].text}&nbsp;•&nbsp;</b></span>
         )}
