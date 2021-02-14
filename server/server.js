@@ -27,9 +27,27 @@ app.get("/status", (req, res) => {
 
 function generateInitialAssets() {
   return [
-    { name: "Agricorp Conglomerated Holdings", symbol: "ACH", price: 10 },
-    { name: "Mooncoin", symbol: "MNC", price: 0.2 },
-    { name: "Brook Video Rental", symbol: "BVR", price: 60 },
+    {
+      name: "Agricorp Conglomerated Holdings",
+      symbol: "ACH",
+      price: 10,
+      poolShares: 100,
+      poolCash: 100,
+    },
+    {
+      name: "Mooncoin",
+      symbol: "MNC",
+      price: 0.2,
+      poolShares: 100,
+      poolCash: 100,
+    },
+    {
+      name: "Brook Video Rental",
+      symbol: "BVR",
+      price: 60,
+      poolShares: 100,
+      poolCash: 100,
+    },
   ];
 }
 
@@ -46,6 +64,11 @@ function getAssetBySymbol(symbol) {
 function broadcastPrices() {
   data = [];
   for (asset of assets) {
+    // console.log(
+    //   `${asset.symbol} ${asset.price} ${asset.poolCash} ${asset.poolShares} ${
+    //     asset.poolShares * asset.poolCash
+    //   }`
+    // );
     data.push({ symbol: asset.symbol, price: asset.price });
   }
   io.emit("prices", data);
@@ -53,32 +76,54 @@ function broadcastPrices() {
 
 function buy(symbol, username, socket) {
   asset = getAssetBySymbol(symbol);
-  asset.price = asset.price * 0.9;
+  let buyValue = 10;
+  let numShares =
+    asset.poolShares -
+    (asset.poolCash * asset.poolShares) / (asset.poolCash + buyValue);
+
+  asset.poolShares -= numShares;
+  asset.poolCash += buyValue;
+  asset.price = asset.poolCash / asset.poolShares;
+
   if (socket) {
     socket.emit("order-result", {
       status: "success",
       symbol: symbol,
-      shares: 10,
-      money: -10 * asset.price,
+      shares: numShares,
+      cash: -buyValue,
     });
   }
 }
 
 function sell(symbol, username, socket) {
   asset = getAssetBySymbol(symbol);
-  asset.price = asset.price * 1.1;
+  let numShares = 10;
+  let sellValue =
+    asset.poolCash -
+    (asset.poolCash * asset.poolShares) / (asset.poolShares + numShares);
+
+  asset.poolShares += numShares;
+  asset.poolCash -= sellValue;
+  asset.price = asset.poolCash / asset.poolShares;
   if (socket) {
     socket.emit("order-result", {
       status: "success",
       symbol: symbol,
-      shares: -10,
-      money: 10 * asset.price,
+      shares: -numShares,
+      cash: sellValue,
     });
   }
 }
 
 function generateShillMessage(symbol) {
-  return `${symbol} is going to the moon!`;
+  let asset = getAssetBySymbol(symbol);
+  let name = _.sample([symbol, asset.name.split(" ")[0]]);
+  return _.sample([
+    `${name} is going to the moon!`,
+    `I took out a mortage to put \$150K into ${name.toLowerCase()}`,
+    `short interest on ${name} is STILL GOING UP`,
+    `HOLD ${name.toUpperCase()}!!! APES TOGETHER STRONG`,
+  ]);
 }
 
 function shill(symbol, username) {
@@ -124,7 +169,7 @@ function tickBots() {
 }
 
 setInterval(tickBots, 2000);
-setInterval(broadcastPrices, 2000);
+setInterval(broadcastPrices, 1000);
 
 http.listen(port, () => {
   console.log("listening on port " + port + "...");
