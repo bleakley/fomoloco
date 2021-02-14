@@ -168,8 +168,29 @@ function tickBots() {
   shill(_.sample(assets).symbol, "bot");
 }
 
+function generateNews() {
+  let asset = _.sample(assets);
+  let name = _.sample([`\$${asset.symbol}`, asset.name]);
+
+  let message = _.sample([
+    `${asset.name} announces cloud-first quantum mainnet for Q${_.sample([
+      1,
+      2,
+      3,
+      4,
+    ])}`,
+    `8 killed and 35 wounded in \$${asset.symbol}-inspired massacre`,
+    `Hackers from ${_.sample([5, 6, 7, 9])}chan exploit ${
+      asset.name
+    } zero day vulnerability`,
+    `Analysts say \$${asset.symbol} trading 3 times above target`,
+  ]);
+
+  io.emit("news", message);
+}
 setInterval(tickBots, 2000);
 setInterval(broadcastPrices, 1000);
+setInterval(generateNews, 10000);
 
 http.listen(port, () => {
   console.log("listening on port " + port + "...");

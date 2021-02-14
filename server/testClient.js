@@ -20,6 +20,10 @@ socket.on("hype-message", (data) => {
   console.log(`${data.username} says "${data.message}"`);
 });
 
+socket.on("news", (message) => {
+  console.log(message);
+});
+
 socket.on("order-result", (data) => {
   if (data.status === "success") {
     console.log(`Gained ${data.shares} ${data.symbol} and \$${data.cash}"`);
