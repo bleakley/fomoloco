@@ -43,29 +43,31 @@ function getAssetBySymbol(symbol) {
   return assets.filter((a) => a.symbol === symbol)[0];
 }
 
-function broadcastPrice(asset) {
-  io.emit("price", { symbol: asset.symbol, price: asset.price });
+function broadcastPrices() {
+  data = [];
+  for (asset of assets) {
+    data.push({ symbol: asset.symbol, price: asset.price });
+  }
+  io.emit("prices", data);
 }
 
-function buy(order, username) {
-  asset = getAssetBySymbol(order.symbol);
+function buy(symbol, username) {
+  asset = getAssetBySymbol(symbol);
   asset.price = asset.price * 0.9;
-  broadcastPrice(asset);
 }
 
-function sell(order, username) {
-  asset = getAssetBySymbol(order.symbol);
+function sell(symbol, username) {
+  asset = getAssetBySymbol(symbol);
   asset.price = asset.price * 1.1;
-  broadcastPrice(asset);
 }
 
 function generateShillMessage(symbol) {
   return `${symbol} is going to the moon!`;
 }
 
-function shill(shillRequest, username) {
-  io.emit("shill", {
-    message: generateShillMessage(shillRequest.symbol),
+function shill(symbol, username) {
+  io.emit("hype-message", {
+    message: generateShillMessage(symbol),
     username: username,
   });
 }
@@ -75,35 +77,38 @@ io.on("connection", function (socket) {
   console.log(`user ${username} has connected`);
   socket.emit("assets", assets);
 
-  socket.on("buy-asset", (order) => {
-    console.log(`${username} requested to buy ${order.shares} ${order.symbol}`);
-    buy(order, username);
+  socket.on("buy-asset", (symbol) => {
+    console.log(`${username} requested to buy ${symbol}`);
+    buy(symbol, username);
   });
 
-  socket.on("sell-asset", (order) => {
-    console.log(
-      `${username} requested to sell ${order.shares} ${order.symbol}`
-    );
-    sell(order, username);
+  socket.on("sell-asset", (symbol) => {
+    console.log(`${username} requested to sell ${symbol}`);
+    sell(symbol, username);
   });
 
-  socket.on("shill-asset", (shillRequest) => {
-    console.log(`${username} requested to shill ${shillRequest.symbol}`);
-    shill(shillRequest, username);
+  socket.on("shill-asset", (symbol) => {
+    console.log(`${username} requested to shill ${symbol}`);
+    shill(symbol, username);
   });
 
   socket.on("buy-upgrade", (upgrade) => {
-    console.log(`${username} requested to shill ${upgrade.name}`);
+    console.log(`${username} requested upgrade ${upgrade}`);
+  });
+
+  socket.on("buy-powerup", (powerup) => {
+    console.log(`${username} requested powerup ${upgrade}`);
   });
 });
 
 function tickBots() {
-  sell({ symbol: _.sample(assets).symbol, shares: 10 }, "bot");
-  buy({ symbol: _.sample(assets).symbol, shares: 10 }, "bot");
-  shill({ symbol: _.sample(assets).symbol }, "bot");
+  sell(_.sample(assets).symbol, "bot");
+  buy(_.sample(assets).symbol, "bot");
+  shill(_.sample(assets).symbol, "bot");
 }
 
 setInterval(tickBots, 2000);
+setInterval(broadcastPrices, 2000);
 
 http.listen(port, () => {
   console.log("listening on port " + port + "...");

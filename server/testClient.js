@@ -8,15 +8,17 @@ socket.on("assets", (assets) => {
   }
 });
 
-socket.on("price", (data) => {
-  console.log(`${data.symbol} now at ${data.price}`);
+socket.on("prices", (assets) => {
+  for (asset of assets) {
+    console.log(`${asset.symbol} ${asset.price}`);
+  }
 });
 
-socket.on("shill", (data) => {
+socket.on("hype-message", (data) => {
   console.log(`${data.username} says "${data.message}"`);
 });
 
-socket.emit("buy-asset", { symbol: "BVR", shares: 10 });
-socket.emit("shill-asset", { symbol: "BVR" });
-socket.emit("sell-asset", { symbol: "BVR", shares: 10 });
-socket.emit("buy-upgrade", { name: "botnet" });
+socket.emit("buy-asset", "BVR");
+socket.emit("shill-asset", "BVR");
+socket.emit("sell-asset", "BVR");
+socket.emit("buy-upgrade", "botnet");
