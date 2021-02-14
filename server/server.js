@@ -91,11 +91,11 @@ function buy(symbol, trader, socket) {
   trader.cash -= buyValue;
 
   if (socket) {
-    socket.emit("order-result", {
-      status: "success",
+    socket.emit("transaction", {
+      type: "buy",
       symbol: symbol,
       shares: numShares,
-      cash: -buyValue,
+      cash: buyValue,
     });
   }
 }
@@ -116,10 +116,10 @@ function sell(symbol, trader, socket) {
   trader.cash += sellValue;
 
   if (socket) {
-    socket.emit("order-result", {
-      status: "success",
+    socket.emit("transaction", {
+      type: "sell",
       symbol: symbol,
-      shares: -numShares,
+      shares: numShares,
       cash: sellValue,
     });
   }
@@ -161,6 +161,12 @@ let users = [];
 io.on("connection", function (socket) {
   let user = new User(getUsername(socket));
   users.push(user);
+
+  socket.emit("transaction", {
+    type: "starting-cash",
+    cash: user.cash,
+  });
+
   console.log(`user ${user.name} has connected`);
   socket.emit("assets", assets);
 

@@ -24,13 +24,23 @@ socket.on("news", (message) => {
   console.log(message);
 });
 
-socket.on("order-result", (data) => {
-  if (data.status === "success") {
-    console.log(`Gained ${data.shares} ${data.symbol} and \$${data.cash}"`);
-  } else {
-    console.log(
-      "Due to highly volatile market conditions, we are unable to process your transaction at this time."
-    );
+socket.on("transaction", (transaction) => {
+  switch (transaction.type) {
+    case "buy":
+      console.log(
+        `Bought ${transaction.shares} ${transaction.symbol} for \$${transaction.cash}"`
+      );
+      break;
+    case "sell":
+      console.log(
+        `Sold ${transaction.shares} ${transaction.symbol} for \$${transaction.cash}"`
+      );
+      break;
+    case "starting-cash":
+      console.log(
+        `You borrow \$${transaction.cash} from your wife's boyfriend to begin trading`
+      );
+      break;
   }
 });
 
