@@ -18,6 +18,16 @@ socket.on("hype-message", (data) => {
   console.log(`${data.username} says "${data.message}"`);
 });
 
+socket.on("order-result", (data) => {
+  if (data.status === "success") {
+    console.log(`Gained ${data.shares} ${data.symbol} and \$${data.money}"`);
+  } else {
+    console.log(
+      "Due to highly volatile market conditions, we are unable to process your transaction at this time."
+    );
+  }
+});
+
 socket.emit("buy-asset", "BVR");
 socket.emit("shill-asset", "BVR");
 socket.emit("sell-asset", "BVR");

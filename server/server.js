@@ -51,14 +51,30 @@ function broadcastPrices() {
   io.emit("prices", data);
 }
 
-function buy(symbol, username) {
+function buy(symbol, username, socket) {
   asset = getAssetBySymbol(symbol);
   asset.price = asset.price * 0.9;
+  if (socket) {
+    socket.emit("order-result", {
+      status: "success",
+      symbol: symbol,
+      shares: 10,
+      money: -10 * asset.price,
+    });
+  }
 }
 
-function sell(symbol, username) {
+function sell(symbol, username, socket) {
   asset = getAssetBySymbol(symbol);
   asset.price = asset.price * 1.1;
+  if (socket) {
+    socket.emit("order-result", {
+      status: "success",
+      symbol: symbol,
+      shares: -10,
+      money: 10 * asset.price,
+    });
+  }
 }
 
 function generateShillMessage(symbol) {
@@ -79,12 +95,12 @@ io.on("connection", function (socket) {
 
   socket.on("buy-asset", (symbol) => {
     console.log(`${username} requested to buy ${symbol}`);
-    buy(symbol, username);
+    buy(symbol, username, socket);
   });
 
   socket.on("sell-asset", (symbol) => {
     console.log(`${username} requested to sell ${symbol}`);
-    sell(symbol, username);
+    sell(symbol, username, socket);
   });
 
   socket.on("shill-asset", (symbol) => {
