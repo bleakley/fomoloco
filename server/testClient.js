@@ -17,7 +17,7 @@ socket.on("prices", (assets) => {
 });
 
 socket.on("hype-message", (data) => {
-  console.log(`${data.username} says "${data.message}"`);
+  console.log(`${data.name} says "${data.text}"`);
 });
 
 socket.on("news", (message) => {

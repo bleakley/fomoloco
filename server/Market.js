@@ -123,8 +123,8 @@ class Market {
     let asset = this.getAssetBySymbol(symbol);
     asset.hype = 1 - (1 - asset.hype) * 0.95;
     this.io.emit("hype-message", {
-      message: this.generateShillMessage(symbol),
-      username: trader.name,
+      text: this.generateShillMessage(symbol),
+      name: trader.name,
     });
   }
 
