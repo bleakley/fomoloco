@@ -56,8 +56,8 @@ class Bot {
     if (Math.random() < 0.3) {
       this.buySomething();
     }
-    if (Math.random() < 0.3) {
-      this.shillSomething();
+    if (Math.random() < 0.1) {
+      setTimeout(() => this.shillSomething(), Math.random() * 2000);
     }
   }
 

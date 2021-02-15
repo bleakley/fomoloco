@@ -20,7 +20,7 @@ const getDefaultState = () => ({
   leaderboard: [],
   leaderboardLastUpdated: Date.now(),
   news: [
-    { text: "Florida man wins lottery" },
+    { text: "Florida man wins lottery after receiving vaccine" },
     {
       text:
         "New study links black-rinded futsu squash to lower rates of Groat's disease",
@@ -160,7 +160,7 @@ class Main extends Component {
             cooldowns={{
               buy: 5,
               sell: 5,
-              hype: 20
+              hype: 20,
             }}
             playerHoldings={this.state.playerHoldings}
             securities={this.state.securities}

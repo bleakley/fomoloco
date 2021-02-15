@@ -243,9 +243,9 @@ class Market {
           "Hedge fund manager warns",
           "Regulators warn",
         ])} of ${_.sample([
-          "irrational exuberance",
-          "unusual volatility",
-          "imminent collapse",
+          "\"irrational exuberance\"",
+          "\"unusual\" market volatility",
+          "\"imminent collapse\"",
         ])} in \$${asset.symbol} price`,
       ]);
     } else {
