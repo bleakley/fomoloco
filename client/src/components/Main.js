@@ -9,7 +9,6 @@ import HypeFeed from "./HypeFeed";
 import SecuritiesDashboard from "./SecuritiesDashboard";
 import openConnection from "socket.io-client";
 
-let socket = openConnection("http://localhost:8080", { query: "username=dfv" });
 
 const HYPE_MESSAGE_PRUNE_COUNT = 20;
 const PRICE_HISTORY_PRUNE_COUNT = 500;
@@ -32,6 +31,9 @@ class Main extends Component {
       hype: [],
       securities: {},
     };
+
+    let socket = openConnection("http://localhost:8080", { query: "username=dfv" });
+    this.socket = socket
 
     socket.on("hype-message", (message) => {
       if (this.state.hype.length > 2 * HYPE_MESSAGE_PRUNE_COUNT) {
@@ -99,10 +101,10 @@ class Main extends Component {
           <HypeFeed hype={this.state.hype} />
         </Card>
         <Card className="SecuritiesDashboard">
-          <SecuritiesDashboard securities={this.state.securities} />
+          <SecuritiesDashboard securities={this.state.securities} socket={this.socket} />
         </Card>
         <Card className="NewsTicker">
-          <NewsTicker news={this.state.news} />
+          <NewsTicker news={this.state.news}  />
         </Card>
       </div>
     );
