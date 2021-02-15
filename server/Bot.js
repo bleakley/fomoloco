@@ -18,9 +18,18 @@ class Bot {
   }
 
   tick() {
-    this.sellSomething();
-    this.buySomething();
-    this.shillSomething();
+    if (Math.random() < 0.5) {
+      this.sellSomething();
+    }
+    if (Math.random() < 0.5) {
+      this.buySomething();
+    }
+    if (Math.random() < 0.5) {
+      this.buySomethingRandom();
+    }
+    if (Math.random() < 0.5) {
+      this.shillSomething();
+    }
   }
 
   sellSomething() {
@@ -37,6 +46,10 @@ class Bot {
       }
     });
     this.market.sell(assetToSell.symbol, this);
+  }
+
+  buySomethingRandom() {
+    this.market.buy(_.sample(this.market.assets).symbol, this);
   }
 
   buySomething() {
