@@ -98,7 +98,7 @@ class TransactionPanel extends Component {
                 <td>{_.last(this.props.securities[symbol])}{" "}</td>
                 <td><TransactionButton label="Buy" onClick={() => this.buy(symbol)} time={this.state.buyTime} cooldown={this.props.cooldowns.buy} /></td>
                 <td><TransactionButton label="Sell"onClick={() => this.sell(symbol)} time={this.state.sellTime} cooldown={this.props.cooldowns.sell} /></td>
-                <td><TransactionButton label="Shill" onClick={() => this.hype(symbol)} time={this.state.hypeTime} cooldown={this.props.cooldowns.hype} /></td>
+                <td><TransactionButton label="Hype" onClick={() => this.hype(symbol)} time={this.state.hypeTime} cooldown={this.props.cooldowns.hype} /></td>
               </tr>
             ))}
           </tbody>
