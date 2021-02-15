@@ -253,7 +253,7 @@ class Market {
         ])} of ${_.sample([
           '"irrational exuberance"',
           '"unusual" market volatility',
-          '"imminent collapse"',
+          '"imminent" collapse',
         ])} in \$${asset.symbol} price`,
       ]);
     } else {
@@ -266,14 +266,27 @@ class Market {
             "multi-cloud",
             "decentralized",
             "hybrid",
-          ])} ${_.sample(["quantum ", ""])}${_.sample([
+            "scalable",
+            '"revolutionary"',
+          ])} ${_.sample([
+            "quantum ",
+            "quantum-ready",
+            "quantum-resistant",
+            "enterprise",
+          ])}${_.sample([
             "mainnet",
             "augmented-reality platform",
             "AI platform",
+            "smart contract framework",
+            "deep-learning model",
           ])} for Q${_.sample([1, 2, 3, 4])}`,
           `${asset.name} receives approval to open ${Math.round(
             significance * 20 + 2
           )} new dispensaries`,
+          `Clinical trials show ${asset.name} ${_.sample([
+            "synthetic cannabinoids",
+            "psilocybin mushroom extracts",
+          ])} hold promise for treating Groat's syndrome`,
         ]);
         asset.fundamentalPrice *= 1 + significance;
       } else {
@@ -281,9 +294,27 @@ class Market {
           `${Math.round(significance * 40 + 1)} wounded in \$${
             asset.symbol
           }-related incident`,
-          `Hackers from ${_.sample([5, 6, 7, 9])}chan exploit ${
-            asset.name
-          } zero-day vulnerability`,
+          `${_.sample([
+            _.sample([5, 6, 7, 9].toString() + "chan"),
+            "Russian",
+            "Chinese",
+            "Ransomware",
+          ])} hackers exploit ${asset.name} zero-day vulnerability`,
+          `${asset.name} announcements draw ${_.sample([
+            "SEC",
+            "FDA",
+            "CFPB",
+            "CFTC",
+            "anti-trust",
+            "congressional",
+          ])} scrutiny`,
+          `${asset.name} CEO arrested on ${_.sample([
+            "embezzlement",
+            "drug",
+            "DUI",
+            "insider trading",
+            "conspiracy",
+          ])} charges`,
         ]);
         asset.fundamentalPrice /= 1 + significance;
       }
