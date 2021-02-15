@@ -44,6 +44,11 @@ socket.on("transaction", (transaction) => {
   }
 });
 
+
+socket.on("leaderboard", (leaderboard) => {
+  console.log(leaderboard);
+});
+
 socket.emit("buy-asset", "BVR");
 socket.emit("shill-asset", "BVR");
 socket.emit("sell-asset", "BVR");

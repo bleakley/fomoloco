@@ -33,11 +33,9 @@ const getUsername = (socket) => {
   return socket.handshake.query.username;
 };
 
-let users = [];
-
 io.on("connection", function (socket) {
   let user = new User(getUsername(socket), market);
-  users.push(user);
+  market.addTrader(user);
 
   socket.emit("transaction", {
     type: "starting-cash",
@@ -70,13 +68,12 @@ io.on("connection", function (socket) {
   });
 });
 
-let bots = [];
 for (let i = 0; i < NUM_BOTS; i++) {
-  bots.push(new Bot(market));
+  market.addTrader(new Bot(market));
 }
 
 function tickBots() {
-  bots.forEach((b) => b.tick());
+  market.getBots().forEach((b) => b.tick());
 }
 
 setInterval(tickBots, 2000);

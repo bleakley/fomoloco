@@ -1,15 +1,27 @@
 const _ = require("lodash");
 
-const roundToCent = (num) => Math.ceil(num * 100) / 100;
+const LEADERBOARD_SIZE = 10;
+const TRADER_TYPE_BOT = 0;
 
 class Market {
   constructor(io) {
     this.io = io;
     this.generateInitialAssets();
+    this.traders = [];
 
     setInterval(() => this.broadcastPrices(), 1000);
     setInterval(() => this.generateNews(), 10000);
     setInterval(() => this.updateMarketMetrics(), 1000);
+    setInterval(() => this.broadcastLeaderboard(), 5000);
+  }
+
+  addTrader(trader) {
+    this.traders.push(trader);
+    trader.startingNetWorth = this.getNetWorth(trader);
+  }
+
+  getBots() {
+    return this.traders.filter((t) => t.type === TRADER_TYPE_BOT);
   }
 
   generateInitialAssets() {
@@ -68,7 +80,7 @@ class Market {
 
     asset.poolShares -= numShares;
     asset.poolCash += buyValue;
-    asset.price = roundToCent(asset.poolCash / asset.poolShares);
+    asset.price = asset.poolCash / asset.poolShares;
 
     trader.shares[symbol] += numShares;
     trader.cash -= buyValue;
@@ -95,7 +107,7 @@ class Market {
 
     asset.poolShares += numShares;
     asset.poolCash -= sellValue;
-    asset.price = roundToCent(asset.poolCash / asset.poolShares);
+    asset.price = asset.poolCash / asset.poolShares;
 
     trader.shares[symbol] -= numShares;
     trader.cash += sellValue;
@@ -165,6 +177,30 @@ class Market {
     ]);
 
     this.io.emit("news", { text: message });
+  }
+
+  getNetWorth(trader) {
+    let netWorth = trader.cash;
+    this.assets.forEach((asset) => {
+      netWorth += trader.shares[asset.symbol] * asset.price;
+    });
+    return netWorth;
+  }
+
+  broadcastLeaderboard() {
+    let leaderboard = [];
+    this.traders.forEach((trader) => {
+      leaderboard.push({
+        name: trader.name,
+        netWorth: this.getNetWorth(trader),
+        cash: trader.cash,
+        profit: this.getNetWorth(trader) - trader.startingNetWorth,
+      });
+    });
+    leaderboard = leaderboard
+      .sort((a, b) => b.netWorth - a.netWorth)
+      .slice(0, Math.min(LEADERBOARD_SIZE, leaderboard.length));
+    this.io.emit("leaderboard", leaderboard);
   }
 }
 
