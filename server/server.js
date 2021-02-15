@@ -20,8 +20,6 @@ const port = 8080;
 
 let Market = require("./Market.js");
 let User = require("./User.js");
-let Bot = require("./Bot.js");
-const NUM_BOTS = 8;
 
 app.get("/status", (req, res) => {
   res.send({ status: "online" });
@@ -71,16 +69,6 @@ io.on("connection", function (socket) {
     console.log(`${user.name} requested powerup ${upgrade}`);
   });
 });
-
-for (let i = 0; i < NUM_BOTS; i++) {
-  market.addTrader(new Bot(market));
-}
-
-function tickBots() {
-  market.getBots().forEach((b) => b.tick());
-}
-
-setInterval(tickBots, 2000);
 
 http.listen(port, () => {
   console.log("listening on port " + port + "...");

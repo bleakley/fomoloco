@@ -2,6 +2,7 @@ const _ = require("lodash");
 const utils = require("./utils.js");
 const LEADERBOARD_SIZE = 10;
 const TRADER_TYPE_BOT = 0;
+const Bot = require("./Bot.js");
 
 class Market {
   constructor(io) {
@@ -9,10 +10,19 @@ class Market {
     this.generateInitialAssets();
     this.traders = [];
 
+    for (let i = 0; i < 15; i++) {
+      this.addTrader(new Bot(this));
+    }
+
     setInterval(() => this.broadcastPrices(), 1000);
     setInterval(() => this.generateNews(), 10000);
     setInterval(() => this.updateMarketMetrics(), 1000);
     setInterval(() => this.broadcastLeaderboard(), 5000);
+    setInterval(() => this.tickBots(), 2000);
+  }
+
+  tickBots() {
+    this.getBots().forEach((b) => b.tick());
   }
 
   addTrader(trader) {
@@ -216,9 +226,21 @@ class Market {
       this.getExuberance(asset)
     );
     if (this.getExuberance(asset) > 1 && Math.random() < 0.4) {
-      message = `Analysts say \$${asset.symbol} trading ${Math.round(
-        asset.price / asset.fundamentalPrice
-      )} times above target`;
+      message = _.sample([
+        `Analysts say \$${asset.symbol} trading ${Math.round(
+          asset.price / asset.fundamentalPrice
+        )} times above target`,
+        `${_.sample([
+          "Fed chairman warns",
+          "Fintech CEO warns",
+          "Hedge fund manager warns",
+          "Regulators warn",
+        ])} of ${_.sample([
+          "irrational exuberance",
+          "unusual volatility",
+          "imminent collapse",
+        ])} ins \$${asset.symbol} price`,
+      ]);
     } else {
       asset = _.sample(this.assets);
       if (Math.random() < 0.5) {
