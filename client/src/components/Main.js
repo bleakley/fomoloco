@@ -1,5 +1,4 @@
 import { Card } from "@material-ui/core";
-import EventEmitter from "events";
 import _ from "lodash";
 import React, { Component } from "react";
 import "../App.css";
@@ -24,7 +23,7 @@ const getDefaultState = () => ({
     { text: "Florida man wins lottery" },
     {
       text:
-        "New study links futsu black-rinded squash to lower rates of Groat's disease",
+        "New study links black-rinded futsu squash to lower rates of Groat's disease",
     },
   ],
   hype: [],
@@ -124,23 +123,23 @@ class Main extends Component {
 
   componentDidMount() {
     window.focused = true;
-    window.addEventListener("focus", this.onFocus)
-    window.addEventListener("blur", this.onLoseFocus)
+    window.addEventListener("focus", this.onFocus);
+    window.addEventListener("blur", this.onLoseFocus);
   }
 
   componentWillUnmount() {
-    window.removeEventListener("focus", this.onFocus)
-    window.removeEventListener("blur", this.onLoseFocus)
+    window.removeEventListener("focus", this.onFocus);
+    window.removeEventListener("blur", this.onLoseFocus);
   }
 
-  onFocus = e => {
+  onFocus = (e) => {
     window.focused = true;
     this.setState(getDefaultState());
-  }
-  onLoseFocus = e => {
+  };
+  onLoseFocus = (e) => {
     window.focused = false;
     this.setState(getDefaultState());
-  }
+  };
 
   render() {
     return (

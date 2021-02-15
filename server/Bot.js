@@ -1,7 +1,6 @@
 const _ = require("lodash");
 const utils = require("./utils");
-
-const TRADER_TYPE_BOT = 0;
+const constants = require("./constants");
 
 class Bot {
   constructor(market) {
@@ -35,7 +34,7 @@ class Bot {
     this.velocityWeight = Math.random();
     this.fundamentalWeight = Math.random();
     this.focus = 2 * Math.random() + 0.5;
-    this.type = TRADER_TYPE_BOT;
+    this.type = constants.TRADER_TYPE_BOT;
 
     for (let asset of market.assets) {
       this.shares[asset.symbol] = 1;

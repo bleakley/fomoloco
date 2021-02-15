@@ -1,0 +1,14 @@
+const MEME_TYPE_NONE = 0;
+const MEME_TYPE_APE = 1;
+const MEME_TYPE_ROCKET = 2;
+
+const TRADER_TYPE_BOT = 0;
+const TRADER_TYPE_PLAYER = 1;
+
+module.exports = {
+  MEME_TYPE_NONE,
+  MEME_TYPE_APE,
+  MEME_TYPE_ROCKET,
+  TRADER_TYPE_BOT,
+  TRADER_TYPE_PLAYER,
+};

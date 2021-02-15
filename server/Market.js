@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const utils = require("./utils.js");
+const constants = require("./constants")
 const LEADERBOARD_SIZE = 10;
-const TRADER_TYPE_BOT = 0;
 const Bot = require("./Bot.js");
 
 class Market {
@@ -31,7 +31,7 @@ class Market {
   }
 
   getBots() {
-    return this.traders.filter((t) => t.type === TRADER_TYPE_BOT);
+    return this.traders.filter((t) => t.type === constants.TRADER_TYPE_BOT);
   }
 
   getTraderByName(name) {
@@ -182,12 +182,19 @@ class Market {
         _.sample([3, 4, 5, 8])
       )}`,
       `🤑 Just sold my ${_.sample([
+        "",
+        "sister's ",
+        "girlfriend's ",
+        "boyfriend's ",
+      ])}${_.sample([
         "house",
         "car",
         "star wars miniatures",
       ])}- gotta buy more \$${symbol} 🤑`,
       `I'm so HORNY for \$${symbol} 😍🥵🥵💦`,
-      `APES STRONGER TOGETHER - BUY \$${symbol} 🍌🍌🍌🐵🐵🐵`,
+      `APES STRONGER TOGETHER - BUY \$${symbol} ${"🍌".repeat(
+        _.sample([1, 2, 3])
+      )}${"🐵".repeat(_.sample([1, 2, 3]))}`,
       `buy \$${symbol} THIS IS THE WAY `,
       `The squeeze has not squoze. If you sell \$${symbol} now you will regret it.`,
       `🙌💎 \$${symbol} 💎🙌`,
