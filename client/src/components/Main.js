@@ -30,6 +30,8 @@ class Main extends Component {
       news: [{text: "Florida man wins lottery"}, {text: "New study links futsu black-rinded squash to lower rates of Groat's disease"}],
       hype: [],
       securities: {},
+      cash: 0,
+      playerHoldings: {}
     };
 
     let socket = openConnection("http://localhost:8080", { query: "username=dfv" });
@@ -88,6 +90,13 @@ class Main extends Component {
       }
       this.setState({ news: updatedNews });
     });
+
+    socket.on("transaction", (transaction) => {
+      this.setState({ cash: transaction.newCash });
+      if (!this.state.playerHoldings.hasOwnProperty(transaction.symbol)) {
+        this.setState({ playerHoldings: { ...this.state.playerHoldings, [transaction.symbol]: transaction.newShares }})
+      }
+    });
   }
 
   render() {
@@ -101,7 +110,7 @@ class Main extends Component {
           <HypeFeed hype={this.state.hype} />
         </Card>
         <Card className="SecuritiesDashboard">
-          <SecuritiesDashboard securities={this.state.securities} socket={this.socket} />
+          <SecuritiesDashboard cash={this.state.cash} playerHoldings={this.state.playerHoldings} securities={this.state.securities} socket={this.socket} />
         </Card>
         <Card className="NewsTicker">
           <NewsTicker news={this.state.news}  />

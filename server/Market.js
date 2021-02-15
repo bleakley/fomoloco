@@ -78,7 +78,9 @@ class Market {
         type: "buy",
         symbol: symbol,
         shares: numShares,
-        cash: buyValue,
+        price: buyValue,
+        newCash: trader.cash,
+        newShares: trader.shares[symbol]
       });
     }
   }
@@ -103,7 +105,9 @@ class Market {
         type: "sell",
         symbol: symbol,
         shares: numShares,
-        cash: sellValue,
+        price: sellValue,
+        newCash: trader.cash,
+        newShares: trader.shares[symbol]
       });
     }
   }
