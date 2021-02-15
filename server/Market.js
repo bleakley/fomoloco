@@ -95,13 +95,20 @@ class Market {
     });
   }
 
-  buy(symbol, trader, socket) {
-    let buyValue = Math.min(10, trader.cash);
+  buy(symbol, trader, numShares, socket) {
     let asset = this.getAssetBySymbol(symbol);
 
-    let numShares =
+    let numSharesTraderCanAfford =
       asset.poolShares -
-      (asset.poolCash * asset.poolShares) / (asset.poolCash + buyValue);
+      (asset.poolCash * asset.poolShares) / (asset.poolCash + trader.cash);
+
+    if (numSharesTraderCanAfford < numShares) {
+      numShares = Math.floor(numSharesTraderCanAfford);
+    }
+
+    let buyValue =
+      (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
+      asset.poolCash;
 
     asset.poolShares -= numShares;
     asset.poolCash += buyValue;
@@ -115,15 +122,15 @@ class Market {
         type: "buy",
         symbol: symbol,
         shares: numShares,
-        price: buyValue,
-        newCash: trader.cash,
+        price: (buyValue / numShares).toFixed(2),
+        newCash: trader.cash.toFixed(2),
         newShares: trader.shares[symbol],
       });
     }
   }
 
-  sell(symbol, trader, socket) {
-    let numShares = Math.min(10, trader.shares[symbol]);
+  sell(symbol, trader, numShares, socket) {
+    numShares = Math.min(numShares, trader.shares[symbol]);
 
     let asset = this.getAssetBySymbol(symbol);
     let sellValue =
@@ -142,8 +149,8 @@ class Market {
         type: "sell",
         symbol: symbol,
         shares: numShares,
-        price: sellValue,
-        newCash: trader.cash,
+        price: (sellValue / numShares).toFixed(2),
+        newCash: trader.cash.toFixed(2),
         newShares: trader.shares[symbol],
       });
     }
@@ -243,9 +250,9 @@ class Market {
           "Hedge fund manager warns",
           "Regulators warn",
         ])} of ${_.sample([
-          "\"irrational exuberance\"",
-          "\"unusual\" market volatility",
-          "\"imminent collapse\"",
+          '"irrational exuberance"',
+          '"unusual" market volatility',
+          '"imminent collapse"',
         ])} in \$${asset.symbol} price`,
       ]);
     } else {

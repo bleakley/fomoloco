@@ -28,12 +28,12 @@ socket.on("transaction", (transaction) => {
   switch (transaction.type) {
     case "buy":
       console.log(
-        `Bought ${transaction.shares} ${transaction.symbol} for \$${transaction.cash}"`
+        `Bought ${transaction.shares} @ ${transaction.price}. Now have ${transaction.newShares} ${transaction.symbol} and \$${transaction.newCash}"`
       );
       break;
     case "sell":
       console.log(
-        `Sold ${transaction.shares} ${transaction.symbol} for \$${transaction.cash}"`
+        `Sold  ${transaction.shares} @ ${transaction.price}. Now have ${transaction.newShares} ${transaction.symbol} and \$${transaction.newCash}"`
       );
       break;
     case "starting-cash":
@@ -44,12 +44,11 @@ socket.on("transaction", (transaction) => {
   }
 });
 
-
 socket.on("leaderboard", (leaderboard) => {
   console.log(leaderboard);
 });
 
-socket.emit("buy-asset", "BVR");
+socket.emit("buy-asset", { symbol: "BVR", shares: 1 });
 socket.emit("shill-asset", "BVR");
-socket.emit("sell-asset", "BVR");
+socket.emit("sell-asset", { symbol: "BVR", shares: 1 });
 socket.emit("buy-upgrade", "botnet");

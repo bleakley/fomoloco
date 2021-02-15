@@ -71,14 +71,14 @@ class Bot {
     let assetToSell = utils.sampleWeighted(assetsHeld, (asset) =>
       Math.pow(1 - this.getAssetSentiment(asset), this.focus)
     );
-    this.market.sell(assetToSell.symbol, this);
+    this.market.sell(assetToSell.symbol, this, 1);
   }
 
   buySomething() {
     let assetToBuy = utils.sampleWeighted(this.market.assets, (asset) =>
       Math.pow(this.getAssetSentiment(asset), this.focus)
     );
-    this.market.buy(assetToBuy.symbol, this);
+    this.market.buy(assetToBuy.symbol, this, 1);
   }
 
   shillSomething() {

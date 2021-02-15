@@ -3,7 +3,6 @@ const _ = require("lodash");
 function sampleWeighted(items, weightFunction) {
   var i;
   let weights = items.map((item) => weightFunction(item));
-
   if (
     weights.reduce((a, b) => {
       return a + b;

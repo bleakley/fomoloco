@@ -19,6 +19,10 @@ class PriceChart extends Component {
       transition: {
         duration: null,
       },
+      size: {
+        height: 240,
+        width: 800
+    },
     });
   }
 

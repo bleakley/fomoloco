@@ -46,14 +46,18 @@ io.on("connection", function (socket) {
 
   console.log(`user ${user.name} has connected`);
 
-  socket.on("buy-asset", (symbol) => {
-    console.log(`${user.name} requested to buy ${symbol}`);
-    market.buy(symbol, user, socket);
+  socket.on("buy-asset", (order) => {
+    console.log(
+      `${user.name} requested to buy ${order.shares} ${order.symbol}`
+    );
+    market.buy(order.symbol, user, order.shares, socket);
   });
 
-  socket.on("sell-asset", (symbol) => {
-    console.log(`${user.name} requested to sell ${symbol}`);
-    market.sell(symbol, user, socket);
+  socket.on("sell-asset", (order) => {
+    console.log(
+      `${user.name} requested to sell ${order.shares} ${order.symbol}`
+    );
+    market.sell(order.symbol, user, order.shares, socket);
   });
 
   socket.on("shill-asset", (symbol) => {
