@@ -24,7 +24,7 @@ class Bot {
     if (Math.random() < 0.5) {
       this.sellSomething();
     }
-    if (Math.random() < 0.5) {
+    if (Math.random() < 0.3) {
       this.buySomething();
     }
     if (Math.random() < 0.5) {

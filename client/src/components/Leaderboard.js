@@ -15,8 +15,6 @@ class Leaderboard extends Component {
   }
 
   render() {
-    console.log(this.props.highScores);
-
     return (
       <TableContainer component={Paper}>
         <Table size="small" aria-label="Leaderboard">
@@ -29,7 +27,6 @@ class Leaderboard extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-          {this.props.highScores.map((row) => {console.log(row)})}
             {this.props.highScores.map((row) => (
               <TableRow
                 key={`${row.name},${this.props.leaderboardLastUpdated}`}

@@ -91,9 +91,9 @@ class Main extends Component {
 
     socket.on("news", (news) => {
       let updatedNews = _.cloneDeep(this.state.news);
-      updatedNews.unshift(news);
+      updatedNews.push(news);
       if (updatedNews.length > NEWS_PRUNE_COUNT) {
-        updatedNews.pop();
+        updatedNews.shift();
       }
       this.setState({ news: updatedNews });
     });

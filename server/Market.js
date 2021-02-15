@@ -36,8 +36,6 @@ class Market {
       {
         name: "Agricorp Conglomerated Holdings",
         symbol: "ACH",
-        price: 10,
-        previousPrice: 10,
         poolShares: 100,
         poolCash: 100,
         hype: 0,
@@ -46,8 +44,6 @@ class Market {
       {
         name: "Mooncoin",
         symbol: "MNC",
-        price: 0.2,
-        previousPrice: 10,
         poolShares: 100,
         poolCash: 100,
         hype: 0,
@@ -55,14 +51,17 @@ class Market {
       {
         name: "Brook Video Rental",
         symbol: "BVR",
-        price: 60,
-        previousPrice: 60,
         poolShares: 100,
         poolCash: 100,
         hype: 0,
         velocity: 0,
       },
     ];
+
+    this.assets.forEach((asset) => {
+      asset.price = asset.poolCash / asset.poolShares;
+      asset.previousPrice = asset.price;
+    });
   }
 
   getAssetBySymbol(symbol) {
@@ -161,7 +160,7 @@ class Market {
       //     asset.poolShares * asset.poolCash
       //   }`
       // );
-      data.push({ symbol: asset.symbol, price: asset.price });
+      data.push({ symbol: asset.symbol, price: asset.price.toFixed(2) });
     }
     this.io.emit("prices", data);
   }
@@ -170,16 +169,22 @@ class Market {
     let asset = _.sample(this.assets);
 
     let message = _.sample([
-      `${asset.name} announces cloud-first quantum mainnet for Q${_.sample([
-        1,
-        2,
-        3,
-        4,
-      ])}`,
-      `8 killed and 35 wounded in \$${asset.symbol}-inspired massacre`,
+      `${asset.name} announces ${_.sample([
+        "cloud-first",
+        "multi-cloud",
+        "decentralized",
+        "hybrid",
+      ])} ${_.sample(["quantum ", ""])}${_.sample([
+        "mainnet",
+        "augmented-reality platform",
+        "AI platform",
+      ])} for Q${_.sample([1, 2, 3, 4])}`,
+      `${Math.round(Math.random() * 40 + 1)} wounded in \$${
+        asset.symbol
+      }-related incident`,
       `Hackers from ${_.sample([5, 6, 7, 9])}chan exploit ${
         asset.name
-      } zero day vulnerability`,
+      } zero-day vulnerability`,
       `Analysts say \$${asset.symbol} trading 3 times above target`,
     ]);
 
@@ -199,9 +204,9 @@ class Market {
     this.traders.forEach((trader) => {
       leaderboard.push({
         name: trader.name,
-        netWorth: this.getNetWorth(trader),
-        cash: trader.cash,
-        profit: this.getNetWorth(trader) - trader.startingNetWorth,
+        netWorth: this.getNetWorth(trader).toFixed(2),
+        cash: trader.cash.toFixed(2),
+        profit: (this.getNetWorth(trader) - trader.startingNetWorth).toFixed(2),
       });
     });
     leaderboard = leaderboard

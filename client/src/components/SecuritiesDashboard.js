@@ -59,10 +59,13 @@ class SecuritiesDashboard extends Component {
   render() {
     return (
       <div>
-        <div><b>USD:</b> {this.props.cash}</div>
+        <div>
+          <b>USD:</b> {this.props.cash}
+        </div>
         {Object.keys(this.props.securities).map((symbol) => (
           <div>
-            <b>${symbol}:</b> {(this.props.playerHoldings[symbol] || 0).toFixed(2)} @ {_.last(this.props.securities[symbol]).toFixed(2)}{" "}
+            <b>${symbol}:</b> {this.props.playerHoldings[symbol] || 0} @{" "}
+            {_.last(this.props.securities[symbol])}{" "}
             <BuyButton socket={this.props.socket} symbol={symbol} /> |{" "}
             <SellButton socket={this.props.socket} symbol={symbol} /> |{" "}
             <ShillButton socket={this.props.socket} symbol={symbol} />
