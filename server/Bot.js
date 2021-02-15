@@ -30,10 +30,18 @@ class Bot {
     this.cash = 100;
     this.shares = {};
     this.market = market;
+
+    // Weights must sum to 1
     this.hypeWeight = Math.random();
     this.velocityWeight = Math.random();
     this.fundamentalWeight = Math.random();
-    this.focus = 2 * Math.random() + 0.5;
+    let totalWeight =
+      this.hypeWeight + this.velocityWeight + this.fundamentalWeight;
+    this.hypeWeight /= totalWeight;
+    this.velocityWeight /= totalWeight;
+    this.fundamentalWeight /= totalWeight;
+
+    this.focus = 3 * Math.random() + 0.5;
     this.type = constants.TRADER_TYPE_BOT;
 
     for (let asset of market.assets) {
@@ -81,11 +89,28 @@ class Bot {
   }
 
   getAssetSentiment(asset) {
-    return (
-      this.hypeWeight * asset.hype +
+    // Asset sentiment must be between 0 and 1
+    let sentiment = this.hypeWeight * asset.hype;
+    sentiment +=
       this.velocityWeight *
-        (Math.min(Math.max(asset.velocity, 2), -2) / 4 + 0.5)
-    );
+      (Math.min(Math.max(asset.velocity, 2), -2) / 4 + 0.5);
+    sentiment +=
+      this.fundamentalWeight *
+      (1 -
+        ((Math.min(asset.price - asset.fundamentalPrice) /
+          asset.fundamentalPrice,
+        4) +
+          1) /
+          5);
+    if (sentiment > 1) {
+      console.log(`Warning sentiment is greater than 1: ${sentiment}`);
+      sentiment = 1;
+    }
+    if (sentiment < 0) {
+      console.log(`Warning sentiment is greater than 1: ${sentiment}`);
+      sentiment = 0;
+    }
+    return sentiment;
   }
 }
 

@@ -1,6 +1,6 @@
 const _ = require("lodash");
 const utils = require("./utils.js");
-const constants = require("./constants")
+const constants = require("./constants");
 const LEADERBOARD_SIZE = 10;
 const Bot = require("./Bot.js");
 
@@ -44,8 +44,8 @@ class Market {
   generateInitialAssets() {
     this.assets = [
       {
-        name: "Agricorp Conglomerated Holdings",
-        symbol: "ACH",
+        name: "Blueberrry Technologies",
+        symbol: "BB",
         poolShares: 100,
         poolCash: 100,
         hype: 0,
@@ -250,6 +250,7 @@ class Market {
       ]);
     } else {
       asset = _.sample(this.assets);
+      let significance = Math.random();
       if (Math.random() < 0.5) {
         message = _.sample([
           `${asset.name} announces ${_.sample([
@@ -262,25 +263,23 @@ class Market {
             "augmented-reality platform",
             "AI platform",
           ])} for Q${_.sample([1, 2, 3, 4])}`,
-          `${asset.name} receives approval to open ${
-            Math.round(Math.random(10)) + 20
-          } new dispensaries`,
+          `${asset.name} receives approval to open ${Math.round(
+            significance * 20 + 2
+          )} new dispensaries`,
         ]);
-
-        asset.fundamentalPrice *= 1.5;
+        asset.fundamentalPrice *= 1 + significance;
       } else {
         message = _.sample([
-          `${Math.round(Math.random() * 40 + 1)} wounded in \$${
+          `${Math.round(significance * 40 + 1)} wounded in \$${
             asset.symbol
           }-related incident`,
           `Hackers from ${_.sample([5, 6, 7, 9])}chan exploit ${
             asset.name
           } zero-day vulnerability`,
         ]);
-        asset.fundamentalPrice /= 1.5;
+        asset.fundamentalPrice /= 1 + significance;
       }
     }
-
     this.io.emit("news", { text: message });
   }
 
