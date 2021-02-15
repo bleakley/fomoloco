@@ -157,6 +157,11 @@ class Main extends Component {
         <Card className="SecuritiesDashboard">
           <SecuritiesDashboard
             cash={this.state.cash}
+            cooldowns={{
+              buy: 5,
+              sell: 5,
+              hype: 20
+            }}
             playerHoldings={this.state.playerHoldings}
             securities={this.state.securities}
             socket={this.socket}

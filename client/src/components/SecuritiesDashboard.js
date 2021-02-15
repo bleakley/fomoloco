@@ -1,51 +1,44 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import PriceChart from "./PriceChart";
-import Button from "@material-ui/core/Button";
+import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
 
-class BuyButton extends Component {
-  constructor(props) {
-    super(props);
+function CooldownTimer(props) {
+  if (!props.current) {
+    return null;
   }
-  render() {
-    return (
-      <Button
-        color="primary"
-        onClick={() => this.props.socket.emit("buy-asset", this.props.symbol)}
+  return (
+    <Box position="relative" display="inline-flex">
+      <CircularProgress size={20} variant="determinate" value={100*props.current/props.max} />
+      <Box
+        top={0}
+        left={0}
+        bottom={0}
+        right={0}
+        position="absolute"
+        display="flex"
+        alignItems="center"
+        justifyContent="center"
       >
-        Buy
-      </Button>
-    );
-  }
+        <Typography variant="caption" component="div" color="textSecondary">{props.current}</Typography>
+      </Box>
+    </Box>
+  );
 }
 
-class SellButton extends Component {
+class TransactionButton extends Component {
   constructor(props) {
     super(props);
   }
   render() {
     return (
       <Button
+        size="small"
         color="primary"
-        onClick={() => this.props.socket.emit("sell-asset", this.props.symbol)}
+        onClick={this.props.onClick}
+        disabled={Boolean(this.props.time)}
       >
-        Sell
-      </Button>
-    );
-  }
-}
-
-class ShillButton extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <Button
-        color="primary"
-        onClick={() => this.props.socket.emit("shill-asset", this.props.symbol)}
-      >
-        Shill
+        {this.props.label} <CooldownTimer current={this.props.time} max={this.props.cooldown} />
       </Button>
     );
   }
@@ -54,6 +47,40 @@ class ShillButton extends Component {
 class SecuritiesDashboard extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      buyTime: 0,
+      sellTime: 0,
+      hypeTime: 0
+    }
+
+    setInterval(() => {
+      this.setState({
+        buyTime: Math.max(0, this.state.buyTime - 1),
+        sellTime: Math.max(0, this.state.sellTime - 1),
+        hypeTime: Math.max(0, this.state.hypeTime - 1),
+      })
+    }, 1000)
+  }
+
+  buy(symbol) {
+    this.props.socket.emit("buy-asset", symbol);
+    this.setState({
+      buyTime: this.props.cooldowns.buy
+    });
+  }
+
+  sell(symbol) {
+    this.props.socket.emit("sell-asset", symbol);
+    this.setState({
+      sellTime: this.props.cooldowns.sell
+    });
+  }
+
+  hype(symbol) {
+    this.props.socket.emit("shill-asset", symbol);
+    this.setState({
+      hypeTime: this.props.cooldowns.hype
+    });
   }
 
   render() {
@@ -62,16 +89,20 @@ class SecuritiesDashboard extends Component {
         <div>
           <b>USD:</b> {this.props.cash}
         </div>
-        {Object.keys(this.props.securities).map((symbol) => (
-          <div>
-            <b>${symbol}:</b>{" "}
-            {(this.props.playerHoldings[symbol]|| 0).toFixed(3) } @{" "}
-            {_.last(this.props.securities[symbol])}{" "}
-            <BuyButton socket={this.props.socket} symbol={symbol} /> |{" "}
-            <SellButton socket={this.props.socket} symbol={symbol} /> |{" "}
-            <ShillButton socket={this.props.socket} symbol={symbol} />
-          </div>
-        ))}
+        <table>
+          <tbody>
+            {Object.keys(this.props.securities).map((symbol) => (
+              <tr key={symbol + '-row'}>
+                <td><b>${symbol}:</b>{" "}</td>
+                <td>{(this.props.playerHoldings[symbol]|| 0).toFixed(3) } @{" "}</td>
+                <td>{_.last(this.props.securities[symbol])}{" "}</td>
+                <td><TransactionButton label="Buy" onClick={() => this.buy(symbol)} time={this.state.buyTime} cooldown={this.props.cooldowns.buy} /></td>
+                <td><TransactionButton label="Sell"onClick={() => this.sell(symbol)} time={this.state.sellTime} cooldown={this.props.cooldowns.sell} /></td>
+                <td><TransactionButton label="Shill" onClick={() => this.hype(symbol)} time={this.state.hypeTime} cooldown={this.props.cooldowns.hype} /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
         <PriceChart securities={this.props.securities} />
       </div>
     );
