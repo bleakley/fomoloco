@@ -5,9 +5,28 @@ const TRADER_TYPE_BOT = 0;
 class Bot {
   constructor(market) {
     this.name =
-      _.sample(["Sexy", "Diamond", "Juicy", "Horny", "Paper"]) +
-      _.sample(["Hands", "Slut", "Tendies"]) +
-      Math.floor(Math.random() * 100 + 10).toString();
+      _.sample([
+        "Sexy",
+        "Diamond",
+        "Juicy",
+        "Horny",
+        "Paper",
+        "Joe",
+        "Badass",
+        "Slow",
+      ]) +
+      _.sample([
+        "Hands",
+        "Slut",
+        "Tendies",
+        "Doge",
+        "Ape",
+        "Banana",
+        "Waffle",
+        "Kitten",
+        "Ninja",
+      ]) +
+      Math.round(Math.random() * 90 + 10).toString();
     this.cash = 100;
     this.shares = {};
     this.market = market;

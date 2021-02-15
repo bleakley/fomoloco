@@ -98,7 +98,7 @@ class Market {
         shares: numShares,
         price: buyValue,
         newCash: trader.cash,
-        newShares: trader.shares[symbol]
+        newShares: trader.shares[symbol],
       });
     }
   }
@@ -125,7 +125,7 @@ class Market {
         shares: numShares,
         price: sellValue,
         newCash: trader.cash,
-        newShares: trader.shares[symbol]
+        newShares: trader.shares[symbol],
       });
     }
   }
@@ -133,13 +133,21 @@ class Market {
   generateShillMessage(symbol) {
     return _.sample([
       `short interest on \$${symbol} is STILL GOING UP`,
-      `HOLD \$${symbol}!!! APES TOGETHER STRONG`,
+      `HOLD \$${symbol}${"!".repeat(
+        _.sample([1, 2, 3, 4])
+      )} APES TOGETHER STRONG ${"🐵".repeat(_.sample([1, 3]))}`,
       `BUY BUY \$${symbol} to the fucking M${"O".repeat(
         _.sample([3, 4, 5, 8])
       )}N ${"🚀".repeat(_.sample([3, 4, 5, 8]))}`,
-      `🤑 Just sold my house- gotta buy more \$${symbol} 🤑`,
+      `🤑 Just sold my ${_.sample([
+        "house",
+        "car",
+        "star wars miniatures",
+      ])}- gotta buy more \$${symbol} 🤑`,
       `I'm so HORNY for \$${symbol} 😍🥵🥵💦`,
       `APES STRONGER TOGETHER - BUY \$${symbol} 🍌🍌🍌🐵🐵🐵`,
+      `buy \$${symbol} THIS IS THE WAY `,
+      `The squeeze has not sqouze. If you sell \$${symbol} now you will regret it.`,
     ]);
   }
 
