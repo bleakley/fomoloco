@@ -130,15 +130,40 @@ class Market {
     }
   }
 
+  generateAstronomicalBody() {
+    let expletive = Math.random() <= 0.3;
+    let definiteArticle = Math.random() <= 0.7;
+    let name = definiteArticle ? _.sample([
+      `MOON`,
+      `MOOON`,
+      `MOOOON`,
+      `MOOOOOOOON`,
+      'SUN',
+      'SUN',
+      'ANDROMEDA GALAXY',
+      'VOYAGER PROBE'
+    ]) : _.sample([
+      `MARS`,
+      `JUPITER`,
+      `SATURN`,
+      `URANUS`,
+      `NEPTUNE`,
+      `PLUTO`
+    ]);
+    let text = '';
+    if (definiteArticle) text += 'the ';
+    if (expletive) text += _.sample(['fuckin', 'fucking', 'freakin', 'freaking']) + ' ';
+    text += name;
+    return text;
+  }
+
   generateShillMessage(symbol) {
     return _.sample([
       `short interest on \$${symbol} is STILL GOING UP`,
       `HOLD \$${symbol}${"!".repeat(
         _.sample([1, 2, 3, 4])
       )} APES TOGETHER STRONG ${"🐵".repeat(_.sample([1, 3]))}`,
-      `BUY BUY \$${symbol} to the fucking M${"O".repeat(
-        _.sample([3, 4, 5, 8])
-      )}N ${"🚀".repeat(_.sample([3, 4, 5, 8]))}`,
+      `BUY BUY \$${symbol} to ${this.generateAstronomicalBody()} ${"🚀".repeat(_.sample([3, 4, 5, 8]))}`,
       `🤑 Just sold my ${_.sample([
         "house",
         "car",
