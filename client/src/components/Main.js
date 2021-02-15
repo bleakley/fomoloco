@@ -17,28 +17,31 @@ let socket = openConnection("http://localhost:8080", {
   query: "username=dfv",
 });
 
+const getDefaultState = () => ({
+  leaderboard: [],
+  leaderboardLastUpdated: Date.now(),
+  news: [
+    { text: "Florida man wins lottery" },
+    {
+      text:
+        "New study links futsu black-rinded squash to lower rates of Groat's disease",
+    },
+  ],
+  hype: [],
+  securities: {},
+  cash: 0,
+  playerHoldings: {},
+});
+
 class Main extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      leaderboard: [],
-      leaderboardLastUpdated: Date.now(),
-      news: [
-        { text: "Florida man wins lottery" },
-        {
-          text:
-            "New study links futsu black-rinded squash to lower rates of Groat's disease",
-        },
-      ],
-      hype: [],
-      securities: {},
-      cash: 0,
-      playerHoldings: {},
-    };
+    this.state = getDefaultState();
 
     this.socket = socket;
 
     socket.on("leaderboard", (leaderboard) => {
+      if (!window.focused) return;
       this.setState({
         leaderboard: leaderboard,
         leaderboardLastUpdated: Date.now(),
@@ -46,6 +49,7 @@ class Main extends Component {
     });
 
     socket.on("hype-message", (message) => {
+      if (!window.focused) return;
       if (this.state.hype.length > 2 * HYPE_MESSAGE_PRUNE_COUNT) {
         this.setState({
           hype: [
@@ -62,6 +66,7 @@ class Main extends Component {
     });
 
     socket.on("prices", (message) => {
+      if (!window.focused) return;
       let updatedPriceHistories = _.cloneDeep(this.state.securities);
       for (let i = 0; i < message.length; i++) {
         let security = message[i];
@@ -90,6 +95,7 @@ class Main extends Component {
     });
 
     socket.on("news", (news) => {
+      if (!window.focused) return;
       let updatedNews = _.cloneDeep(this.state.news);
       updatedNews.push(news);
       if (updatedNews.length > NEWS_PRUNE_COUNT) {
@@ -99,6 +105,7 @@ class Main extends Component {
     });
 
     socket.on("transaction", (transaction) => {
+      if (!window.focused) return;
       this.setState({ cash: transaction.newCash });
       if (!this.state.playerHoldings.hasOwnProperty(transaction.symbol)) {
         this.setState({
@@ -113,6 +120,25 @@ class Main extends Component {
         this.setState({ playerHoldings: newPlayerHoldings });
       }
     });
+  }
+
+  componentDidMount() {
+    window.focused = true;
+    window.addEventListener("focus", this.onFocus)
+    window.addEventListener("blur", this.onLoseFocus)
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("focus", this.onFocus)
+    window.removeEventListener("blur", this.onLoseFocus)
+  }
+
+  onFocus = e => {
+    window.focused = true;
+    this.setState(getDefaultState());
+  }
+  onLoseFocus = e => {
+    window.focused = false;
   }
 
   render() {
