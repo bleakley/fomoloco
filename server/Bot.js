@@ -30,6 +30,8 @@ class Bot {
     this.cash = 100;
     this.shares = {};
     this.market = market;
+    this.shillCoolDownTime = 20000;
+    this.lastShillTime = Date.now() - Math.random() * this.shillCoolDownTime;
 
     // Weights must sum to 1
     this.hypeWeight = Math.random();
@@ -41,7 +43,7 @@ class Bot {
     this.velocityWeight /= totalWeight;
     this.fundamentalWeight /= totalWeight;
 
-    this.focus = 3 * Math.random() + 0.5;
+    this.focus = 0.25 * Math.random() + 0.25;
     this.type = constants.TRADER_TYPE_BOT;
 
     for (let asset of market.assets) {
@@ -53,7 +55,7 @@ class Bot {
     if (Math.random() < 0.3) {
       this.sellSomething();
     }
-    if (Math.random() < 0.3) {
+    if (Math.random() < 0.4) {
       this.buySomething();
     }
     if (Math.random() < 0.1) {
@@ -82,10 +84,19 @@ class Bot {
   }
 
   shillSomething() {
+    if (Date.now() - this.lastShillTime < this.shillCoolDownTime) return;
+
     let favoriteAsset = utils.sampleWeighted(this.market.assets, (asset) =>
-      Math.pow(this.shares[asset.symbol] * asset.price, this.focus)
+      Math.pow(
+        this.shares[asset.symbol] * asset.price * (0.1 + 0.9 * asset.hype),
+        this.focus
+      )
     );
-    this.market.shill(favoriteAsset.symbol, this);
+
+    if (Math.random() < 0.1 + 0.9 * favoriteAsset.hype) {
+      this.lastShillTime = Date.now();
+      this.market.shill(favoriteAsset.symbol, this);
+    }
   }
 
   getAssetSentiment(asset) {
