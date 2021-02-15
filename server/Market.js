@@ -24,6 +24,13 @@ class Market {
     return this.traders.filter((t) => t.type === TRADER_TYPE_BOT);
   }
 
+  getTraderByName(name) {
+    let matches = this.traders.filter((t) => t.name === name);
+    if (matches.length) {
+      return matches[0];
+    } else return null;
+  }
+
   generateInitialAssets() {
     this.assets = [
       {

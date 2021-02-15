@@ -9,33 +9,41 @@ import HypeFeed from "./HypeFeed";
 import SecuritiesDashboard from "./SecuritiesDashboard";
 import openConnection from "socket.io-client";
 
-
 const HYPE_MESSAGE_PRUNE_COUNT = 20;
 const PRICE_HISTORY_PRUNE_COUNT = 500;
 const NEWS_PRUNE_COUNT = 4;
+
+let socket = openConnection("http://localhost:8080", {
+  query: "username=dfv",
+});
 
 class Main extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      leaderboard: [
-        { name: "CryptoFOMO", netWorth: 253490, cash: 253490, profit: 253490 },
+      leaderboard: [],
+      leaderboardLastUpdated: Date.now(),
+      news: [
+        { text: "Florida man wins lottery" },
         {
-          name: "u/deepfuckingvalue",
-          netWorth: 963495,
-          cash: 963495,
-          profit: 963495,
+          text:
+            "New study links futsu black-rinded squash to lower rates of Groat's disease",
         },
       ],
-      news: [{text: "Florida man wins lottery"}, {text: "New study links futsu black-rinded squash to lower rates of Groat's disease"}],
       hype: [],
       securities: {},
       cash: 0,
-      playerHoldings: {}
+      playerHoldings: {},
     };
 
-    let socket = openConnection("http://localhost:8080", { query: "username=dfv" });
-    this.socket = socket
+    this.socket = socket;
+
+    socket.on("leaderboard", (leaderboard) => {
+      this.setState({
+        leaderboard: leaderboard,
+        leaderboardLastUpdated: Date.now(),
+      });
+    });
 
     socket.on("hype-message", (message) => {
       if (this.state.hype.length > 2 * HYPE_MESSAGE_PRUNE_COUNT) {
@@ -93,7 +101,12 @@ class Main extends Component {
     socket.on("transaction", (transaction) => {
       this.setState({ cash: transaction.newCash });
       if (!this.state.playerHoldings.hasOwnProperty(transaction.symbol)) {
-        this.setState({ playerHoldings: { ...this.state.playerHoldings, [transaction.symbol]: transaction.newShares }})
+        this.setState({
+          playerHoldings: {
+            ...this.state.playerHoldings,
+            [transaction.symbol]: transaction.newShares,
+          },
+        });
       }
     });
   }
@@ -102,17 +115,25 @@ class Main extends Component {
     return (
       <div className="Main">
         <Card className="CashLeaderboard">
-          <Leaderboard highScores={this.state.leaderboard} />
+          <Leaderboard
+            highScores={this.state.leaderboard}
+            leaderboardLastUpdated={this.state.leaderboardLastUpdated}
+          />
         </Card>
         <Card className="Advertisement">Super annoying ad</Card>
         <Card className="HypeFeed">
           <HypeFeed hype={this.state.hype} />
         </Card>
         <Card className="SecuritiesDashboard">
-          <SecuritiesDashboard cash={this.state.cash} playerHoldings={this.state.playerHoldings} securities={this.state.securities} socket={this.socket} />
+          <SecuritiesDashboard
+            cash={this.state.cash}
+            playerHoldings={this.state.playerHoldings}
+            securities={this.state.securities}
+            socket={this.socket}
+          />
         </Card>
         <Card className="NewsTicker">
-          <NewsTicker news={this.state.news}  />
+          <NewsTicker news={this.state.news} />
         </Card>
       </div>
     );

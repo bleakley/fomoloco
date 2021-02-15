@@ -34,8 +34,12 @@ const getUsername = (socket) => {
 };
 
 io.on("connection", function (socket) {
-  let user = new User(getUsername(socket), market);
-  market.addTrader(user);
+  let username = getUsername(socket);
+  let user = market.getTraderByName(username);
+  if (!user) {
+    user = new User(username, market);
+    market.addTrader(user);
+  }
 
   socket.emit("transaction", {
     type: "starting-cash",
