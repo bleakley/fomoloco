@@ -158,7 +158,7 @@ class Market {
       `Analysts say \$${asset.symbol} trading 3 times above target`,
     ]);
 
-    this.io.emit("news", message);
+    this.io.emit("news", { text: message });
   }
 }
 

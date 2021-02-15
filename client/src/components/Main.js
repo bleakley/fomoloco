@@ -13,6 +13,7 @@ let socket = openConnection("http://localhost:8080", { query: "username=dfv" });
 
 const HYPE_MESSAGE_PRUNE_COUNT = 20;
 const PRICE_HISTORY_PRUNE_COUNT = 500;
+const NEWS_PRUNE_COUNT = 4;
 
 class Main extends Component {
   constructor(props) {
@@ -27,13 +28,7 @@ class Main extends Component {
           profit: 963495,
         },
       ],
-      news: [
-        { text: "BREAKING NEWS" },
-        { text: "$GMME announces cloud-first quantum mainnet for Q3" },
-        { text: "8 killed and 35 wounded in $YOLO-inspired massacre" },
-        { text: "Hackers from 5chan exploit $BITZ zero day vulnerability" },
-        { text: "Analysts say $HYPE trading 3 times above target" },
-      ],
+      news: [{text: "Florida man wins lottery"}, {text: "New study links futsu black-rinded squash to lower rates of Groat's disease"}],
       hype: [],
       securities: {},
     };
@@ -81,6 +76,15 @@ class Main extends Component {
       }
       this.setState({ securities: updatedPriceHistories });
       window.securities = updatedPriceHistories;
+    });
+
+    socket.on("news", (news) => {
+      let updatedNews = _.cloneDeep(this.state.news);
+      updatedNews.unshift(news);
+      if (updatedNews.length > NEWS_PRUNE_COUNT) {
+        updatedNews.pop();
+      }
+      this.setState({ news: updatedNews });
     });
   }
 
