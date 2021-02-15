@@ -7,10 +7,10 @@ class PriceChart extends Component {
     super(props);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    let symbols = Object.keys(nextProps.securities);
-    let data = symbols.map(symbol => [symbol, ...nextProps.securities[symbol]]);
-    c3.generate({
+  componentDidMount() {
+    let symbols = Object.keys(this.props.securities);
+    let data = symbols.map(symbol => [symbol, ...this.props.securities[symbol]]);
+    this.chart = c3.generate({
       bindto: "#chart",
       data: {
         columns: data,
@@ -19,6 +19,14 @@ class PriceChart extends Component {
       transition: {
         duration: null,
       },
+    });
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    let symbols = Object.keys(nextProps.securities);
+    let data = symbols.map(symbol => [symbol, ...nextProps.securities[symbol]]);
+    this.chart.load({
+      columns: data
     });
     return false;
   }
