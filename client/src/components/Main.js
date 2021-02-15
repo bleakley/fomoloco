@@ -139,6 +139,7 @@ class Main extends Component {
   }
   onLoseFocus = e => {
     window.focused = false;
+    this.setState(getDefaultState());
   }
 
   render() {
