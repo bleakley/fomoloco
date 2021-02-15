@@ -68,7 +68,7 @@ class SecuritiesDashboard extends Component {
             <ShillButton socket={this.props.socket} symbol={symbol} />
           </div>
         ))}
-        <PriceChart />
+        <PriceChart securities={this.props.securities} />
       </div>
     );
   }

@@ -79,7 +79,6 @@ class Main extends Component {
         }
       }
       this.setState({ securities: updatedPriceHistories });
-      window.securities = updatedPriceHistories;
     });
 
     socket.on("news", (news) => {

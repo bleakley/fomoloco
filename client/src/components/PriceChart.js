@@ -1,25 +1,15 @@
-import React from "react";
+import React, { Component } from "react";
 import c3 from "c3";
 import "c3/c3.css";
 
-export const PriceChart = () => {
-  const [data, setData] = React.useState([]);
+class PriceChart extends Component {
+  constructor(props) {
+    super(props);
+  }
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      console.log("helllo1");
-      let priceHistory = window.securities;
-      let newData = [];
-      for (let symbol in priceHistory) {
-        newData.push([symbol, ...priceHistory[symbol]]);
-      }
-      setData(newData);
-    }, 1000);
-    return () => clearInterval(interval);
-  }, []);
-
-  React.useEffect(() => {
-    console.log("helloeee");
+  shouldComponentUpdate(nextProps, nextState) {
+    let symbols = Object.keys(nextProps.securities);
+    let data = symbols.map(symbol => [symbol, ...nextProps.securities[symbol]]);
     c3.generate({
       bindto: "#chart",
       data: {
@@ -30,9 +20,12 @@ export const PriceChart = () => {
         duration: null,
       },
     });
-  }, [data]);
+    return false;
+  }
 
-  return <div id="chart" />;
-};
+  render() {
+    return <div id="chart" />;
+  }
+}
 
 export default PriceChart;
