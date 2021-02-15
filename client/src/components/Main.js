@@ -107,6 +107,10 @@ class Main extends Component {
             [transaction.symbol]: transaction.newShares,
           },
         });
+      } else {
+        let newPlayerHoldings = _.cloneDeep(this.state.playerHoldings);
+        newPlayerHoldings[transaction.symbol] = transaction.newShares;
+        this.setState({ playerHoldings: newPlayerHoldings });
       }
     });
   }
