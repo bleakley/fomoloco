@@ -39,8 +39,6 @@ class Main extends Component {
     };
 
     socket.on("hype-message", (message) => {
-      console.log("Received hype");
-      console.log(message);
       if (this.state.hype.length > 2 * HYPE_MESSAGE_PRUNE_COUNT) {
         this.setState({
           hype: [
@@ -75,7 +73,6 @@ class Main extends Component {
             security.price,
           ];
         } else {
-          console.log(updatedPriceHistories[security.symbol]);
           updatedPriceHistories[security.symbol] = [
             ...updatedPriceHistories[security.symbol],
             security.price,
@@ -83,6 +80,7 @@ class Main extends Component {
         }
       }
       this.setState({ securities: updatedPriceHistories });
+      window.securities = updatedPriceHistories;
     });
   }
 
