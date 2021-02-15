@@ -91,6 +91,7 @@ class Market {
     this.assets.forEach((asset) => {
       asset.velocity =
         (asset.price - asset.previousPrice) / asset.previousPrice;
+      asset.previousPrice = 0.5 * asset.previousPrice + 0.5 * asset.price;
       asset.hype = asset.hype * 0.95;
     });
   }
