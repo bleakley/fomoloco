@@ -1,5 +1,7 @@
 const _ = require("lodash");
 
+const roundToCent = (num) => Math.ceil(num * 100) / 100;
+
 class Market {
   constructor(io) {
     this.io = io;
@@ -66,7 +68,7 @@ class Market {
 
     asset.poolShares -= numShares;
     asset.poolCash += buyValue;
-    asset.price = asset.poolCash / asset.poolShares;
+    asset.price = roundToCent(asset.poolCash / asset.poolShares);
 
     trader.shares[symbol] += numShares;
     trader.cash -= buyValue;
@@ -91,7 +93,7 @@ class Market {
 
     asset.poolShares += numShares;
     asset.poolCash -= sellValue;
-    asset.price = asset.poolCash / asset.poolShares;
+    asset.price = roundToCent(asset.poolCash / asset.poolShares);
 
     trader.shares[symbol] -= numShares;
     trader.cash += sellValue;
