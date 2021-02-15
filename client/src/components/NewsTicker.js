@@ -7,6 +7,10 @@ class Leaderboard extends Component {
     super(props);
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    return false;
+  }
+
   render() {
     return (
       <Ticker>
