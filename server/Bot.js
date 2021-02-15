@@ -1,4 +1,5 @@
 const _ = require("lodash");
+const utils = require("./utils");
 
 const TRADER_TYPE_BOT = 0;
 
@@ -32,6 +33,8 @@ class Bot {
     this.market = market;
     this.hypeWeight = Math.random();
     this.velocityWeight = Math.random();
+    this.fundamentalWeight = Math.random();
+    this.focus = 2 * Math.random() + 0.5;
     this.type = TRADER_TYPE_BOT;
 
     for (let asset of market.assets) {
@@ -40,16 +43,13 @@ class Bot {
   }
 
   tick() {
-    if (Math.random() < 0.5) {
+    if (Math.random() < 0.3) {
       this.sellSomething();
     }
     if (Math.random() < 0.3) {
       this.buySomething();
     }
-    if (Math.random() < 0.5) {
-      this.buySomethingRandom();
-    }
-    if (Math.random() < 0.5) {
+    if (Math.random() < 0.3) {
       this.shillSomething();
     }
   }
@@ -61,46 +61,32 @@ class Bot {
     if (assetsHeld.length === 0) {
       return;
     }
-    let assetToSell = _.sample(assetsHeld);
-    assetsHeld.forEach((asset) => {
-      if (this.getAssetSentiment(asset) < this.getAssetSentiment(assetToSell)) {
-        assetToSell = asset;
-      }
-    });
+    let assetToSell = utils.sampleWeighted(assetsHeld, (asset) =>
+      Math.pow(1 - this.getAssetSentiment(asset), this.focus)
+    );
     this.market.sell(assetToSell.symbol, this);
   }
 
-  buySomethingRandom() {
-    this.market.buy(_.sample(this.market.assets).symbol, this);
-  }
-
   buySomething() {
-    let favoriteAsset = _.sample(this.market.assets);
-    this.market.assets.forEach((asset) => {
-      if (
-        this.getAssetSentiment(asset) > this.getAssetSentiment(favoriteAsset)
-      ) {
-        favoriteAsset = asset;
-      }
-    });
-    this.market.buy(favoriteAsset.symbol, this);
+    let assetToBuy = utils.sampleWeighted(this.market.assets, (asset) =>
+      Math.pow(this.getAssetSentiment(asset), this.focus)
+    );
+    this.market.buy(assetToBuy.symbol, this);
   }
 
   shillSomething() {
-    let favoriteAsset = _.sample(this.market.assets);
-    this.market.assets.forEach((asset) => {
-      if (
-        this.shares[asset.symbol] * asset.price >
-        this.shares[favoriteAsset.symbol] * favoriteAsset.price
-      ) {
-        favoriteAsset = asset;
-      }
-    });
+    let favoriteAsset = utils.sampleWeighted(this.market.assets, (asset) =>
+      Math.pow(this.shares[asset.symbol] * asset.price, this.focus)
+    );
     this.market.shill(favoriteAsset.symbol, this);
   }
 
   getAssetSentiment(asset) {
-    return this.hypeWeight * asset.hype + this.velocityWeight * asset.velocity;
+    return (
+      this.hypeWeight * asset.hype +
+      this.velocityWeight *
+        (Math.min(Math.max(asset.velocity, 2), -2) / 4 + 0.5)
+    );
   }
 }
 

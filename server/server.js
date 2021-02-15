@@ -21,7 +21,7 @@ const port = 8080;
 let Market = require("./Market.js");
 let User = require("./User.js");
 let Bot = require("./Bot.js");
-const NUM_BOTS = 3;
+const NUM_BOTS = 8;
 
 app.get("/status", (req, res) => {
   res.send({ status: "online" });

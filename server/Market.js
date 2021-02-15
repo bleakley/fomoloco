@@ -1,5 +1,5 @@
 const _ = require("lodash");
-
+const utils = require("./utils.js");
 const LEADERBOARD_SIZE = 10;
 const TRADER_TYPE_BOT = 0;
 
@@ -56,11 +56,20 @@ class Market {
         hype: 0,
         velocity: 0,
       },
+      {
+        name: "Sundog Growers",
+        symbol: "SDG",
+        poolShares: 100,
+        poolCash: 100,
+        hype: 0,
+        velocity: 0,
+      },
     ];
 
     this.assets.forEach((asset) => {
       asset.price = asset.poolCash / asset.poolShares;
       asset.previousPrice = asset.price;
+      asset.fundamentalPrice = asset.price;
     });
   }
 
@@ -133,26 +142,22 @@ class Market {
   generateAstronomicalBody() {
     let expletive = Math.random() <= 0.3;
     let definiteArticle = Math.random() <= 0.7;
-    let name = definiteArticle ? _.sample([
-      `MOON`,
-      `MOOON`,
-      `MOOOON`,
-      `MOOOOOOOON`,
-      'SUN',
-      'SUN',
-      'ANDROMEDA GALAXY',
-      'VOYAGER PROBE'
-    ]) : _.sample([
-      `MARS`,
-      `JUPITER`,
-      `SATURN`,
-      `URANUS`,
-      `NEPTUNE`,
-      `PLUTO`
-    ]);
-    let text = '';
-    if (definiteArticle) text += 'the ';
-    if (expletive) text += _.sample(['fuckin', 'fucking', 'freakin', 'freaking']) + ' ';
+    let name = definiteArticle
+      ? _.sample([
+          `MOON`,
+          `MOOON`,
+          `MOOOON`,
+          `MOOOOOOOON`,
+          "SUN",
+          "SUN",
+          "ANDROMEDA GALAXY",
+          "VOYAGER PROBE",
+        ])
+      : _.sample([`MARS`, `JUPITER`, `SATURN`, `URANUS`, `NEPTUNE`, `PLUTO`]);
+    let text = "";
+    if (definiteArticle) text += "the ";
+    if (expletive)
+      text += _.sample(["fuckin", "fucking", "freakin", "freaking"]) + " ";
     text += name;
     return text;
   }
@@ -163,7 +168,9 @@ class Market {
       `HOLD \$${symbol}${"!".repeat(
         _.sample([1, 2, 3, 4])
       )} APES TOGETHER STRONG ${"🐵".repeat(_.sample([1, 3]))}`,
-      `BUY BUY \$${symbol} to ${this.generateAstronomicalBody()} ${"🚀".repeat(_.sample([3, 4, 5, 8]))}`,
+      `BUY BUY \$${symbol} to ${this.generateAstronomicalBody()} ${"🚀".repeat(
+        _.sample([3, 4, 5, 8])
+      )}`,
       `🤑 Just sold my ${_.sample([
         "house",
         "car",
@@ -173,7 +180,7 @@ class Market {
       `APES STRONGER TOGETHER - BUY \$${symbol} 🍌🍌🍌🐵🐵🐵`,
       `buy \$${symbol} THIS IS THE WAY `,
       `The squeeze has not squoze. If you sell \$${symbol} now you will regret it.`,
-      `🙌💎 \$${symbol} 💎🙌`
+      `🙌💎 \$${symbol} 💎🙌`,
     ]);
   }
 
@@ -199,28 +206,51 @@ class Market {
     this.io.emit("prices", data);
   }
 
-  generateNews() {
-    let asset = _.sample(this.assets);
+  getExuberance(asset) {
+    return Math.max(asset.price / asset.fundamentalPrice - 1, 0) + 0.01;
+  }
 
-    let message = _.sample([
-      `${asset.name} announces ${_.sample([
-        "cloud-first",
-        "multi-cloud",
-        "decentralized",
-        "hybrid",
-      ])} ${_.sample(["quantum ", ""])}${_.sample([
-        "mainnet",
-        "augmented-reality platform",
-        "AI platform",
-      ])} for Q${_.sample([1, 2, 3, 4])}`,
-      `${Math.round(Math.random() * 40 + 1)} wounded in \$${
-        asset.symbol
-      }-related incident`,
-      `Hackers from ${_.sample([5, 6, 7, 9])}chan exploit ${
-        asset.name
-      } zero-day vulnerability`,
-      `Analysts say \$${asset.symbol} trading 3 times above target`,
-    ]);
+  generateNews() {
+    let message;
+    let asset = utils.sampleWeighted(this.assets, (asset) =>
+      this.getExuberance(asset)
+    );
+    if (this.getExuberance(asset) > 1 && Math.random() < 0.4) {
+      message = `Analysts say \$${asset.symbol} trading ${Math.round(
+        asset.price / asset.fundamentalPrice
+      )} times above target`;
+    } else {
+      asset = _.sample(this.assets);
+      if (Math.random() < 0.5) {
+        message = _.sample([
+          `${asset.name} announces ${_.sample([
+            "cloud-first",
+            "multi-cloud",
+            "decentralized",
+            "hybrid",
+          ])} ${_.sample(["quantum ", ""])}${_.sample([
+            "mainnet",
+            "augmented-reality platform",
+            "AI platform",
+          ])} for Q${_.sample([1, 2, 3, 4])}`,
+          `${asset.name} receives approval to open ${
+            Math.round(Math.random(10)) + 20
+          } new dispensaries`,
+        ]);
+
+        asset.fundamentalPrice /= 1.5;
+      } else {
+        message = _.sample([
+          `${Math.round(Math.random() * 40 + 1)} wounded in \$${
+            asset.symbol
+          }-related incident`,
+          `Hackers from ${_.sample([5, 6, 7, 9])}chan exploit ${
+            asset.name
+          } zero-day vulnerability`,
+        ]);
+        asset.fundamentalPrice *= 1.5;
+      }
+    }
 
     this.io.emit("news", { text: message });
   }
