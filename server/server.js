@@ -41,7 +41,7 @@ io.on("connection", function (socket) {
 
   socket.emit("transaction", {
     type: "starting-cash",
-    cash: user.cash,
+    newCash: user.cash.toFixed(2),
   });
 
   console.log(`user ${user.name} has connected`);
