@@ -246,7 +246,7 @@ class Market {
           "irrational exuberance",
           "unusual volatility",
           "imminent collapse",
-        ])} ins \$${asset.symbol} price`,
+        ])} in \$${asset.symbol} price`,
       ]);
     } else {
       asset = _.sample(this.assets);
@@ -267,7 +267,7 @@ class Market {
           } new dispensaries`,
         ]);
 
-        asset.fundamentalPrice /= 1.5;
+        asset.fundamentalPrice *= 1.5;
       } else {
         message = _.sample([
           `${Math.round(Math.random() * 40 + 1)} wounded in \$${
@@ -277,7 +277,7 @@ class Market {
             asset.name
           } zero-day vulnerability`,
         ]);
-        asset.fundamentalPrice *= 1.5;
+        asset.fundamentalPrice /= 1.5;
       }
     }
 
