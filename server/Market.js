@@ -172,7 +172,8 @@ class Market {
       `I'm so HORNY for \$${symbol} 😍🥵🥵💦`,
       `APES STRONGER TOGETHER - BUY \$${symbol} 🍌🍌🍌🐵🐵🐵`,
       `buy \$${symbol} THIS IS THE WAY `,
-      `The squeeze has not sqouze. If you sell \$${symbol} now you will regret it.`,
+      `The squeeze has not squoze. If you sell \$${symbol} now you will regret it.`,
+      `🙌💎 \$${symbol} 💎🙌`
     ]);
   }
 
