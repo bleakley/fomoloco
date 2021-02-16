@@ -20,10 +20,16 @@ class Leaderboard extends Component {
         <Table size="small" aria-label="Leaderboard">
           <TableHead>
             <TableRow>
-              <TableCell>Username</TableCell>
-              <TableCell align="right">Net Worth</TableCell>
-              <TableCell align="right">Cash</TableCell>
-              <TableCell align="right">Profit</TableCell>
+              <TableCell></TableCell>
+              <TableCell align="right">
+                <b>Net Worth</b>
+              </TableCell>
+              <TableCell align="right">
+                <b>Cash</b>
+              </TableCell>
+              <TableCell align="right">
+                <b>Profit</b>
+              </TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -32,7 +38,7 @@ class Leaderboard extends Component {
                 key={`${row.name},${this.props.leaderboardLastUpdated}`}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  <i>{row.name}</i>
                 </TableCell>
                 <TableCell align="right">${row.netWorth}</TableCell>
                 <TableCell align="right">${row.cash}</TableCell>

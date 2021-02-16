@@ -94,30 +94,33 @@ class TransactionPanel extends Component {
     let cooldowns = {
       buy: 5 - this.props.upgrades.buy,
       sell: 5 - this.props.upgrades.sell,
-      hype: 20 - 2 * this.props.upgrades.hype
-    }
+      hype: 20 - 2 * this.props.upgrades.hype,
+    };
 
     return (
       <div>
         <table>
           <tbody>
-            <tr key={"cash-row"}>
-              <td>
-                <b>Cash</b>
-              </td>
-              <td>${this.props.cash}</td>
-            </tr>
             <tr key={"header"}>
               <td></td>
-              <td>Quantity</td>
-              <td>Price</td>
-              <td>Value</td>
+              <td>
+                <b>Quantity</b>
+              </td>
+              <td>
+                <b>Price</b>
+              </td>
+              <td>
+                <b>Value</b>
+              </td>
             </tr>
             {Object.keys(this.props.securities).map((symbol) => (
               <tr key={symbol + "-row"}>
                 <td
                   style={{
-                    color: getAssetColor(symbol, Object.keys(this.props.securities)),
+                    color: getAssetColor(
+                      symbol,
+                      Object.keys(this.props.securities)
+                    ),
                   }}
                 >
                   <b>${symbol}</b>{" "}
@@ -157,6 +160,12 @@ class TransactionPanel extends Component {
                 </td>
               </tr>
             ))}
+            <tr key={"cash-row"}>
+              <td>
+                <b>Cash</b>
+              </td>
+              <td>{`\$${this.props.cash}`}</td>
+            </tr>
           </tbody>
         </table>
       </div>
