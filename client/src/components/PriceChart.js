@@ -35,11 +35,23 @@ class PriceChart extends Component {
         duration: null,
       },
       size: {
-        height: 240,
-        width: 800,
+        height: 280,
+        width: 950
       },
       legend: {
         hide: true,
+      },
+      axis: {
+        x: {
+          tick: {
+            values: [],
+          },
+        },
+        y: {
+          tick: {
+            format: (y) => (y >= 0 ? `\$${y}` : ""),
+          },
+        },
       },
     });
   }

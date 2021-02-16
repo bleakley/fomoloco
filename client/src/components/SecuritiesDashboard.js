@@ -72,7 +72,7 @@ class SecuritiesDashboard extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
         <div style={{ display: "flex" }}>
           <TransactionPanel
             cash={this.state.cash}
