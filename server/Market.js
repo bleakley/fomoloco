@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const utils = require("./utils.js");
+const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
 const LEADERBOARD_SIZE = 10;
 const Bot = require("./Bot.js");
@@ -157,36 +158,13 @@ class Market {
     }
   }
 
-  generateAstronomicalBody() {
-    let expletive = Math.random() <= 0.3;
-    let definiteArticle = Math.random() <= 0.7;
-    let name = definiteArticle
-      ? _.sample([
-          `MOON`,
-          `MOOON`,
-          `MOOOON`,
-          `MOOOOOOOON`,
-          "SUN",
-          "SUN",
-          "ANDROMEDA GALAXY",
-          "VOYAGER PROBE",
-        ])
-      : _.sample([`MARS`, `JUPITER`, `SATURN`, `URANUS`, `NEPTUNE`, `PLUTO`]);
-    let text = "";
-    if (definiteArticle) text += "the ";
-    if (expletive)
-      text += _.sample(["fuckin", "fucking", "freakin", "freaking"]) + " ";
-    text += name;
-    return text;
-  }
-
   generateShillMessage(symbol) {
     return _.sample([
       `short interest on \$${symbol} is STILL GOING UP`,
       `HOLD \$${symbol}${"!".repeat(
         _.sample([1, 2, 3, 4])
       )} APES TOGETHER STRONG ${"🐵".repeat(_.sample([1, 3]))}`,
-      `BUY BUY \$${symbol} to ${this.generateAstronomicalBody()} ${"🚀".repeat(
+      `BUY BUY \$${symbol} to ${narrativeUtils.generateAstronomicalBody()} ${"🚀".repeat(
         _.sample([3, 4, 5, 8])
       )}`,
       `🤑 Just sold my ${_.sample([
@@ -261,25 +239,7 @@ class Market {
       let significance = Math.random();
       if (Math.random() < 0.5) {
         message = _.sample([
-          `${asset.name} announces ${_.sample([
-            "cloud-first",
-            "multi-cloud",
-            "decentralized",
-            "hybrid",
-            "scalable",
-            '"revolutionary"',
-          ])} ${_.sample([
-            "quantum ",
-            "quantum-ready",
-            "quantum-resistant",
-            "enterprise",
-          ])}${_.sample([
-            "mainnet",
-            "augmented-reality platform",
-            "AI platform",
-            "smart contract framework",
-            "deep-learning model",
-          ])} for Q${_.sample([1, 2, 3, 4])}`,
+          `${asset.name} announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample([1, 2, 3, 4])}`,
           `${asset.name} receives approval to open ${Math.round(
             significance * 20 + 2
           )} new dispensaries`,
@@ -291,15 +251,10 @@ class Market {
         asset.fundamentalPrice *= 1 + significance;
       } else {
         message = _.sample([
-          `${Math.round(significance * 40 + 1)} wounded in \$${
+          `${Math.round(significance * 40 + 1)} injured in \$${
             asset.symbol
           }-related incident`,
-          `${_.sample([
-            _.sample([5, 6, 7, 9].toString() + "chan"),
-            "Russian",
-            "Chinese",
-            "Ransomware",
-          ])} hackers exploit ${asset.name} zero-day vulnerability`,
+          `${narrativeUtils.generateHackerOrg()} hackers exploit ${asset.name} zero-day vulnerability`,
           `${asset.name} announcements draw ${_.sample([
             "SEC",
             "FDA",
