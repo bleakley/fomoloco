@@ -3,6 +3,9 @@ const utils = require("./utils.js");
 const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
 const LEADERBOARD_SIZE = 10;
+const BOT_QUITTING_THRESHOLD = 10;
+const DESIRED_BOT_COUNT = 15;
+const SECOND = 1000;
 const Bot = require("./Bot.js");
 
 class Market {
@@ -11,15 +14,16 @@ class Market {
     this.generateInitialAssets();
     this.traders = [];
 
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < DESIRED_BOT_COUNT; i++) {
       this.addTrader(new Bot(this));
     }
 
-    setInterval(() => this.broadcastPrices(), 1000);
-    setInterval(() => this.generateNews(), 10000);
-    setInterval(() => this.updateMarketMetrics(), 1000);
-    setInterval(() => this.broadcastLeaderboard(), 5000);
-    setInterval(() => this.tickBots(), 2000);
+    setInterval(() => this.broadcastPrices(), 1 * SECOND);
+    setInterval(() => this.generateNews(), 10 * SECOND);
+    setInterval(() => this.updateMarketMetrics(), 1 * SECOND);
+    setInterval(() => this.broadcastLeaderboard(), 5 * SECOND);
+    setInterval(() => this.tickBots(), 2 * SECOND);
+    setInterval(() => this.cullBots(), 10 * SECOND);
   }
 
   tickBots() {
@@ -158,6 +162,15 @@ class Market {
     }
   }
 
+  generateQuittingMessage() {
+    return _.sample([
+      `too rich for my blood- I'm out`,
+      `this isn't a market- it's a casino! I quit!`,
+      `damn I guess I'm homeless now. I quit!`,
+      `I guess I'm going back to mom's basement. I'm broke!`
+    ]);
+  }
+
   generateShillMessage(symbol) {
     return _.sample([
       `short interest on \$${symbol} is STILL GOING UP`,
@@ -284,6 +297,23 @@ class Market {
       netWorth += trader.shares[asset.symbol] * asset.price;
     });
     return netWorth;
+  }
+
+  cullBots() {
+    let quittingTraders = _.remove(this.traders, (t) => t.type === constants.TRADER_TYPE_BOT && this.getNetWorth(t) < BOT_QUITTING_THRESHOLD);
+    quittingTraders.forEach(trader => {
+      trader.sellEverything();
+      console.log(`bot ${trader.name} is quitting`);
+      this.io.emit("hype-message", {
+        text: this.generateQuittingMessage(),
+        name: trader.name,
+      });
+    });
+
+    if (this.getBots().length < DESIRED_BOT_COUNT) {
+      this.addTrader(new Bot(this));
+      console.log(`a new bot joins`);
+    }
   }
 
   broadcastLeaderboard() {

@@ -76,6 +76,15 @@ class Bot {
     this.market.sell(assetToSell.symbol, this, 1);
   }
 
+  sellEverything() {
+    for (let i = 0; i < this.market.assets.length; i++) {
+      let symbol = this.market.assets[symbol];
+      if (this.shares[symbol] > 0) {
+        this.market.sell(assetToSell.symbol, this, this.shares[symbol]);
+      }
+    }
+  }
+
   buySomething() {
     let assetToBuy = utils.sampleWeighted(this.market.assets, (asset) =>
       Math.pow(this.getAssetSentiment(asset), this.focus)

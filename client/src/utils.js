@@ -1,4 +1,5 @@
 import { ASSET_COLORS } from "./constants";
+
 export function getAssetColor(symbol, symbols) {
   let index = symbols.findIndex((s) => s === symbol);
   if (index === -1) return "#000000";
