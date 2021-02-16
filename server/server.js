@@ -65,8 +65,9 @@ io.on("connection", function (socket) {
     market.shill(symbol, user);
   });
 
-  socket.on("buy-upgrade", (upgrade) => {
-    console.log(`${user.name} requested upgrade ${upgrade}`);
+  socket.on("buy-upgrade", (upgradeType) => {
+    console.log(`${user.name} requested upgrade ${upgradeType}`);
+    user.upgrade(upgradeType, socket);
   });
 
   socket.on("buy-powerup", (powerup) => {

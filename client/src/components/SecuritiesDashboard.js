@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import PriceChart from "./PriceChart";
 import TransactionPanel from "./TransactionPanel";
+import UpgradePanel from "./UpgradePanel";
 
 const PRICE_HISTORY_PRUNE_COUNT = 100;
 
@@ -9,6 +10,12 @@ const getDefaultState = () => ({
   securities: {},
   cash: 0,
   playerHoldings: {},
+  upgrades: {
+    buy: 0,
+    sell: 0,
+    hype: 0,
+    volume: 0
+  }
 });
 
 class SecuritiesDashboard extends Component {
@@ -49,12 +56,19 @@ class SecuritiesDashboard extends Component {
       }
       this.setState({ securities: updatedPriceHistories });
     });
+
+    this.props.socket.on("upgrade", (message) => {
+      this.setState({ cash: message.cash, upgrades: {...this.state.upgrades, [message.type]: message.level} });
+    });
   }
 
   render() {
     return (
       <div>
-        <TransactionPanel cash={this.state.cash} securities={this.state.securities} cooldowns={this.props.cooldowns} socket={this.props.socket} playerHoldings={this.state.playerHoldings} />
+        <div style={{display: 'flex'}}>
+          <TransactionPanel cash={this.state.cash} securities={this.state.securities} upgrades={this.state.upgrades} socket={this.props.socket} playerHoldings={this.state.playerHoldings} />
+          <UpgradePanel cash={this.state.cash} upgrades={this.state.upgrades} socket={this.props.socket} />
+        </div>
         <PriceChart securities={this.state.securities} />
       </div>
     );

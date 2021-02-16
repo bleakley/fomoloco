@@ -68,28 +68,34 @@ class TransactionPanel extends Component {
     }, 1000);
   }
 
-  buy(symbol) {
+  buy(symbol, cooldown) {
     this.props.socket.emit("buy-asset", { symbol: symbol, shares: 1 });
     this.setState({
-      buyTime: this.props.cooldowns.buy,
+      buyTime: cooldown,
     });
   }
 
-  sell(symbol) {
+  sell(symbol, cooldown) {
     this.props.socket.emit("sell-asset", { symbol: symbol, shares: 1 });
     this.setState({
-      sellTime: this.props.cooldowns.sell,
+      sellTime: cooldown,
     });
   }
 
-  hype(symbol) {
+  hype(symbol, cooldown) {
     this.props.socket.emit("shill-asset", symbol);
     this.setState({
-      hypeTime: this.props.cooldowns.hype,
+      hypeTime: cooldown,
     });
   }
 
   render() {
+    let cooldowns = {
+      buy: 5 - this.props.upgrades.buy,
+      sell: 5 - this.props.upgrades.sell,
+      hype: 20 - 2 * this.props.upgrades.hype
+    }
+
     return (
       <div>
         <table>
@@ -123,25 +129,25 @@ class TransactionPanel extends Component {
                 <td>
                   <TransactionButton
                     label="Buy"
-                    onClick={() => this.buy(symbol)}
+                    onClick={() => this.buy(symbol, cooldowns.buy)}
                     time={this.state.buyTime}
-                    cooldown={this.props.cooldowns.buy}
+                    cooldown={cooldowns.buy}
                   />
                 </td>
                 <td>
                   <TransactionButton
                     label="Sell"
-                    onClick={() => this.sell(symbol)}
+                    onClick={() => this.sell(symbol, cooldowns.sell)}
                     time={this.state.sellTime}
-                    cooldown={this.props.cooldowns.sell}
+                    cooldown={cooldowns.sell}
                   />
                 </td>
                 <td>
                   <TransactionButton
                     label="Hype"
-                    onClick={() => this.hype(symbol)}
+                    onClick={() => this.hype(symbol, cooldowns.hype)}
                     time={this.state.hypeTime}
-                    cooldown={this.props.cooldowns.hype}
+                    cooldown={cooldowns.hype}
                   />
                 </td>
               </tr>

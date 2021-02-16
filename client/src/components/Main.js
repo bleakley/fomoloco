@@ -65,14 +65,7 @@ class Main extends Component {
           <HypeFeed socket={this.socket} />
         </Card>
         <Card className="SecuritiesDashboard">
-          <SecuritiesDashboard
-            cooldowns={{
-              buy: 5,
-              sell: 5,
-              hype: 20,
-            }}
-            socket={this.socket}
-          />
+          <SecuritiesDashboard socket={this.socket} />
         </Card>
         <Card className="NewsTicker">
           <NewsTicker socket={this.socket} />
