@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
+import { getAssetColor } from "../utils";
 
 function CooldownTimer(props) {
   if (!props.current) {
@@ -114,7 +115,11 @@ class TransactionPanel extends Component {
             </tr>
             {Object.keys(this.props.securities).map((symbol) => (
               <tr key={symbol + "-row"}>
-                <td>
+                <td
+                  style={{
+                    color: getAssetColor(symbol, Object.keys(this.props.securities)),
+                  }}
+                >
                   <b>${symbol}</b>{" "}
                 </td>
                 <td>{this.props.playerHoldings[symbol] || 0} </td>

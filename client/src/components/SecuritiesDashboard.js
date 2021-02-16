@@ -14,8 +14,8 @@ const getDefaultState = () => ({
     buy: 0,
     sell: 0,
     hype: 0,
-    volume: 0
-  }
+    volume: 0,
+  },
 });
 
 class SecuritiesDashboard extends Component {
@@ -49,8 +49,13 @@ class SecuritiesDashboard extends Component {
         if (updatedPriceHistories[security.symbol] == null) {
           updatedPriceHistories[security.symbol] = [];
         }
-        updatedPriceHistories[security.symbol] = updatedPriceHistories[security.symbol].concat([security.price]);
-        if (updatedPriceHistories[security.symbol].length > PRICE_HISTORY_PRUNE_COUNT) {
+        updatedPriceHistories[security.symbol] = updatedPriceHistories[
+          security.symbol
+        ].concat([security.price]);
+        if (
+          updatedPriceHistories[security.symbol].length >
+          PRICE_HISTORY_PRUNE_COUNT
+        ) {
           updatedPriceHistories[security.symbol].shift();
         }
       }
@@ -58,18 +63,34 @@ class SecuritiesDashboard extends Component {
     });
 
     this.props.socket.on("upgrade", (message) => {
-      this.setState({ cash: message.cash, upgrades: {...this.state.upgrades, [message.type]: message.level} });
+      this.setState({
+        cash: message.cash,
+        upgrades: { ...this.state.upgrades, [message.type]: message.level },
+      });
     });
   }
 
   render() {
     return (
       <div>
-        <div style={{display: 'flex'}}>
-          <TransactionPanel cash={this.state.cash} securities={this.state.securities} upgrades={this.state.upgrades} socket={this.props.socket} playerHoldings={this.state.playerHoldings} />
-          <UpgradePanel cash={this.state.cash} upgrades={this.state.upgrades} socket={this.props.socket} />
+        <div style={{ display: "flex" }}>
+          <TransactionPanel
+            cash={this.state.cash}
+            securities={this.state.securities}
+            upgrades={this.state.upgrades}
+            socket={this.props.socket}
+            playerHoldings={this.state.playerHoldings}
+          />
+          <UpgradePanel
+            cash={this.state.cash}
+            upgrades={this.state.upgrades}
+            socket={this.props.socket}
+          />
         </div>
-        <PriceChart securities={this.state.securities} />
+        <PriceChart
+          securities={this.state.securities}
+          key={Object.keys(this.state.securities).length}
+        />
       </div>
     );
   }

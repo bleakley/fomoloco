@@ -193,6 +193,7 @@ class Market {
     this.io.emit("hype-message", {
       text: this.generateShillMessage(symbol),
       name: trader.name,
+      symbol: symbol
     });
   }
 

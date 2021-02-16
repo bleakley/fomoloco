@@ -14,7 +14,7 @@ let socket = openConnection("http://localhost:8080", {
 
 const getDefaultState = () => ({
   leaderboard: [],
-  leaderboardLastUpdated: Date.now()
+  leaderboardLastUpdated: Date.now(),
 });
 
 class Main extends Component {
