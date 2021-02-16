@@ -67,7 +67,7 @@ class UpgradePanel extends Component {
               <td>10x trade volume</td>
               <td>
                 <Button
-                  disabled={this.props.upgrades.volume >= upgradeCosts.length || this.props.cash <= volumeCost}
+                  disabled={true || this.props.upgrades.volume >= upgradeCosts.length || this.props.cash <= volumeCost}
                   onClick={() => this.props.socket.emit("buy-upgrade", 'volume')}
                 >
                   Upgrade ${volumeCost}
