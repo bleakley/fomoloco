@@ -32,6 +32,15 @@ function generateHackerOrg() {
   ]);
 }
 
+function generateCcgCard() {
+  let card = _.sample(['holofoil charizard', 'alpha black lotus']);
+  if (Math.random() <= 0.3) {
+    let grade = `${_.sample(['PSA', 'BGS'])} ${_.sample(['9', '9.5', '10'])}`;
+    card = `${grade} ${card}`;
+  }
+  return card;
+}
+
 function generateTechnologyProduct() {
   return `${_.sample([
     "cloud-first",
@@ -54,4 +63,4 @@ function generateTechnologyProduct() {
   ])}`;
 }
 
-module.exports = { generateAstronomicalBody, generateHackerOrg, generateTechnologyProduct };
+module.exports = { generateAstronomicalBody, generateHackerOrg, generateTechnologyProduct, generateCcgCard };

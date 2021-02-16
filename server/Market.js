@@ -176,7 +176,7 @@ class Market {
       `short interest on \$${symbol} is STILL GOING UP`,
       `HOLD \$${symbol}${"!".repeat(
         _.sample([1, 2, 3, 4])
-      )} APES TOGETHER STRONG ${"🐵".repeat(_.sample([1, 3]))}`,
+      )} APES TOGETHER STRONG ${"🐵".repeat(_.sample([1, 2, 3]))}`,
       `BUY BUY \$${symbol} to ${narrativeUtils.generateAstronomicalBody()} ${"🚀".repeat(
         _.sample([3, 4, 5, 8])
       )}`,
@@ -188,7 +188,9 @@ class Market {
       ])}${_.sample([
         "house",
         "car",
+        "kidney",
         "star wars miniatures",
+        narrativeUtils.generateCcgCard()
       ])}- gotta buy more \$${symbol} 🤑`,
       `I'm so HORNY for \$${symbol} 😍🥵🥵💦`,
       `APES STRONGER TOGETHER - BUY \$${symbol} ${"🍌".repeat(
@@ -323,7 +325,7 @@ class Market {
         name: trader.name,
         netWorth: this.getNetWorth(trader).toFixed(2),
         cash: trader.cash.toFixed(2),
-        profit: (this.getNetWorth(trader) - trader.startingNetWorth).toFixed(2),
+        profit: (this.getNetWorth(trader) - trader.startingNetWorth + trader.totalSpentOnUpgrades).toFixed(2),
       });
     });
     leaderboard = leaderboard

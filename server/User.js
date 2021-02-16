@@ -14,6 +14,7 @@ class User {
       hype: 0,
       volume: 0
     }
+    this.totalSpentOnUpgrades = 0;
     for (let asset of market.assets) {
       this.shares[asset.symbol] = 0;
     }
@@ -27,6 +28,7 @@ class User {
     if (this.cash >= cost) {
       this.upgrades[type]++;
       this.cash -= cost;
+      this.totalSpentOnUpgrades += cost;
       socket.emit("upgrade", {
         type,
         level: this.upgrades[type],

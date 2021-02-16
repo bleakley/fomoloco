@@ -28,6 +28,7 @@ class Bot {
       ]) +
       Math.round(Math.random() * 90 + 10).toString();
     this.cash = 100;
+    this.totalSpentOnUpgrades = 0;
     this.shares = {};
     this.market = market;
     this.shillCoolDownTime = 20000;
