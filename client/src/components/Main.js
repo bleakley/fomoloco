@@ -71,7 +71,7 @@ class Main extends Component {
         <Card className="NewsTicker">
           <NewsTicker socket={this.socket} />
         </Card>
-        <FpsView left={1400} />
+        <FpsView top={800} />
       </div>
     );
   }

@@ -12,18 +12,14 @@ class PriceChart extends Component {
     let symbols = Object.keys(this.props.securities);
 
     let colors = {};
-    console.log("symbols");
-    console.log(symbols);
     for (let i = 0; i < symbols.length; i++) {
       colors[symbols[i]] = ASSET_COLORS[i];
       console.log(colors);
     }
-    console.log(colors);
     let data = symbols.map((symbol) => [
       symbol,
       ...this.props.securities[symbol],
     ]);
-    console.log(ASSET_COLORS);
     this.chart = c3.generate({
       bindto: "#chart",
       data: {
@@ -43,6 +39,8 @@ class PriceChart extends Component {
       },
       axis: {
         x: {
+          max: 100,
+          min: 0,
           tick: {
             values: [],
           },
