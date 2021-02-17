@@ -7,7 +7,7 @@ import UpgradePanel from "./UpgradePanel";
 const PRICE_HISTORY_PRUNE_COUNT = 100;
 
 const getDefaultState = () => ({
-  securities: {},
+  currentPrices: {},
   cash: 0,
   playerHoldings: {},
   upgrades: {
@@ -23,6 +23,9 @@ class SecuritiesDashboard extends Component {
     super(props);
 
     this.state = getDefaultState();
+
+    this.priceHistories = {};
+    this.chartComponent = React.createRef();
 
     this.props.socket.on("transaction", (transaction) => {
       if (!window.focused) return;
@@ -43,23 +46,31 @@ class SecuritiesDashboard extends Component {
 
     this.props.socket.on("prices", (message) => {
       if (!window.focused) return;
-      let updatedPriceHistories = _.cloneDeep(this.state.securities);
+      let currentPrices = {};
       for (let i = 0; i < message.length; i++) {
         let security = message[i];
-        if (updatedPriceHistories[security.symbol] == null) {
-          updatedPriceHistories[security.symbol] = [];
+        currentPrices[security.symbol] = Number(security.price);
+      }
+      this.setState({ currentPrices });
+
+      for (let i = 0; i < message.length; i++) {
+        let security = message[i];
+        if (this.priceHistories[security.symbol] == null) {
+          this.priceHistories[security.symbol] = [];
         }
-        updatedPriceHistories[security.symbol] = updatedPriceHistories[
-          security.symbol
-        ].concat([security.price]);
+        this.priceHistories[security.symbol] = this.priceHistories[security.symbol].concat([Number(security.price)]);
         if (
-          updatedPriceHistories[security.symbol].length >
+          this.priceHistories[security.symbol].length >
           PRICE_HISTORY_PRUNE_COUNT
         ) {
-          updatedPriceHistories[security.symbol].shift();
+          this.priceHistories[security.symbol].shift();
         }
       }
-      this.setState({ securities: updatedPriceHistories });
+      let comp = this.chartComponent.current;
+        if (comp && comp.chart) {
+          let data = Object.keys(this.priceHistories).map(symbol => [symbol, ...this.priceHistories[symbol]]);
+          comp.chart.load({columns: data});
+        }
     });
 
     this.props.socket.on("upgrade", (message) => {
@@ -76,7 +87,7 @@ class SecuritiesDashboard extends Component {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <TransactionPanel
             cash={this.state.cash}
-            securities={this.state.securities}
+            currentPrices={this.state.currentPrices}
             upgrades={this.state.upgrades}
             socket={this.props.socket}
             playerHoldings={this.state.playerHoldings}
@@ -88,8 +99,8 @@ class SecuritiesDashboard extends Component {
           />
         </div>
         <PriceChart
-          securities={this.state.securities}
-          key={Object.keys(this.state.securities).length}
+          symbols={Object.keys(this.state.currentPrices)}
+          ref={this.chartComponent}
         />
       </div>
     );

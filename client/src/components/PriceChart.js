@@ -9,21 +9,17 @@ class PriceChart extends Component {
   }
 
   componentDidMount() {
-    let symbols = Object.keys(this.props.securities);
+    let symbols = Object.keys(this.props.symbols);
 
     let colors = {};
     for (let i = 0; i < symbols.length; i++) {
       colors[symbols[i]] = ASSET_COLORS[i];
       console.log(colors);
     }
-    let data = symbols.map((symbol) => [
-      symbol,
-      ...this.props.securities[symbol],
-    ]);
     this.chart = c3.generate({
       bindto: "#chart",
       data: {
-        columns: data,
+        columns: symbols.map(s => [s]),
         type: "line",
         colors: colors,
       },
@@ -55,14 +51,6 @@ class PriceChart extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    let symbols = Object.keys(nextProps.securities);
-    let data = symbols.map((symbol) => [
-      symbol,
-      ...nextProps.securities[symbol],
-    ]);
-    this.chart.load({
-      columns: data,
-    });
     return false;
   }
 

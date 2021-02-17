@@ -113,25 +113,25 @@ class TransactionPanel extends Component {
                 <b>Value</b>
               </td>
             </tr>
-            {Object.keys(this.props.securities).map((symbol) => (
+            {Object.keys(this.props.currentPrices).map((symbol) => (
               <tr key={symbol + "-row"}>
                 <td
                   style={{
                     color: getAssetColor(
                       symbol,
-                      Object.keys(this.props.securities)
+                      Object.keys(this.props.currentPrices)
                     ),
                   }}
                 >
                   <b>${symbol}</b>{" "}
                 </td>
                 <td>{this.props.playerHoldings[symbol] || 0} </td>
-                <td>${_.last(this.props.securities[symbol])} </td>
+                <td>${this.props.currentPrices[symbol]} </td>
                 <td>
                   $
                   {(
                     (this.props.playerHoldings[symbol] || 0) *
-                    _.last(this.props.securities[symbol])
+                    this.props.currentPrices[symbol]
                   ).toFixed(2)}{" "}
                 </td>
                 <td>

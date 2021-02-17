@@ -8,22 +8,20 @@ class NewsTicker extends Component {
   constructor(props) {
     super(props);
 
-    this.state= {
-      news: [{ text: "Florida man wins lottery after receiving vaccine" },
+    this.news = [
+      { text: "Florida man wins lottery after receiving vaccine" },
       {
         text:
           "New study links black-rinded futsu squash to lower rates of Groat's disease",
-      },]
-    }
+      }
+    ]
 
     this.props.socket.on("news", (news) => {
       if (!window.focused) return;
-      let updatedNews = _.cloneDeep(this.state.news);
-      updatedNews.push(news);
-      if (updatedNews.length > NEWS_PRUNE_COUNT) {
-        updatedNews.shift();
+      this.news.push(news);
+      if (this.news.length > NEWS_PRUNE_COUNT) {
+        this.news.shift();
       }
-      this.setState({ news: updatedNews });
     });
   }
 
@@ -37,7 +35,7 @@ class NewsTicker extends Component {
         {({ index }) => (
           <span>
             <b>
-              {this.state.news[index % this.state.news.length].text}
+              {this.news[index % this.news.length].text}
               &nbsp;•&nbsp;
             </b>
           </span>
