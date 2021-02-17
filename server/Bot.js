@@ -79,7 +79,7 @@ class Bot {
 
   sellEverything() {
     for (let i = 0; i < this.market.assets.length; i++) {
-      let symbol = this.market.assets[symbol];
+      let symbol = this.market.assets[i];
       if (this.shares[symbol] > 0) {
         this.market.sell(assetToSell.symbol, this, this.shares[symbol]);
       }

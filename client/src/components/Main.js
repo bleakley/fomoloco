@@ -1,4 +1,5 @@
 import { Card } from "@material-ui/core";
+import {FpsView} from "react-fps";
 import _ from "lodash";
 import React, { Component } from "react";
 import "../App.css";
@@ -70,6 +71,7 @@ class Main extends Component {
         <Card className="NewsTicker">
           <NewsTicker socket={this.socket} />
         </Card>
+        <FpsView left={1400} />
       </div>
     );
   }
