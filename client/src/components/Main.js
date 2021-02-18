@@ -1,8 +1,9 @@
 import { Card } from "@material-ui/core";
-import {FpsView} from "react-fps";
+import { FpsView } from "react-fps";
 import _ from "lodash";
 import React, { Component } from "react";
 import "../App.css";
+import LoginDialog from "./LoginDialog";
 import Leaderboard from "./Leaderboard";
 import NewsTicker from "./NewsTicker";
 import HypeFeed from "./HypeFeed";
@@ -16,6 +17,7 @@ let socket = openConnection("http://localhost:8080", {
 const getDefaultState = () => ({
   leaderboard: [],
   leaderboardLastUpdated: Date.now(),
+  loginDialogOpen: true,
 });
 
 class Main extends Component {
@@ -52,9 +54,18 @@ class Main extends Component {
     window.focused = false;
   };
 
+  onLoginDialogClose() {
+    this.setState({ loginDialogOpen: false });
+  }
+
   render() {
     return (
       <div className="Main">
+        <LoginDialog
+          socket={this.socket}
+          open={this.state.loginDialogOpen}
+          onClose={() => this.onLoginDialogClose()}
+        />
         <Card className="CashLeaderboard">
           <Leaderboard
             highScores={this.state.leaderboard}

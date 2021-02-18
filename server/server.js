@@ -73,6 +73,11 @@ io.on("connection", function (socket) {
   socket.on("buy-powerup", (powerup) => {
     console.log(`${user.name} requested powerup ${upgrade}`);
   });
+
+  socket.on("set-username", (username) => {
+    user.name = username;
+    console.log(`${user.name} set username to ${username}`);
+  });
 });
 
 http.listen(port, () => {
