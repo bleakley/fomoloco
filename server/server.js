@@ -35,7 +35,7 @@ io.on("connection", function (socket) {
   let username = getUsername(socket);
   let user = market.getTraderByName(username);
   if (!user) {
-    user = new User(username, market);
+    user = new User(username, market, socket);
     market.addTrader(user);
   }
 

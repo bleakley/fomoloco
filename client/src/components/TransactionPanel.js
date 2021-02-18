@@ -122,7 +122,7 @@ class TransactionPanel extends Component {
                   <b>${asset.symbol}</b>{" "}
                 </td>
                 <td>{this.props.playerHoldings[asset.symbol] || 0} </td>
-                <td>${this.props.currentPrices[asset.symbol]} </td>
+                <td>${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)} </td>
                 <td>
                   $
                   {(

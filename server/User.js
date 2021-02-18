@@ -1,10 +1,13 @@
-const constants = require("constants");
+const constants = require("./constants");
+const uuid = require('uuid');
 
 const upgradeCosts = [150, 250, 500, 1000];
 
 class User {
-  constructor(name, market) {
+  constructor(name, market, socket) {
     this.name = name;
+    this.socket = socket;
+    this.id = uuid.v4();
     this.cash = 1000;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;

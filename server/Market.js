@@ -319,15 +319,20 @@ class Market {
     this.traders.forEach((trader) => {
       leaderboard.push({
         name: trader.name,
+        id: trader.id,
         netWorth: this.getNetWorth(trader).toFixed(2),
         cash: trader.cash.toFixed(2),
         profit: (this.getNetWorth(trader) - trader.startingNetWorth + trader.totalSpentOnUpgrades).toFixed(2),
       });
     });
     leaderboard = leaderboard
-      .sort((a, b) => b.netWorth - a.netWorth)
-      .slice(0, Math.min(LEADERBOARD_SIZE, leaderboard.length));
-    this.io.emit("leaderboard", leaderboard);
+      .sort((a, b) => b.profit - a.profit);
+    let top = leaderboard.slice(0, Math.min(LEADERBOARD_SIZE, leaderboard.length));
+    this.traders.forEach((trader) => {
+      if (trader.type === constants.TRADER_TYPE_PLAYER) {
+        trader.socket.emit("leaderboard", { rank: leaderboard.findIndex(t => t.id === trader.id) + 1, total: leaderboard.length, top });
+      }
+    });
   }
 }
 

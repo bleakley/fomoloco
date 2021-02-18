@@ -16,6 +16,8 @@ class Leaderboard extends Component {
 
   render() {
     return (
+      <div>
+        <div>Your rank: {this.props.leaderboard.rank} of {this.props.leaderboard.total}</div>
       <TableContainer component={Paper}>
         <Table size="small" aria-label="Leaderboard">
           <TableHead>
@@ -33,7 +35,7 @@ class Leaderboard extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.highScores.map((row) => (
+            {this.props.leaderboard.top.map((row) => (
               <TableRow
                 key={`${row.name},${this.props.leaderboardLastUpdated}`}
               >
@@ -48,6 +50,7 @@ class Leaderboard extends Component {
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
     );
   }
 }

@@ -1,6 +1,7 @@
 const _ = require("lodash");
 const utils = require("./utils");
 const constants = require("./constants");
+const uuid = require('uuid');
 
 class Bot {
   constructor(market) {
@@ -27,6 +28,7 @@ class Bot {
         "Ninja",
       ]) +
       Math.round(Math.random() * 90 + 10).toString();
+    this.id = uuid.v4();
     this.cash = 100;
     this.totalSpentOnUpgrades = 0;
     this.shares = {};

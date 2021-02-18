@@ -15,7 +15,7 @@ let socket = openConnection("http://localhost:8080", {
 });
 
 const getDefaultState = () => ({
-  leaderboard: [],
+  leaderboard: {rank: 0, total: 0, top: []},
   leaderboardLastUpdated: Date.now(),
   loginDialogOpen: true,
   assetDescriptions: []
@@ -74,7 +74,7 @@ class Main extends Component {
         />
         <Card className="CashLeaderboard">
           <Leaderboard
-            highScores={this.state.leaderboard}
+            leaderboard={this.state.leaderboard}
             leaderboardLastUpdated={this.state.leaderboardLastUpdated}
           />
         </Card>
