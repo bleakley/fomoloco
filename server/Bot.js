@@ -37,7 +37,7 @@ class Bot {
     // Weights must sum to 1
     this.hypeWeight = Math.random();
     this.velocityWeight = Math.random();
-    this.fundamentalWeight = 0.5 * Math.random();
+    this.fundamentalWeight = Math.random();
     let totalWeight =
       this.hypeWeight + this.velocityWeight + this.fundamentalWeight;
     this.hypeWeight /= totalWeight;
@@ -128,7 +128,7 @@ class Bot {
       sentiment = 1;
     }
     if (sentiment < 0) {
-      console.log(`Warning sentiment is greater than 1: ${sentiment}`);
+      console.log(`Warning sentiment is less than 0: ${sentiment}`);
       sentiment = 0;
     }
     return sentiment;

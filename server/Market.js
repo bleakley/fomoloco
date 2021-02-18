@@ -264,6 +264,7 @@ class Market {
           ])} hold promise for treating Groat's syndrome`,
         ]);
         asset.fundamentalPrice = Math.min(MAX_FUNDAMENTAL_PRICE, asset.fundamentalPrice * (1 + significance));
+        asset.hype = 1 - (1 - asset.hype) * 0.75;
       } else {
         message = _.sample([
           `${Math.round(significance * 40 + 1)} injured in \$${
