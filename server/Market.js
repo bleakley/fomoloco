@@ -42,6 +42,10 @@ class Market {
     return this.traders.filter((t) => t.type === constants.TRADER_TYPE_BOT);
   }
 
+  getPlayers() {
+    return this.traders.filter((t) => t.type === constants.TRADER_TYPE_PLAYER);
+  }
+
   getTraderByName(name) {
     let matches = this.traders.filter((t) => t.name === name);
     if (matches.length) {
@@ -327,11 +331,12 @@ class Market {
       rankLookup[leaderboard[i].id] = i;
     }
     let top = leaderboard.slice(0, Math.min(LEADERBOARD_SIZE, leaderboard.length));
-    this.traders.forEach((trader) => {
-      if (trader.type === constants.TRADER_TYPE_PLAYER) {
-        trader.socket.emit("leaderboard", { rank: rankLookup[trader.id], total: leaderboard.length, top });
-      }
+    this.getPlayers().forEach((trader) => {
+      trader.socket.emit("leaderboard", { rank: rankLookup[trader.id], total: leaderboard.length, top });
     });
+    if (Math.random() < 0.02) {
+      this.io.emit("news", { text: `FOMO LOCO trader ${top[0].name} called to testify before House Committee on Financial Services` });
+    }
   }
 }
 
