@@ -67,7 +67,11 @@ class SecuritiesDashboard extends Component {
       let comp = this.chartComponent.current;
         if (comp && comp.chart) {
           let data = Object.keys(this.priceHistories).map(symbol => [symbol, ...this.priceHistories[symbol]]);
-          comp.chart.load({columns: data});
+          let colors = {};
+          for (let i = 0; i < this.props.assetDescriptions.length; i++) {
+            colors[this.props.assetDescriptions[i].symbol] = this.props.assetDescriptions[i].color;
+          }
+          comp.chart.load({columns: data, type: "line", colors: colors});
           comp.chart.legend.hide();
         }
     });

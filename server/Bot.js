@@ -37,7 +37,7 @@ class Bot {
     // Weights must sum to 1
     this.hypeWeight = Math.random();
     this.velocityWeight = Math.random();
-    this.fundamentalWeight = 0.5 * 0.5 * Math.random();
+    this.fundamentalWeight = 0.5 * Math.random();
     let totalWeight =
       this.hypeWeight + this.velocityWeight + this.fundamentalWeight;
     this.hypeWeight /= totalWeight;
