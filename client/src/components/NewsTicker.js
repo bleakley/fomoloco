@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { getAssetColor } from "../utils";
 import Ticker from "react-ticker";
 import _ from "lodash";
 
@@ -46,7 +45,9 @@ class NewsTicker extends Component {
   changeSymbolColors(text) {
     let updatedText = text;
     this.symbols.forEach(symbol => {
-      updatedText = updatedText.replace('$' + symbol, `<span style="color: ${getAssetColor(symbol, this.symbols)}">\$${symbol}</span>`)
+      let description = this.props.assetDescriptions.find(a => a.symbol === symbol);
+      let color = description ? description.color : 'black';
+      updatedText = updatedText.replace('$' + symbol, `<span style="color: ${color}">\$${symbol}</span>`)
     });
     return updatedText;
   }

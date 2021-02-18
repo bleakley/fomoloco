@@ -68,6 +68,7 @@ class SecuritiesDashboard extends Component {
         if (comp && comp.chart) {
           let data = Object.keys(this.priceHistories).map(symbol => [symbol, ...this.priceHistories[symbol]]);
           comp.chart.load({columns: data});
+          comp.chart.legend.hide();
         }
     });
 
@@ -89,6 +90,7 @@ class SecuritiesDashboard extends Component {
             upgrades={this.state.upgrades}
             socket={this.props.socket}
             playerHoldings={this.state.playerHoldings}
+            assetDescriptions={this.props.assetDescriptions}
           />
           <UpgradePanel
             cash={this.state.cash}
@@ -97,7 +99,7 @@ class SecuritiesDashboard extends Component {
           />
         </div>
         <PriceChart
-          symbols={Object.keys(this.state.currentPrices)}
+          assetDescriptions={this.props.assetDescriptions}
           ref={this.chartComponent}
         />
       </div>

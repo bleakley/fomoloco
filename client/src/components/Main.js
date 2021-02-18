@@ -18,6 +18,7 @@ const getDefaultState = () => ({
   leaderboard: [],
   leaderboardLastUpdated: Date.now(),
   loginDialogOpen: true,
+  assetDescriptions: []
 });
 
 class Main extends Component {
@@ -31,6 +32,12 @@ class Main extends Component {
       this.setState({
         leaderboard: leaderboard,
         leaderboardLastUpdated: Date.now(),
+      });
+    });
+
+    socket.on("assetDescriptions", (descriptions) => {
+      this.setState({
+        assetDescriptions: descriptions
       });
     });
   }
@@ -73,13 +80,13 @@ class Main extends Component {
         </Card>
         <Card className="Advertisement">Super annoying ad</Card>
         <Card className="HypeFeed">
-          <HypeFeed socket={this.socket} />
+          <HypeFeed socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
         </Card>
         <Card className="SecuritiesDashboard">
-          <SecuritiesDashboard socket={this.socket} />
+          <SecuritiesDashboard socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
         </Card>
         <Card className="NewsTicker">
-          <NewsTicker socket={this.socket} />
+          <NewsTicker socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
         </Card>
         <FpsView top={800} />
       </div>

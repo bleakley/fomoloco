@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { getAssetColor } from "../utils";
 
 const HYPE_MESSAGE_PRUNE_COUNT = 20;
 
@@ -11,12 +10,14 @@ class HypeMessage extends Component {
     );
   }
   render() {
+    let description = this.props.assetDescriptions.find(a => a.symbol === this.props.message.symbol);
+    let color = description ? description.color : 'black';
     return (
       <div>
         <b>{this.props.message.name}:</b> {this.textParts[0]}{" "}
         <span
           style={{
-            color: getAssetColor(this.props.message.symbol, this.props.symbols),
+            color: color
           }}
         >
           <b>{`\$${this.props.message.symbol}`}</b>
@@ -32,13 +33,8 @@ class HypeFeed extends Component {
     super(props);
 
     this.state = {
-      hype: [],
-      symbols: [],
+      hype: []
     };
-
-    this.props.socket.on("prices", (prices) => {
-      this.setState({ symbols: prices.map((asset) => asset.symbol) });
-    });
 
     this.props.socket.on("hype-message", (message) => {
       if (this.state.hype.length > 2 * HYPE_MESSAGE_PRUNE_COUNT) {
@@ -69,7 +65,7 @@ class HypeFeed extends Component {
     return (
       <div>
         {this.state.hype.map((message) => (
-          <HypeMessage message={message} symbols={this.state.symbols}/>
+          <HypeMessage message={message} assetDescriptions={this.props.assetDescriptions}/>
         ))}
         <div
           style={{ float: "left", clear: "both" }}

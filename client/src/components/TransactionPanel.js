@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
-import { getAssetColor } from "../utils";
 
 function CooldownTimer(props) {
   if (!props.current) {
@@ -113,31 +112,28 @@ class TransactionPanel extends Component {
                 <b>Value</b>
               </td>
             </tr>
-            {Object.keys(this.props.currentPrices).map((symbol) => (
-              <tr key={symbol + "-row"}>
+            {this.props.assetDescriptions.map((asset) => (
+              <tr key={asset.symbol + "-row"}>
                 <td
                   style={{
-                    color: getAssetColor(
-                      symbol,
-                      Object.keys(this.props.currentPrices)
-                    ),
+                    color: asset.color
                   }}
                 >
-                  <b>${symbol}</b>{" "}
+                  <b>${asset.symbol}</b>{" "}
                 </td>
-                <td>{this.props.playerHoldings[symbol] || 0} </td>
-                <td>${this.props.currentPrices[symbol]} </td>
+                <td>{this.props.playerHoldings[asset.symbol] || 0} </td>
+                <td>${this.props.currentPrices[asset.symbol]} </td>
                 <td>
                   $
                   {(
-                    (this.props.playerHoldings[symbol] || 0) *
-                    this.props.currentPrices[symbol]
+                    (this.props.playerHoldings[asset.symbol] || 0) *
+                    this.props.currentPrices[asset.symbol]
                   ).toFixed(2)}{" "}
                 </td>
                 <td>
                   <TransactionButton
                     label="Buy"
-                    onClick={() => this.buy(symbol, cooldowns.buy)}
+                    onClick={() => this.buy(asset.symbol, cooldowns.buy)}
                     time={this.state.buyTime}
                     cooldown={cooldowns.buy}
                   />
@@ -145,7 +141,7 @@ class TransactionPanel extends Component {
                 <td>
                   <TransactionButton
                     label="Sell"
-                    onClick={() => this.sell(symbol, cooldowns.sell)}
+                    onClick={() => this.sell(asset.symbol, cooldowns.sell)}
                     time={this.state.sellTime}
                     cooldown={cooldowns.sell}
                   />
@@ -153,7 +149,7 @@ class TransactionPanel extends Component {
                 <td>
                   <TransactionButton
                     label="Hype"
-                    onClick={() => this.hype(symbol, cooldowns.hype)}
+                    onClick={() => this.hype(asset.symbol, cooldowns.hype)}
                     time={this.state.hypeTime}
                     cooldown={cooldowns.hype}
                   />

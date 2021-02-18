@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import c3 from "c3";
 import "c3/c3.css";
-import { ASSET_COLORS } from "../constants";
 
 class PriceChart extends Component {
   constructor(props) {
@@ -9,17 +8,14 @@ class PriceChart extends Component {
   }
 
   componentDidMount() {
-    let symbols = Object.keys(this.props.symbols);
-
     let colors = {};
-    for (let i = 0; i < symbols.length; i++) {
-      colors[symbols[i]] = ASSET_COLORS[i];
-      console.log(colors);
+    for (let i = 0; i < this.props.assetDescriptions.length; i++) {
+      colors[this.props.assetDescriptions[i].symbol] = this.props.assetDescriptions[i].color;
     }
     this.chart = c3.generate({
       bindto: "#chart",
       data: {
-        columns: symbols.map(s => [s]),
+        columns: this.props.assetDescriptions.map(a => [a.symbol]),
         type: "line",
         colors: colors,
       },

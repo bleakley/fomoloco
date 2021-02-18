@@ -54,6 +54,7 @@ class Market {
       {
         name: "Blueberrry Technologies",
         symbol: "BB",
+        color: "#1f77b4",
         poolShares: 100,
         poolCash: 100,
         hype: 0,
@@ -62,6 +63,7 @@ class Market {
       {
         name: "Mooncoin",
         symbol: "MNC",
+        color: "#2ca02c",
         poolShares: 100,
         poolCash: 100,
         hype: 0,
@@ -70,6 +72,7 @@ class Market {
       {
         name: "Brook Video Rental",
         symbol: "BVR",
+        color: "#ff7f0e",
         poolShares: 100,
         poolCash: 100,
         hype: 0,
@@ -78,6 +81,7 @@ class Market {
       {
         name: "Sundog Growers",
         symbol: "SDG",
+        color: "#d62728",
         poolShares: 100,
         poolCash: 100,
         hype: 0,

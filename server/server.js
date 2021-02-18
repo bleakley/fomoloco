@@ -44,6 +44,8 @@ io.on("connection", function (socket) {
     newCash: user.cash.toFixed(2),
   });
 
+  socket.emit("assetDescriptions", market.assets.map(a => ({symbol: a.symbol, name: a.name, color: a.color})));
+
   console.log(`user ${user.name} has connected`);
 
   socket.on("buy-asset", (order) => {

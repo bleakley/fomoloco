@@ -1,1 +1,0 @@
-export const ASSET_COLORS = ["#1f77b4", "#2ca02c", "#ff7f0e", "#d62728"];
