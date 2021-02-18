@@ -264,7 +264,7 @@ class Market {
           ])} hold promise for treating Groat's syndrome`,
         ]);
         asset.fundamentalPrice = Math.min(MAX_FUNDAMENTAL_PRICE, asset.fundamentalPrice * (1 + significance));
-        asset.hype = 1 - (1 - asset.hype) * 0.75;
+        setTimeout(() => asset.hype = 1 - (1 - asset.hype) * 0.75, Math.random() * 3 * SECOND);
       } else {
         message = _.sample([
           `${Math.round(significance * 40 + 1)} injured in \$${
@@ -315,22 +315,21 @@ class Market {
   }
 
   broadcastLeaderboard() {
-    let leaderboard = [];
-    this.traders.forEach((trader) => {
-      leaderboard.push({
-        name: trader.name,
-        id: trader.id,
-        netWorth: this.getNetWorth(trader).toFixed(2),
-        cash: trader.cash.toFixed(2),
-        profit: (this.getNetWorth(trader) - trader.startingNetWorth + trader.totalSpentOnUpgrades).toFixed(2),
-      });
-    });
-    leaderboard = leaderboard
-      .sort((a, b) => b.profit - a.profit);
+    let leaderboard = this.traders.map((trader) => ({
+      name: trader.name,
+      id: trader.id,
+      netWorth: this.getNetWorth(trader).toFixed(2),
+      cash: trader.cash.toFixed(2),
+      profit: (this.getNetWorth(trader) - trader.startingNetWorth + trader.totalSpentOnUpgrades).toFixed(2),
+    })).sort((a, b) => b.profit - a.profit);
+    let rankLookup = {};
+    for (let i = 0; i < leaderboard.length; i++) {
+      rankLookup[leaderboard[i].id] = i;
+    }
     let top = leaderboard.slice(0, Math.min(LEADERBOARD_SIZE, leaderboard.length));
     this.traders.forEach((trader) => {
       if (trader.type === constants.TRADER_TYPE_PLAYER) {
-        trader.socket.emit("leaderboard", { rank: leaderboard.findIndex(t => t.id === trader.id) + 1, total: leaderboard.length, top });
+        trader.socket.emit("leaderboard", { rank: rankLookup[trader.id], total: leaderboard.length, top });
       }
     });
   }

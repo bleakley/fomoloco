@@ -60,7 +60,7 @@ class HypeFeed extends Component {
   componentDidUpdate() {
     this.scrollToBottom();
   }
-
+  
   render() {
     return (
       <div>
