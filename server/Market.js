@@ -2,13 +2,14 @@ const _ = require("lodash");
 const utils = require("./utils.js");
 const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
+const SECOND = 1000;
+const Bot = require("./Bot.js");
+
 const LEADERBOARD_SIZE = 10;
-const BOT_QUITTING_THRESHOLD = 10;
+const BOT_QUITTING_THRESHOLD = 50;
 const DESIRED_BOT_COUNT = 15;
 const MAX_FUNDAMENTAL_PRICE = 2000;
 const MIN_FUNDAMENTAL_PRICE = 0.05;
-const SECOND = 1000;
-const Bot = require("./Bot.js");
 
 class Market {
   constructor(io) {
@@ -64,6 +65,7 @@ class Market {
         poolShares: 100,
         poolCash: 100,
         hype: 0,
+        velocity: 0,
       },
       {
         name: "Brook Video Rental",
@@ -162,15 +164,6 @@ class Market {
         newShares: trader.shares[symbol],
       });
     }
-  }
-
-  generateQuittingMessage() {
-    return _.sample([
-      `too rich for my blood- I'm out`,
-      `this isn't a market- it's a casino! I quit!`,
-      `damn I guess I'm homeless now. I quit!`,
-      `I guess I'm going back to mom's basement. I'm broke!`
-    ]);
   }
 
   generateShillMessage(symbol) {
@@ -308,10 +301,6 @@ class Market {
     quittingTraders.forEach(trader => {
       trader.sellEverything();
       console.log(`bot ${trader.name} is quitting`);
-      this.io.emit("hype-message", {
-        text: this.generateQuittingMessage(),
-        name: trader.name,
-      });
     });
 
     if (this.getBots().length < DESIRED_BOT_COUNT) {

@@ -41,7 +41,6 @@ class HypeFeed extends Component {
     });
 
     this.props.socket.on("hype-message", (message) => {
-      if (!window.focused) return;
       if (this.state.hype.length > 2 * HYPE_MESSAGE_PRUNE_COUNT) {
         this.setState({
           hype: this.state.hype

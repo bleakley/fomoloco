@@ -28,7 +28,6 @@ class Main extends Component {
     this.socket = socket;
 
     socket.on("leaderboard", (leaderboard) => {
-      if (!window.focused) return;
       this.setState({
         leaderboard: leaderboard,
         leaderboardLastUpdated: Date.now(),

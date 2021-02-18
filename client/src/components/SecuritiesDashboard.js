@@ -28,7 +28,6 @@ class SecuritiesDashboard extends Component {
     this.chartComponent = React.createRef();
 
     this.props.socket.on("transaction", (transaction) => {
-      if (!window.focused) return;
       this.setState({ cash: transaction.newCash });
       if (!this.state.playerHoldings.hasOwnProperty(transaction.symbol)) {
         this.setState({
@@ -45,7 +44,6 @@ class SecuritiesDashboard extends Component {
     });
 
     this.props.socket.on("prices", (message) => {
-      if (!window.focused) return;
       let currentPrices = {};
       for (let i = 0; i < message.length; i++) {
         let security = message[i];

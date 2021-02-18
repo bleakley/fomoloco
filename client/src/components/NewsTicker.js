@@ -28,7 +28,6 @@ class NewsTicker extends Component {
     ]);
 
     this.props.socket.on("news", (news) => {
-      if (!window.focused) return;
       this.news.push(news);
       if (this.news.length > NEWS_PRUNE_COUNT) {
         this.news.shift();
