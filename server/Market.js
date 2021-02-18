@@ -5,6 +5,8 @@ const constants = require("./constants");
 const LEADERBOARD_SIZE = 10;
 const BOT_QUITTING_THRESHOLD = 10;
 const DESIRED_BOT_COUNT = 15;
+const MAX_FUNDAMENTAL_PRICE = 2000;
+const MIN_FUNDAMENTAL_PRICE = 0.05;
 const SECOND = 1000;
 const Bot = require("./Bot.js");
 
@@ -253,7 +255,7 @@ class Market {
     } else {
       asset = _.sample(this.assets);
       let significance = Math.random();
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.55) {
         message = _.sample([
           `${asset.name} announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample([1, 2, 3, 4])}`,
           `${asset.name} receives approval to open ${Math.round(
@@ -264,7 +266,7 @@ class Market {
             "psilocybin mushroom extracts",
           ])} hold promise for treating Groat's syndrome`,
         ]);
-        asset.fundamentalPrice *= 1 + significance;
+        asset.fundamentalPrice = Math.min(MAX_FUNDAMENTAL_PRICE, asset.fundamentalPrice * (1 + significance));
       } else {
         message = _.sample([
           `${Math.round(significance * 40 + 1)} injured in \$${
@@ -287,7 +289,7 @@ class Market {
             "conspiracy",
           ])} charges`,
         ]);
-        asset.fundamentalPrice /= 1 + significance;
+        asset.fundamentalPrice = Math.max(MIN_FUNDAMENTAL_PRICE, asset.fundamentalPrice / (1 + significance));
       }
     }
     this.io.emit("news", { text: message });
