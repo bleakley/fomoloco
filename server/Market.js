@@ -257,11 +257,11 @@ class Market {
       let significance = Math.random();
       if (Math.random() < 0.55) {
         message = _.sample([
-          `${asset.name} announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample([1, 2, 3, 4])}`,
-          `${asset.name} receives approval to open ${Math.round(
+          `${asset.name} (\$${asset.symbol}) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample([1, 2, 3, 4])}`,
+          `${asset.name} (\$${asset.symbol}) receives approval to open ${Math.round(
             significance * 20 + 2
           )} new dispensaries`,
-          `Clinical trials show ${asset.name} ${_.sample([
+          `Clinical trials show ${asset.name} (\$${asset.symbol}) ${_.sample([
             "synthetic cannabinoids",
             "psilocybin mushroom extracts",
           ])} hold promise for treating Groat's syndrome`,
@@ -272,8 +272,8 @@ class Market {
           `${Math.round(significance * 40 + 1)} injured in \$${
             asset.symbol
           }-related incident`,
-          `${narrativeUtils.generateHackerOrg()} hackers exploit ${asset.name} zero-day vulnerability`,
-          `${asset.name} announcements draw ${_.sample([
+          `${narrativeUtils.generateHackerOrg()} hackers exploit ${asset.name} (\$${asset.symbol}) zero-day vulnerability`,
+          `${asset.name} (\$${asset.symbol}) announcements draw ${_.sample([
             "SEC",
             "FDA",
             "CFPB",
@@ -281,7 +281,7 @@ class Market {
             "anti-trust",
             "congressional",
           ])} scrutiny`,
-          `${asset.name} CEO arrested on ${_.sample([
+          `${asset.name} (\$${asset.symbol}) CEO arrested on ${_.sample([
             "embezzlement",
             "drug",
             "DUI",
