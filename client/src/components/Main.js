@@ -10,6 +10,8 @@ import HypeFeed from "./HypeFeed";
 import SecuritiesDashboard from "./SecuritiesDashboard";
 import openConnection from "socket.io-client";
 
+const DEBUG_MODE = true;
+
 let socket = openConnection("http://localhost:8080", {
   query: "username=dfv",
 });
@@ -86,9 +88,9 @@ class Main extends Component {
           <SecuritiesDashboard socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
         </Card>
         <Card className="NewsTicker">
-          <NewsTicker socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
+          <NewsTicker socket={this.socket} assetDescriptions={this.state.assetDescriptions} debug={DEBUG_MODE} />
         </Card>
-        <FpsView top={800} />
+        {DEBUG_MODE && <FpsView top={800} />}
       </div>
     );
   }

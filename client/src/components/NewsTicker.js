@@ -70,7 +70,7 @@ class NewsTicker extends Component {
   render() {
     return (
       <span>
-        <span style={{position: 'absolute', bottom: 10}}>{this.state.serverNewsCount} news items in queue, {this.state.expiredNewsCount} thrown away</span>
+        {this.props.debug && <span style={{position: 'absolute', bottom: 10}}>{this.state.serverNewsCount} news items in queue, {this.state.expiredNewsCount} thrown away</span>}
         <Ticker>
           {({ index }) => (
             <span>
