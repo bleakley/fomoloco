@@ -12,6 +12,8 @@ let priceHistories = {};
 const getDefaultState = () => ({
   currentPrices: {},
   cash: 0,
+  lastDividend: 0,
+  timeToNextDividend: 60,
   playerHoldings: {},
   upgrades: {
     buy: 0,
@@ -54,7 +56,9 @@ class SecuritiesDashboard extends Component {
     this.state = getDefaultState();
 
     this.chartComponent = React.createRef();
+  }
 
+  componentDidMount() {
     this.props.socket.on("transaction", (transaction) => {
       this.setState({ cash: transaction.newCash });
       if (!this.state.playerHoldings.hasOwnProperty(transaction.symbol)) {
@@ -69,6 +73,14 @@ class SecuritiesDashboard extends Component {
         newPlayerHoldings[transaction.symbol] = transaction.newShares;
         this.setState({ playerHoldings: newPlayerHoldings });
       }
+    });
+
+    this.props.socket.on("dividend", (transaction) => {
+      this.setState({ 
+        cash: transaction.newCash,
+        lastDividend: transaction.totalPayout,
+        timeToNextDividend: transaction.timeToNextDividend,
+       });
     });
 
     this.props.socket.on("prices", (message) => {
@@ -109,6 +121,12 @@ class SecuritiesDashboard extends Component {
         upgrades: { ...this.state.upgrades, [message.type]: message.level },
       });
     });
+
+    setInterval(() => {
+      this.setState({
+        timeToNextDividend: Math.max(0, this.state.timeToNextDividend - 1)
+      });
+    }, 1000);
   }
 
   render() {
@@ -117,6 +135,8 @@ class SecuritiesDashboard extends Component {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <TransactionPanel
             cash={this.state.cash}
+            lastDividend={this.state.lastDividend}
+            timeToNextDividend={this.state.timeToNextDividend}
             currentPrices={this.state.currentPrices}
             upgrades={this.state.upgrades}
             socket={this.props.socket}

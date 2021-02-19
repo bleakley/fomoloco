@@ -36,7 +36,7 @@ class User {
       socket.emit("upgrade", {
         type,
         level: this.upgrades[type],
-        cash: this.cash
+        cash: this.cash.toFixed(2)
       });
     }
   }

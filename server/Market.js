@@ -11,6 +11,7 @@ const BOT_QUITTING_THRESHOLD = 50;
 const DESIRED_BOT_COUNT = 15;
 const MAX_FUNDAMENTAL_PRICE = 2000;
 const MIN_FUNDAMENTAL_PRICE = 0.05;
+const SECONDS_BETWEEN_DIVIDENDS = 60;
 
 class Market {
   constructor(io) {
@@ -30,6 +31,7 @@ class Market {
     setInterval(() => this.broadcastLeaderboard(), 5 * SECOND);
     setInterval(() => this.tickBots(), 2 * SECOND);
     setInterval(() => this.cullBots(), 10 * SECOND);
+    setInterval(() => this.payDividends(), SECONDS_BETWEEN_DIVIDENDS * SECOND);
   }
 
   tickBots() {
@@ -350,6 +352,23 @@ class Market {
     if (Math.random() < 0.02) {
       this.io.emit("news", { text: `FOMO LOCO trader ${top[0].name} called to testify before House Committee on Financial Services` });
     }
+  }
+
+  payDividends() {
+    let dividends = {};
+    this.assets.forEach(asset => dividends[asset.symbol] = (asset.fundamentalPrice * 0.01));
+    this.traders.forEach(trader => {
+      let totalPayout = 0;
+      this.assets.forEach(asset => totalPayout += trader.shares[asset.symbol] * dividends[asset.symbol]);
+      trader.cash += totalPayout;
+      if (trader.type === constants.TRADER_TYPE_PLAYER) {
+        trader.socket.emit("dividend", {
+          totalPayout: totalPayout.toFixed(2),
+          newCash: trader.cash.toFixed(2),
+          timeToNextDividend: SECONDS_BETWEEN_DIVIDENDS
+        });
+      }
+    });
   }
 }
 

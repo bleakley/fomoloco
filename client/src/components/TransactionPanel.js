@@ -162,6 +162,12 @@ class TransactionPanel extends Component {
               </td>
               <td>{`\$${this.props.cash}`}</td>
             </tr>
+            <tr key={"dividend-row"}>
+              <td>
+                <div style={{position: 'relative'}}><b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style={{position: 'absolute', top: '2px', left: '72px'}}><CooldownTimer current={this.props.timeToNextDividend} max={60} /></div></div>
+              </td>
+              <td>{`\$${this.props.lastDividend}`}</td>
+            </tr>
           </tbody>
         </table>
       </div>

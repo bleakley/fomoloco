@@ -26,8 +26,17 @@ app.use(express.static(game_client_root));
 
 let market = new Market(io);
 
+let serverCreatedAt = new Date();
+
 app.get("/status", (req, res) => {
-  res.send({ status: "online", players: market.getPlayers().length, playersQuit: market.playersQuitCount, bots: market.getBots().length, botsCulled: market.botsCulledCount});
+  res.send({
+    status: "online",
+    players: market.getPlayers().length,
+    playersQuit: market.playersQuitCount,
+    bots: market.getBots().length,
+    botsCulled: market.botsCulledCount,
+    hours: ((new Date() - serverCreatedAt) / (60 * 60 * 1000)).toFixed(2)
+  });
 });
 
 io.on("connection", function (socket) {
