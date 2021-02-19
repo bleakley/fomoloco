@@ -1,5 +1,18 @@
 const _ = require("lodash");
 
+function generatePlanet() {
+  return _.sample([`Mars`, `Jupiter`, `Saturn`, `Uranus`, `Neptune`, `Pluto`]);
+}
+
+function generatePlanetPair() {
+  let firstPlanet = generatePlanet();
+  let secondPlanet = generatePlanet();
+  while (firstPlanet === secondPlanet) {
+    secondPlanet = generatePlanet();
+  }
+  return [firstPlanet, secondPlanet];
+}
+
 function generateAstronomicalBody() {
   let expletive = Math.random() <= 0.3;
   let definiteArticle = Math.random() <= 0.7;
@@ -14,7 +27,7 @@ function generateAstronomicalBody() {
         "ANDROMEDA GALAXY",
         "VOYAGER PROBE",
       ])
-    : _.sample([`MARS`, `JUPITER`, `SATURN`, `URANUS`, `NEPTUNE`, `PLUTO`]);
+    : generatePlanet();
   let text = "";
   if (definiteArticle) text += "the ";
   if (expletive)
@@ -22,6 +35,14 @@ function generateAstronomicalBody() {
       _.sample(["fuckin", "fucking", "freakin", "freaking", "friggin"]) + " ";
   text += name;
   return text;
+}
+
+function generateAstrologicalEvent() {
+  let planets = generatePlanetPair();
+  return _.sample(
+    [`${planets[0]}  in retrograde`],
+    [`${planets[0]}-${planets[1]} conjunction`]
+  );
 }
 
 function generateHackerOrg() {
@@ -128,6 +149,7 @@ function generateCelebrity() {
 
 module.exports = {
   generateAstronomicalBody,
+  generateAstrologicalEvent,
   generateHackerOrg,
   generateTechnologyProduct,
   generateCcgCard,

@@ -268,7 +268,7 @@ class Market {
           }) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample(
             [1, 2, 3, 4]
           )}`,
-          `${narrativeUtils.generateCelebrity()} announces purchase of ${_.sample(
+          `${narrativeUtils.generateCelebrity()} reveals purchase of ${_.sample(
             ["10k", "100k", "500k"]
           )} \$${Math.ceil(
             (1.5 + 2 * significance) * asset.price
@@ -282,6 +282,9 @@ class Market {
             "synthetic cannabinoids",
             "psilocybin mushroom extracts",
           ])} hold promise for treating Groat's syndrome`,
+          `Analyst: ${narrativeUtils.generateAstrologicalEvent()} a positive sign for \$${
+            asset.symbol
+          } price`,
         ]);
         asset.fundamentalPrice = Math.min(
           MAX_FUNDAMENTAL_PRICE,
@@ -317,6 +320,9 @@ class Market {
             "insider trading",
             "conspiracy",
           ])} charges`,
+          `Analyst: ${narrativeUtils.generateAstrologicalEvent()} suggests \$${
+            asset.symbol
+          } likely to fall`,
         ]);
         asset.fundamentalPrice = Math.max(
           MIN_FUNDAMENTAL_PRICE,
