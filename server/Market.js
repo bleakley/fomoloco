@@ -268,7 +268,7 @@ class Market {
           ])} hold promise for treating Groat's syndrome`,
         ]);
         asset.fundamentalPrice = Math.min(MAX_FUNDAMENTAL_PRICE, asset.fundamentalPrice * (1 + significance));
-        setTimeout(() => asset.hype = 1 - (1 - asset.hype) * 0.75, Math.random() * 3 * SECOND);
+        setTimeout(() => asset.hype = 1 - (1 - asset.hype) * 0.75, (1 + Math.random()) * 5 * SECOND);
       } else {
         message = _.sample([
           `${Math.round(significance * 40 + 1)} injured in \$${
