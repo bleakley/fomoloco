@@ -25,7 +25,7 @@ class NewsTicker extends Component {
       },
       {
         text:
-          "Mercury in retrograde causes loss of NASA spacecraft during attempted landing on the inner planet",
+          "Mercury in retrograde blamed for loss of spacecraft during attempted flyby of the inner planet",
       },
       {
         text:
