@@ -100,7 +100,11 @@ function generateCelebrity() {
     "George R.R. Martin",
     "Paul Hollywood",
     "Simon Cowell",
-    "Noel Fielding"
+    "Joe Rogan",
+    "Jack Ma",
+    "Martin Shkreli",
+    "Changpeng Zhao",
+    "LeBron James"
   ]);
 }
 
