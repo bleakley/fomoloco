@@ -49,16 +49,23 @@ function generateTechnologyProduct() {
     "hybrid",
     "scalable",
     '"revolutionary"',
+    "high-throughput",
   ])} ${_.sample([
     "quantum",
     "quantum-ready",
     "quantum-resistant",
     "enterprise",
+    "SNP genotyping",
+    "protein folding",
+    "predictive modeling",
   ])} ${_.sample([
     "mainnet",
     "augmented-reality platform",
     "AI platform",
     "smart contract framework",
+    "drug discovery pipeline",
+    "biopharma accelerator",
+    "CRISPR theraputic",
     "deep-learning model",
   ])}`;
 }
