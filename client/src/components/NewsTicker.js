@@ -35,7 +35,7 @@ class NewsTicker extends Component {
 
     this.props.socket.on("news", (news) => {
       serverNews.push({...news, receivedAt: new Date()});
-      this.setState({serverNewsCount: this.state.serverNewsCount + 1})
+      this.setState({serverNewsCount: serverNews.length})
     });
   }
 
@@ -50,9 +50,9 @@ class NewsTicker extends Component {
 
   getNewsText(index) {
     if (serverNews.length) {
-      this.setState({serverNewsCount: this.state.serverNewsCount - 1})
       let news = serverNews.shift();
       let age = new Date() - news.receivedAt;
+      this.setState({serverNewsCount: serverNews.length})
       if (age < 60000) {
         return news;
       } else {
