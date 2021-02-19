@@ -15,6 +15,9 @@ class Bot {
         "Joe",
         "Badass",
         "Slow",
+        "DeepFucking",
+        "1r0ny",
+        "Roaring"
       ]) +
       _.sample([
         "Hands",
@@ -26,6 +29,8 @@ class Bot {
         "Waffle",
         "Kitten",
         "Ninja",
+        "Value",
+        "Man"
       ]) +
       Math.round(Math.random() * 90 + 10).toString();
     this.id = uuid.v4();
