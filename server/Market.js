@@ -198,7 +198,7 @@ class Market {
         "car",
         "kidney",
         "star wars miniatures",
-        narrativeUtils.generateCcgCard()
+        narrativeUtils.generateCcgCard(),
       ])}- gotta buy more \$${symbol} 🤑`,
       `I'm so HORNY for \$${symbol} 😍🥵🥵💦`,
       `APES STRONGER TOGETHER - BUY \$${symbol} ${"🍌".repeat(
@@ -216,7 +216,7 @@ class Market {
     this.io.emit("hype-message", {
       text: this.generateShillMessage(symbol),
       name: trader.name,
-      symbol: symbol
+      symbol: symbol,
     });
   }
 
@@ -263,9 +263,19 @@ class Market {
       let significance = Math.random();
       if (Math.random() < 0.52) {
         message = _.sample([
-          `${asset.name} (\$${asset.symbol}) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample([1, 2, 3, 4])}`,
-          `${narrativeUtils.generateCelebrity()} announces purchase of ${_.sample(['10k', '100k', '500k'])} \$${Math.ceil((1.5 + 2 * significance) * asset.price)} calls on \$${asset.symbol}`,
-          `${asset.name} (\$${asset.symbol}) receives approval to open ${Math.round(
+          `${asset.name} (\$${
+            asset.symbol
+          }) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample(
+            [1, 2, 3, 4]
+          )}`,
+          `${narrativeUtils.generateCelebrity()} announces purchase of ${_.sample(
+            ["10k", "100k", "500k"]
+          )} \$${Math.ceil(
+            (1.5 + 2 * significance) * asset.price
+          )} calls on \$${asset.symbol}`,
+          `${asset.name} (\$${
+            asset.symbol
+          }) receives approval to open ${Math.round(
             significance * 20 + 2
           )} new dispensaries`,
           `Clinical trials show ${asset.name} (\$${asset.symbol}) ${_.sample([
@@ -273,14 +283,22 @@ class Market {
             "psilocybin mushroom extracts",
           ])} hold promise for treating Groat's syndrome`,
         ]);
-        asset.fundamentalPrice = Math.min(MAX_FUNDAMENTAL_PRICE, asset.fundamentalPrice * (1 + significance));
-        setTimeout(() => asset.hype = 1 - (1 - asset.hype) * 0.75, (1 + Math.random()) * 5 * SECOND);
+        asset.fundamentalPrice = Math.min(
+          MAX_FUNDAMENTAL_PRICE,
+          asset.fundamentalPrice * (1 + significance)
+        );
+        setTimeout(
+          () => (asset.hype = 1 - (1 - asset.hype) * 0.75),
+          (1 + Math.random()) * 5 * SECOND
+        );
       } else {
         message = _.sample([
           `${Math.round(significance * 40 + 1)} injured in \$${
             asset.symbol
           }-related incident`,
-          `${narrativeUtils.generateHackerOrg()} hackers exploit ${asset.name} (\$${asset.symbol}) zero-day vulnerability`,
+          `${narrativeUtils.generateHackerOrg()} hackers exploit ${
+            asset.name
+          } (\$${asset.symbol}) zero-day vulnerability`,
           `${asset.name} (\$${asset.symbol}) announcements draw ${_.sample([
             "SEC",
             "FDA",
@@ -289,7 +307,10 @@ class Market {
             "anti-trust",
             "congressional",
           ])} scrutiny`,
-          `${asset.name} (\$${asset.symbol}) CEO arrested on ${_.sample([
+          `${asset.name} (\$${asset.symbol}) CEO ${_.sample([
+            "arrested",
+            "indicted",
+          ])} on ${_.sample([
             "embezzlement",
             "drug",
             "DUI",
@@ -297,7 +318,10 @@ class Market {
             "conspiracy",
           ])} charges`,
         ]);
-        asset.fundamentalPrice = Math.max(MIN_FUNDAMENTAL_PRICE, asset.fundamentalPrice / (1 + significance));
+        asset.fundamentalPrice = Math.max(
+          MIN_FUNDAMENTAL_PRICE,
+          asset.fundamentalPrice / (1 + significance)
+        );
       }
     }
     this.io.emit("news", { text: message });
@@ -312,8 +336,13 @@ class Market {
   }
 
   cullBots() {
-    let quittingTraders = _.remove(this.traders, (t) => t.type === constants.TRADER_TYPE_BOT && this.getNetWorth(t) < BOT_QUITTING_THRESHOLD);
-    quittingTraders.forEach(trader => {
+    let quittingTraders = _.remove(
+      this.traders,
+      (t) =>
+        t.type === constants.TRADER_TYPE_BOT &&
+        this.getNetWorth(t) < BOT_QUITTING_THRESHOLD
+    );
+    quittingTraders.forEach((trader) => {
       this.botsCulledCount++;
       trader.sellEverything();
       console.log(`bot ${trader.name} is quitting`);
@@ -326,8 +355,8 @@ class Market {
   }
 
   removePlayer(id) {
-    let removed = _.remove(this.traders, t => t.id === id);
-    removed.forEach(trader => {
+    let removed = _.remove(this.traders, (t) => t.id === id);
+    removed.forEach((trader) => {
       this.playersQuitCount++;
       trader.sellEverything();
       console.log(`player ${trader.name} is quitting`);
@@ -335,41 +364,68 @@ class Market {
   }
 
   broadcastLeaderboard() {
-    let leaderboard = this.traders.map((trader) => ({
-      name: trader.name,
-      id: trader.id,
-      netWorth: this.getNetWorth(trader).toFixed(2),
-      cash: trader.cash.toFixed(2),
-      profit: (this.getNetWorth(trader) - trader.startingNetWorth + trader.totalSpentOnUpgrades).toFixed(2),
-    })).sort((a, b) => b.profit - a.profit);
+    let leaderboard = this.traders
+      .map((trader) => ({
+        name: trader.name,
+        id: trader.id,
+        netWorth: this.getNetWorth(trader).toFixed(2),
+        cash: trader.cash.toFixed(2),
+        profit: (
+          this.getNetWorth(trader) -
+          trader.startingNetWorth +
+          trader.totalSpentOnUpgrades
+        ).toFixed(2),
+      }))
+      .sort((a, b) => b.profit - a.profit);
     let rankLookup = {};
     for (let i = 0; i < leaderboard.length; i++) {
       rankLookup[leaderboard[i].id] = i + 1;
     }
-    let top = leaderboard.slice(0, Math.min(LEADERBOARD_SIZE, leaderboard.length));
+    let top = leaderboard.slice(
+      0,
+      Math.min(LEADERBOARD_SIZE, leaderboard.length)
+    );
     this.getPlayers().forEach((trader) => {
-      trader.socket.emit("leaderboard", { rank: rankLookup[trader.id], total: leaderboard.length, top });
+      trader.socket.emit("leaderboard", {
+        rank: rankLookup[trader.id],
+        total: leaderboard.length,
+        top,
+      });
     });
     if (Math.random() < 0.02) {
-      this.io.emit("news", { text: `FOMO LOCO trader ${top[0].name} called to testify before House Committee on Financial Services` });
+      this.io.emit("news", {
+        text: `FOMO LOCO trader ${top[0].name} called to testify before House Committee on Financial Services`,
+      });
     }
   }
 
   payDividends() {
     let dividends = {};
-    this.assets.forEach(asset => dividends[asset.symbol] = (asset.fundamentalPrice * 0.01));
+    this.assets.forEach(
+      (asset) => (dividends[asset.symbol] = asset.fundamentalPrice * 0.01)
+    );
     if (Math.random() < 0.05) {
-      this.io.emit("news", { text: `Dividends per share ${this.assets.map(asset => `\$${asset.symbol} \$${dividends[asset.symbol].toFixed(4)}`).join(', ')}` });
+      this.io.emit("news", {
+        text: `Dividends per share ${this.assets
+          .map(
+            (asset) =>
+              `\$${asset.symbol} \$${dividends[asset.symbol].toFixed(4)}`
+          )
+          .join(", ")}`,
+      });
     }
-    this.traders.forEach(trader => {
+    this.traders.forEach((trader) => {
       let totalPayout = 0;
-      this.assets.forEach(asset => totalPayout += trader.shares[asset.symbol] * dividends[asset.symbol]);
+      this.assets.forEach(
+        (asset) =>
+          (totalPayout += trader.shares[asset.symbol] * dividends[asset.symbol])
+      );
       trader.cash += totalPayout;
       if (trader.type === constants.TRADER_TYPE_PLAYER) {
         trader.socket.emit("dividend", {
           totalPayout: totalPayout.toFixed(2),
           newCash: trader.cash.toFixed(2),
-          timeToNextDividend: SECONDS_BETWEEN_DIVIDENDS
+          timeToNextDividend: SECONDS_BETWEEN_DIVIDENDS,
         });
       }
     });

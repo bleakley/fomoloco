@@ -18,7 +18,8 @@ function generateAstronomicalBody() {
   let text = "";
   if (definiteArticle) text += "the ";
   if (expletive)
-    text += _.sample(["fuckin", "fucking", "freakin", "freaking"]) + " ";
+    text +=
+      _.sample(["fuckin", "fucking", "freakin", "freaking", "friggin"]) + " ";
   text += name;
   return text;
 }
@@ -28,14 +29,15 @@ function generateHackerOrg() {
     _.sample([5, 6, 7, 9]).toString() + "chan",
     "Russian",
     "Chinese",
-    "Ransomware"
+    "Ransomware",
+    "Unidentified",
   ]);
 }
 
 function generateCcgCard() {
-  let card = _.sample(['holofoil charizard', 'alpha black lotus']);
+  let card = _.sample(["holofoil charizard", "alpha black lotus"]);
   if (Math.random() <= 0.3) {
-    let grade = `${_.sample(['PSA', 'BGS'])} ${_.sample(['9', '9.5', '10'])}`;
+    let grade = `${_.sample(["PSA", "BGS"])} ${_.sample(["9", "9.5", "10"])}`;
     card = `${grade} ${card}`;
   }
   return card;
@@ -50,22 +52,23 @@ function generateTechnologyProduct() {
     "scalable",
     '"revolutionary"',
     "high-throughput",
+    "open-source",
   ])} ${_.sample([
     "quantum",
     "quantum-ready",
     "quantum-resistant",
     "enterprise",
     "SNP genotyping",
-    "protein folding",
-    "predictive modeling",
+    "predictive",
   ])} ${_.sample([
     "mainnet",
     "augmented-reality platform",
     "AI platform",
-    "smart contract framework",
+    "smart-contract framework",
     "drug discovery pipeline",
     "biopharma accelerator",
     "CRISPR theraputic",
+    "protein folding algorithm",
     "deep-learning model",
   ])}`;
 }
@@ -104,8 +107,22 @@ function generateCelebrity() {
     "Jack Ma",
     "Martin Shkreli",
     "Changpeng Zhao",
-    "LeBron James"
+    "LeBron James",
+    "Charli D'Amelio",
+    "Autumn Rose",
+    "Belle Delphine",
+    "Snoop Dogg",
+    "John Cena",
+    "Gal Gadot",
+    "Psy",
+    "Hayden Christensen",
   ]);
 }
 
-module.exports = { generateAstronomicalBody, generateHackerOrg, generateTechnologyProduct, generateCcgCard, generateCelebrity };
+module.exports = {
+  generateAstronomicalBody,
+  generateHackerOrg,
+  generateTechnologyProduct,
+  generateCcgCard,
+  generateCelebrity,
+};
