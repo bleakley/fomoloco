@@ -9,7 +9,7 @@ const { remove } = require("lodash");
 const LEADERBOARD_SIZE = 10;
 const BOT_QUITTING_THRESHOLD = 50;
 const DESIRED_BOT_COUNT = 15;
-const MAX_FUNDAMENTAL_PRICE = 2000;
+const MAX_FUNDAMENTAL_PRICE = 200;
 const MIN_FUNDAMENTAL_PRICE = 0.05;
 const SECONDS_BETWEEN_DIVIDENDS = 60;
 
@@ -261,7 +261,7 @@ class Market {
     } else {
       asset = _.sample(this.assets);
       let significance = Math.random();
-      if (Math.random() < 0.55) {
+      if (Math.random() < 0.52) {
         message = _.sample([
           `${asset.name} (\$${asset.symbol}) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample([1, 2, 3, 4])}`,
           `${asset.name} (\$${asset.symbol}) receives approval to open ${Math.round(
