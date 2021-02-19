@@ -21,23 +21,19 @@ const port = 8080;
 let Market = require("./Market.js");
 let User = require("./User.js");
 
-app.get("/status", (req, res) => {
-  res.send({ status: "online" });
-});
+const game_client_root = require('path').join(__dirname, '..', 'client', 'build');
+app.use(express.static(game_client_root));
 
 let market = new Market(io);
 
-const getUsername = (socket) => {
-  return socket.handshake.query.username;
-};
+app.get("/status", (req, res) => {
+  res.send({ status: "online", players: market.getPlayers().length, bots: market.getBots().length });
+});
 
 io.on("connection", function (socket) {
-  let username = getUsername(socket);
-  let user = market.getTraderByName(username);
-  if (!user) {
-    user = new User(username, market, socket);
-    market.addTrader(user);
-  }
+
+  let user = new User(market, socket);
+  market.addTrader(user);
 
   socket.emit("transaction", {
     type: "starting-cash",
@@ -79,6 +75,11 @@ io.on("connection", function (socket) {
   socket.on("set-username", (username) => {
     user.name = username;
     console.log(`${user.name} set username to ${username}`);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`${user.name} has disconnected`);
+    market.removePlayer(user.id);
   });
 });
 

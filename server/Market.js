@@ -4,6 +4,7 @@ const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
 const SECOND = 1000;
 const Bot = require("./Bot.js");
+const { remove } = require("lodash");
 
 const LEADERBOARD_SIZE = 10;
 const BOT_QUITTING_THRESHOLD = 50;
@@ -316,6 +317,14 @@ class Market {
       this.addTrader(new Bot(this));
       console.log(`a new bot joins`);
     }
+  }
+
+  removePlayer(id) {
+    let removed = _.remove(this.traders, t => t.id === id);
+    removed.forEach(trader => {
+      trader.sellEverything();
+      console.log(`player ${trader.name} is quitting`);
+    });
   }
 
   broadcastLeaderboard() {

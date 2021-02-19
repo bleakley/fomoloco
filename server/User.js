@@ -4,11 +4,12 @@ const uuid = require('uuid');
 const upgradeCosts = [150, 250, 500, 1000];
 
 class User {
-  constructor(name, market, socket) {
-    this.name = name;
+  constructor(market, socket) {
     this.socket = socket;
+    this.market = market;
     this.id = uuid.v4();
-    this.cash = 1000;
+    this.name = `user-${this.id}`;
+    this.cash = 100;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;
     this.upgrades = {
@@ -37,6 +38,15 @@ class User {
         level: this.upgrades[type],
         cash: this.cash
       });
+    }
+  }
+
+  sellEverything() {
+    for (let i = 0; i < this.market.assets.length; i++) {
+      let symbol = this.market.assets[i];
+      if (this.shares[symbol] > 0) {
+        this.market.sell(assetToSell.symbol, this, this.shares[symbol]);
+      }
     }
   }
 }
