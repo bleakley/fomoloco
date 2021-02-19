@@ -1,10 +1,13 @@
 import React, { Component } from "react";
 import _ from "lodash";
+import LinkedList from "linked-list";
 import PriceChart from "./PriceChart";
 import TransactionPanel from "./TransactionPanel";
 import UpgradePanel from "./UpgradePanel";
 
 const PRICE_HISTORY_PRUNE_COUNT = 100;
+
+let priceHistories = {};
 
 const getDefaultState = () => ({
   currentPrices: {},
@@ -18,13 +21,38 @@ const getDefaultState = () => ({
   },
 });
 
+class PricePoint extends LinkedList.Item {
+  constructor(value) {
+    super();
+    this.value = value;
+  }
+}
+
+class PriceHistory extends LinkedList {
+  constructor(symbol) {
+    super();
+    this.symbol = symbol;
+  }
+
+  toDataColumn() {
+    var item = this.head;
+    var result = [this.symbol];
+  
+    while (item) {
+      result.push(item.value);
+      item = item.next;
+    }
+  
+    return result;
+  }
+}
+
 class SecuritiesDashboard extends Component {
   constructor(props) {
     super(props);
 
     this.state = getDefaultState();
 
-    this.priceHistories = {};
     this.chartComponent = React.createRef();
 
     this.props.socket.on("transaction", (transaction) => {
@@ -53,26 +81,25 @@ class SecuritiesDashboard extends Component {
 
       for (let i = 0; i < message.length; i++) {
         let security = message[i];
-        if (this.priceHistories[security.symbol] == null) {
-          this.priceHistories[security.symbol] = [];
+        if (!priceHistories[security.symbol]) {
+          priceHistories[security.symbol] = new PriceHistory(security.symbol);
         }
-        this.priceHistories[security.symbol] = this.priceHistories[security.symbol].concat([Number(security.price)]);
+        priceHistories[security.symbol].append(new PricePoint(Number(security.price)));
         if (
-          this.priceHistories[security.symbol].length >
+          priceHistories[security.symbol].size >
           PRICE_HISTORY_PRUNE_COUNT
         ) {
-          this.priceHistories[security.symbol].shift();
+          priceHistories[security.symbol].head.detach();
         }
       }
       let comp = this.chartComponent.current;
         if (comp && comp.chart) {
-          let data = Object.keys(this.priceHistories).map(symbol => [symbol, ...this.priceHistories[symbol]]);
+          let data = Object.values(priceHistories).map(list => list.toDataColumn());
           let colors = {};
           for (let i = 0; i < this.props.assetDescriptions.length; i++) {
             colors[this.props.assetDescriptions[i].symbol] = this.props.assetDescriptions[i].color;
           }
-          comp.chart.load({columns: data, type: "line", colors: colors});
-          comp.chart.legend.hide();
+          comp.chart.load({columns: data, colors: colors});
         }
     });
 

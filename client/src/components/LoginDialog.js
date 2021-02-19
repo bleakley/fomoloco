@@ -38,10 +38,10 @@ class LoginDialog extends Component {
         {/* <DialogTitle id="simple-dialog-title">Enter username</DialogTitle> */}
         <DialogContent>
           <TextField
-            autocomplete="off"
-            autocorrect="off"
-            autocapitalize="off"
-            spellcheck="false"
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            spellCheck="false"
             autoFocus
             margin="dense"
             label="Username"
