@@ -337,7 +337,7 @@ class Market {
     })).sort((a, b) => b.profit - a.profit);
     let rankLookup = {};
     for (let i = 0; i < leaderboard.length; i++) {
-      rankLookup[leaderboard[i].id] = i;
+      rankLookup[leaderboard[i].id] = i + 1;
     }
     let top = leaderboard.slice(0, Math.min(LEADERBOARD_SIZE, leaderboard.length));
     this.getPlayers().forEach((trader) => {
