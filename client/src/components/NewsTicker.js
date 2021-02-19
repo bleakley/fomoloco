@@ -59,7 +59,7 @@ class NewsTicker extends Component {
         let numberToThrowAway = serverNews.length - 1;
         if (numberToThrowAway > 0) {
           serverNews = [serverNews[numberToThrowAway]];
-          this.setState({expiredNewsCount: this.state.expiredNewsCount + numberToThrowAway + 1})
+          this.setState({serverNewsCount: serverNews.length, expiredNewsCount: this.state.expiredNewsCount + numberToThrowAway + 1})
         }
         return this.getNewsText(index);
       }
