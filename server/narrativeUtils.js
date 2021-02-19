@@ -70,4 +70,30 @@ function generateTechnologyProduct() {
   ])}`;
 }
 
-module.exports = { generateAstronomicalBody, generateHackerOrg, generateTechnologyProduct, generateCcgCard };
+function generateCelebrity() {
+  return _.sample([
+    "Bernie Sanders",
+    "Hunter Biden",
+    "Alexandria Ocasio-Cortez",
+    "Andrew Yang",
+    "Ivanka Trump",
+    "Kim Kardashian",
+    "Kanye West",
+    "Tom Hanks",
+    "Idris Elba",
+    "Gene Simmons",
+    "John McAfee",
+    "Elon Musk",
+    "Peter Thiel",
+    "Chamath Palihapitiya",
+    "Mark Cuban",
+    "Vitalik Buterin",
+    "Charles Hoskinson",
+    "Michael Burry",
+    "Ryan Cohen",
+    "PewDiePie",
+    "Mr. Beast"
+  ]);
+}
+
+module.exports = { generateAstronomicalBody, generateHackerOrg, generateTechnologyProduct, generateCcgCard, generateCelebrity };

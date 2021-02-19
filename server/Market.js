@@ -264,6 +264,7 @@ class Market {
       if (Math.random() < 0.52) {
         message = _.sample([
           `${asset.name} (\$${asset.symbol}) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample([1, 2, 3, 4])}`,
+          `${narrativeUtils.generateCelebrity()} announces purchase of ${_.sample(['10k', '100k', '500k'])} \$${Math.ceil((1.5 + significance) * asset.price)} calls on \$${asset.symbol}`,
           `${asset.name} (\$${asset.symbol}) receives approval to open ${Math.round(
             significance * 20 + 2
           )} new dispensaries`,
