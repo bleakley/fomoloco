@@ -11,8 +11,9 @@ import SecuritiesDashboard from "./SecuritiesDashboard";
 import openConnection from "socket.io-client";
 
 const DEBUG_MODE = true;
+const SERVER_URL = process.env.NODE_ENV === 'production' ? "http://fomolo.co:8080" : "http://localhost:8080";
 
-let socket = openConnection("http://localhost:8080", {
+let socket = openConnection(SERVER_URL, {
   query: "username=dfv",
 });
 
