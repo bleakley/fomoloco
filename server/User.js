@@ -1,7 +1,7 @@
 const constants = require("./constants");
 const uuid = require('uuid');
 
-const upgradeCosts = [150, 250, 500, 1000];
+const upgradeCosts = [150, 500, 1000];
 
 class User {
   constructor(market, socket) {

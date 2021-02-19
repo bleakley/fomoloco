@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
 
-const upgradeCosts = [150, 250, 500, 1000];
+const upgradeCosts = [150, 500, 1000];
 
 class UpgradePanel extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class UpgradePanel extends Component {
             </tr>
             <tr>
               <td>HFT Server (Lvl {this.props.upgrades.buy})</td>
-              <td>+1 Buy speed</td>
+              <td>2x Buy speed</td>
               <td>
                 <Button
                   size="small"
@@ -46,7 +46,7 @@ class UpgradePanel extends Component {
             </tr>
             <tr>
               <td>Fat Pipes (Lvl {this.props.upgrades.sell})</td>
-              <td>+1 Sell speed</td>
+              <td>2x Sell speed</td>
               <td>
                 <Button
                   size="small"
@@ -63,7 +63,7 @@ class UpgradePanel extends Component {
             </tr>
             <tr>
               <td>Distributed Botnet (Lvl {this.props.upgrades.hype})</td>
-              <td>+2 Hype speed</td>
+              <td>2x Hype speed</td>
               <td>
                 <Button
                   size="small"
@@ -80,7 +80,7 @@ class UpgradePanel extends Component {
             </tr>
             <tr>
               <td>Brokerage Backchannel (Lvl {this.props.upgrades.volume})</td>
-              <td>10x trade volume</td>
+              <td>+5 trade volume</td>
               <td>
                 <Button
                   size="small"

@@ -12,8 +12,6 @@ let priceHistories = {};
 const getDefaultState = () => ({
   currentPrices: {},
   cash: 0,
-  lastDividend: 0,
-  timeToNextDividend: 60,
   playerHoldings: {},
   upgrades: {
     buy: 0,
@@ -77,9 +75,7 @@ class SecuritiesDashboard extends Component {
 
     this.props.socket.on("dividend", (transaction) => {
       this.setState({ 
-        cash: transaction.newCash,
-        lastDividend: transaction.totalPayout,
-        timeToNextDividend: transaction.timeToNextDividend,
+        cash: transaction.newCash
        });
     });
 
@@ -135,8 +131,6 @@ class SecuritiesDashboard extends Component {
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <TransactionPanel
             cash={this.state.cash}
-            lastDividend={this.state.lastDividend}
-            timeToNextDividend={this.state.timeToNextDividend}
             currentPrices={this.state.currentPrices}
             upgrades={this.state.upgrades}
             socket={this.props.socket}

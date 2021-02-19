@@ -51,7 +51,7 @@ class PriceChart extends Component {
   }
 
   render() {
-    return <div id="chart" style={{marginTop: 10}} />;
+    return <div id="chart" style={{marginTop: 0}} />;
   }
 }
 

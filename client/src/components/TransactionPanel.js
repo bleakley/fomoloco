@@ -24,7 +24,7 @@ function CooldownTimer(props) {
         justifyContent="center"
       >
         <Typography variant="caption" component="div" color="textSecondary">
-          {props.current}
+          {props.current.toFixed(0)}
         </Typography>
       </Box>
     </Box>
@@ -57,15 +57,25 @@ class TransactionPanel extends Component {
       buyTime: 0,
       sellTime: 0,
       hypeTime: 0,
+      lastDividend: 0,
+      timeToNextDividend: 60
     };
 
     setInterval(() => {
       this.setState({
-        buyTime: Math.max(0, this.state.buyTime - 1),
-        sellTime: Math.max(0, this.state.sellTime - 1),
-        hypeTime: Math.max(0, this.state.hypeTime - 1),
+        buyTime: Math.max(0, this.state.buyTime - 0.1),
+        sellTime: Math.max(0, this.state.sellTime - 0.1),
+        hypeTime: Math.max(0, this.state.hypeTime - 0.1),
+        timeToNextDividend: Math.max(0, this.state.timeToNextDividend - 0.1),
       });
-    }, 1000);
+    }, 100);
+
+    this.props.socket.on("dividend", (transaction) => {
+      this.setState({ 
+        lastDividend: transaction.totalPayout,
+        timeToNextDividend: transaction.timeToNextDividend,
+       });
+    });
   }
 
   buy(symbol, cooldown) {
@@ -91,13 +101,13 @@ class TransactionPanel extends Component {
 
   render() {
     let cooldowns = {
-      buy: 5 - this.props.upgrades.buy,
-      sell: 5 - this.props.upgrades.sell,
-      hype: 20 - 2 * this.props.upgrades.hype,
+      buy: 6 / (2 ** this.props.upgrades.buy),
+      sell: 6 / (2 ** this.props.upgrades.sell),
+      hype: 40 / (2 ** this.props.upgrades.hype),
     };
 
     return (
-      <div>
+      <div style={{userSelect: 'none'}}>
         <table>
           <tbody>
             <tr key={"header"}>
@@ -164,9 +174,9 @@ class TransactionPanel extends Component {
             </tr>
             <tr key={"dividend-row"}>
               <td>
-                <div style={{position: 'relative'}}><b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style={{position: 'absolute', top: '2px', left: '72px'}}><CooldownTimer current={this.props.timeToNextDividend} max={60} /></div></div>
+                <div style={{position: 'relative'}}><b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style={{position: 'absolute', top: '2px', left: '72px'}}><CooldownTimer current={this.state.timeToNextDividend} max={60} /></div></div>
               </td>
-              <td>{`\$${this.props.lastDividend}`}</td>
+              <td>{`\$${this.state.lastDividend}`}</td>
             </tr>
           </tbody>
         </table>

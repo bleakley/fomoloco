@@ -18,8 +18,6 @@ let socket = openConnection(SERVER_URL, {
 });
 
 const getDefaultState = () => ({
-  leaderboard: {rank: 0, total: 0, top: []},
-  leaderboardLastUpdated: Date.now(),
   loginDialogOpen: true,
   assetDescriptions: []
 });
@@ -30,13 +28,6 @@ class Main extends Component {
     this.state = getDefaultState();
 
     this.socket = socket;
-
-    socket.on("leaderboard", (leaderboard) => {
-      this.setState({
-        leaderboard: leaderboard,
-        leaderboardLastUpdated: Date.now(),
-      });
-    });
 
     socket.on("assetDescriptions", (descriptions) => {
       this.setState({
@@ -76,10 +67,7 @@ class Main extends Component {
           onClose={() => this.onLoginDialogClose()}
         />
         <Card className="CashLeaderboard">
-          <Leaderboard
-            leaderboard={this.state.leaderboard}
-            leaderboardLastUpdated={this.state.leaderboardLastUpdated}
-          />
+          <Leaderboard socket={this.socket} />
         </Card>
         <Card className="Advertisement">Super annoying ad</Card>
         <Card className="HypeFeed">

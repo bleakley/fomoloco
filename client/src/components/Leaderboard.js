@@ -12,12 +12,24 @@ import Paper from "@material-ui/core/Paper";
 class Leaderboard extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      leaderboard: {rank: 0, total: 0, top: []},
+      leaderboardLastUpdated: Date.now()
+    };
+
+    this.props.socket.on("leaderboard", (leaderboard) => {
+      this.setState({
+        leaderboard: leaderboard,
+        leaderboardLastUpdated: Date.now(),
+      });
+    });
   }
 
   render() {
     return (
       <div>
-        <div>Your rank: {this.props.leaderboard.rank} of {this.props.leaderboard.total}</div>
+        <div>Your rank: {this.state.leaderboard.rank} of {this.state.leaderboard.total}</div>
       <TableContainer component={Paper}>
         <Table size="small" aria-label="Leaderboard">
           <TableHead>
@@ -35,9 +47,9 @@ class Leaderboard extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.leaderboard.top.map((row) => (
+            {this.state.leaderboard.top.map((row) => (
               <TableRow
-                key={`${row.name},${this.props.leaderboardLastUpdated}`}
+                key={`${row.name},${this.state.leaderboardLastUpdated}`}
               >
                 <TableCell component="th" scope="row">
                   <i>{row.name}</i>
