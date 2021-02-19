@@ -92,7 +92,15 @@ function generateCelebrity() {
     "Michael Burry",
     "Ryan Cohen",
     "PewDiePie",
-    "Mr. Beast"
+    "Mr. Beast",
+    "Pokimane",
+    "Paris Hilton",
+    "Larry David",
+    "J.K. Rowling",
+    "George R.R. Martin",
+    "Paul Hollywood",
+    "Simon Cowell",
+    "Noel Fielding"
   ]);
 }
 
