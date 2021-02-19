@@ -357,6 +357,9 @@ class Market {
   payDividends() {
     let dividends = {};
     this.assets.forEach(asset => dividends[asset.symbol] = (asset.fundamentalPrice * 0.01));
+    if (Math.random() < 0.05) {
+      this.io.emit("news", { text: `Dividends per share ${this.assets.map(asset => `\$${asset.symbol} \$${dividends[asset.symbol].toFixed(4)}`).join(', ')}` });
+    }
     this.traders.forEach(trader => {
       let totalPayout = 0;
       this.assets.forEach(asset => totalPayout += trader.shares[asset.symbol] * dividends[asset.symbol]);
