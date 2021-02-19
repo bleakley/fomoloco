@@ -64,8 +64,8 @@ class HypeFeed extends Component {
   render() {
     return (
       <div>
-        {this.state.hype.map((message) => (
-          <HypeMessage message={message} assetDescriptions={this.props.assetDescriptions}/>
+        {this.state.hype.map((message, i) => (
+          <HypeMessage key={i} message={message} assetDescriptions={this.props.assetDescriptions}/>
         ))}
         <div
           style={{ float: "left", clear: "both" }}

@@ -22,7 +22,7 @@ class Market {
     }
 
     setInterval(() => this.broadcastPrices(), 1 * SECOND);
-    setInterval(() => this.generateNews(), 10 * SECOND);
+    setInterval(() => this.generateNews(), 15 * SECOND);
     setInterval(() => this.updateMarketMetrics(), 1 * SECOND);
     setInterval(() => this.broadcastLeaderboard(), 5 * SECOND);
     setInterval(() => this.tickBots(), 2 * SECOND);
