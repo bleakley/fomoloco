@@ -17,6 +17,8 @@ class Market {
     this.io = io;
     this.generateInitialAssets();
     this.traders = [];
+    this.botsCulledCount = 0;
+    this.playersQuitCount = 0;
 
     for (let i = 0; i < DESIRED_BOT_COUNT; i++) {
       this.addTrader(new Bot(this));
@@ -309,6 +311,7 @@ class Market {
   cullBots() {
     let quittingTraders = _.remove(this.traders, (t) => t.type === constants.TRADER_TYPE_BOT && this.getNetWorth(t) < BOT_QUITTING_THRESHOLD);
     quittingTraders.forEach(trader => {
+      this.botsCulledCount++;
       trader.sellEverything();
       console.log(`bot ${trader.name} is quitting`);
     });
@@ -322,6 +325,7 @@ class Market {
   removePlayer(id) {
     let removed = _.remove(this.traders, t => t.id === id);
     removed.forEach(trader => {
+      this.playersQuitCount++;
       trader.sellEverything();
       console.log(`player ${trader.name} is quitting`);
     });

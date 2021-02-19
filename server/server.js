@@ -27,7 +27,7 @@ app.use(express.static(game_client_root));
 let market = new Market(io);
 
 app.get("/status", (req, res) => {
-  res.send({ status: "online", players: market.getPlayers().length, bots: market.getBots().length });
+  res.send({ status: "online", players: market.getPlayers().length, playersQuit: market.playersQuitCount, bots: market.getBots().length, botsCulled: market.botsCulledCount});
 });
 
 io.on("connection", function (socket) {
