@@ -39,6 +39,16 @@ app.get("/status", (req, res) => {
   });
 });
 
+app.post("/message", (req, res) => {
+  if (req.body.secret === '44440570-52bf-4dfc-b81b-f7837528ee8d') {
+    io.emit("alert", req.body.message)
+    res.json({ message: 'message sent' })
+  } else {
+    res.status(403);
+    res.json({ message: 'wrong secret' })
+  }
+});
+
 io.on("connection", function (socket) {
 
   let user = new User(market, socket);

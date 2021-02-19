@@ -34,6 +34,10 @@ class Main extends Component {
         assetDescriptions: descriptions
       });
     });
+
+    socket.on("alert", (message) => {
+      alert(message);
+    });
   }
 
   componentDidMount() {
