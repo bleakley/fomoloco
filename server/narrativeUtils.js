@@ -116,6 +116,12 @@ function generateCelebrity() {
     "Gal Gadot",
     "Psy",
     "Hayden Christensen",
+    _.sample([
+      "Sporty Spice",
+      "Baby Spice",
+      "Ginger Spice",
+      "Victoria Beckham",
+    ]),
   ]);
 }
 
