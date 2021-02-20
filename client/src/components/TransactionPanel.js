@@ -58,7 +58,7 @@ class TransactionPanel extends Component {
       sellTime: 0,
       hypeTime: 0,
       lastDividend: 0,
-      timeToNextDividend: 60
+      timeToNextDividend: 60,
     };
 
     setInterval(() => {
@@ -71,22 +71,28 @@ class TransactionPanel extends Component {
     }, 100);
 
     this.props.socket.on("dividend", (transaction) => {
-      this.setState({ 
+      this.setState({
         lastDividend: transaction.totalPayout,
         timeToNextDividend: transaction.timeToNextDividend,
-       });
+      });
     });
   }
 
   buy(symbol, cooldown) {
-    this.props.socket.emit("buy-asset", { symbol: symbol, shares: 1 });
+    this.props.socket.emit("buy-asset", {
+      symbol: symbol,
+      shares: 10 ** this.props.upgrades.volume,
+    });
     this.setState({
       buyTime: cooldown,
     });
   }
 
   sell(symbol, cooldown) {
-    this.props.socket.emit("sell-asset", { symbol: symbol, shares: 1 });
+    this.props.socket.emit("sell-asset", {
+      symbol: symbol,
+      shares: 10 ** this.props.upgrades.volume,
+    });
     this.setState({
       sellTime: cooldown,
     });
@@ -101,13 +107,13 @@ class TransactionPanel extends Component {
 
   render() {
     let cooldowns = {
-      buy: 6 / (2 ** this.props.upgrades.buy),
-      sell: 6 / (2 ** this.props.upgrades.sell),
-      hype: 40 / (2 ** this.props.upgrades.hype),
+      buy: 6 / 2 ** this.props.upgrades.buy,
+      sell: 6 / 2 ** this.props.upgrades.sell,
+      hype: 40 / 2 ** this.props.upgrades.hype,
     };
 
     return (
-      <div style={{userSelect: 'none'}}>
+      <div style={{ userSelect: "none" }}>
         <table>
           <tbody>
             <tr key={"header"}>
@@ -126,13 +132,15 @@ class TransactionPanel extends Component {
               <tr key={asset.symbol + "-row"}>
                 <td
                   style={{
-                    color: asset.color
+                    color: asset.color,
                   }}
                 >
                   <b>${asset.symbol}</b>{" "}
                 </td>
                 <td>{this.props.playerHoldings[asset.symbol] || 0} </td>
-                <td>${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)} </td>
+                <td>
+                  ${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}{" "}
+                </td>
                 <td>
                   $
                   {(
@@ -174,7 +182,17 @@ class TransactionPanel extends Component {
             </tr>
             <tr key={"dividend-row"}>
               <td>
-                <div style={{position: 'relative'}}><b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<div style={{position: 'absolute', top: '2px', left: '72px'}}><CooldownTimer current={this.state.timeToNextDividend} max={60} /></div></div>
+                <div style={{ position: "relative" }}>
+                  <b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div
+                    style={{ position: "absolute", top: "2px", left: "72px" }}
+                  >
+                    <CooldownTimer
+                      current={this.state.timeToNextDividend}
+                      max={60}
+                    />
+                  </div>
+                </div>
               </td>
               <td>{`\$${this.state.lastDividend}`}</td>
             </tr>

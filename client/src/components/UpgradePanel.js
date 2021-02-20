@@ -2,7 +2,12 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
 
-const upgradeCosts = [150, 500, 1000];
+const upgradeCosts = {
+  buy: [150, 500, 1000],
+  sell: [150, 500, 1000],
+  hype: [150, 500, 1000],
+  volume: [1000, 2000],
+};
 
 class UpgradePanel extends Component {
   constructor(props) {
@@ -10,10 +15,10 @@ class UpgradePanel extends Component {
   }
 
   render() {
-    let buyCost = upgradeCosts[this.props.upgrades.buy];
-    let sellCost = upgradeCosts[this.props.upgrades.sell];
-    let hypeCost = upgradeCosts[this.props.upgrades.hype];
-    let volumeCost = upgradeCosts[this.props.upgrades.volume];
+    let buyCost = upgradeCosts["buy"][this.props.upgrades.buy];
+    let sellCost = upgradeCosts["sell"][this.props.upgrades.sell];
+    let hypeCost = upgradeCosts["hype"][this.props.upgrades.hype];
+    let volumeCost = upgradeCosts["volume"][this.props.upgrades.volume];
 
     return (
       <div>
@@ -35,7 +40,7 @@ class UpgradePanel extends Component {
                   size="small"
                   color="primary"
                   disabled={
-                    this.props.upgrades.buy >= upgradeCosts.length ||
+                    this.props.upgrades.buy >= upgradeCosts["buy"].length ||
                     this.props.cash <= buyCost
                   }
                   onClick={() => this.props.socket.emit("buy-upgrade", "buy")}
@@ -52,7 +57,7 @@ class UpgradePanel extends Component {
                   size="small"
                   color="primary"
                   disabled={
-                    this.props.upgrades.sell >= upgradeCosts.length ||
+                    this.props.upgrades.sell >= upgradeCosts["sell"].length ||
                     this.props.cash <= sellCost
                   }
                   onClick={() => this.props.socket.emit("buy-upgrade", "sell")}
@@ -69,7 +74,7 @@ class UpgradePanel extends Component {
                   size="small"
                   color="primary"
                   disabled={
-                    this.props.upgrades.hype >= upgradeCosts.length ||
+                    this.props.upgrades.hype >= upgradeCosts["hype"].length ||
                     this.props.cash <= hypeCost
                   }
                   onClick={() => this.props.socket.emit("buy-upgrade", "hype")}
@@ -86,8 +91,8 @@ class UpgradePanel extends Component {
                   size="small"
                   color="primary"
                   disabled={
-                    true ||
-                    this.props.upgrades.volume >= upgradeCosts.length ||
+                    this.props.upgrades.volume >=
+                      upgradeCosts["volume"].length ||
                     this.props.cash <= volumeCost
                   }
                   onClick={() =>

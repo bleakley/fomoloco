@@ -1,7 +1,12 @@
 const constants = require("./constants");
-const uuid = require('uuid');
+const uuid = require("uuid");
 
-const upgradeCosts = [150, 500, 1000];
+const upgradeCosts = {
+  buy: [150, 500, 1000],
+  sell: [150, 500, 1000],
+  hype: [150, 500, 1000],
+  volume: [1000, 2000],
+};
 
 class User {
   constructor(market, socket) {
@@ -17,8 +22,8 @@ class User {
       buy: 0,
       sell: 0,
       hype: 0,
-      volume: 0
-    }
+      volume: 0,
+    };
     this.totalSpentOnUpgrades = 0;
     for (let asset of market.assets) {
       this.shares[asset.symbol] = 0;
@@ -29,7 +34,7 @@ class User {
     if (this.upgrades[type] >= upgradeCosts.length) {
       return false;
     }
-    let cost = upgradeCosts[this.upgrades[type]];
+    let cost = upgradeCosts[type][this.upgrades[type]];
     if (this.cash >= cost) {
       this.upgrades[type]++;
       this.cash -= cost;
@@ -37,7 +42,7 @@ class User {
       socket.emit("upgrade", {
         type,
         level: this.upgrades[type],
-        cash: this.cash.toFixed(2)
+        cash: this.cash.toFixed(2),
       });
     }
   }
