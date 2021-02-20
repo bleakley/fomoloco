@@ -27,7 +27,7 @@ function generateAstronomicalBody() {
         "ANDROMEDA GALAXY",
         "VOYAGER PROBE",
       ])
-    : generatePlanet();
+    : generatePlanet().toUpperCase();
   let text = "";
   if (definiteArticle) text += "the ";
   if (expletive)
