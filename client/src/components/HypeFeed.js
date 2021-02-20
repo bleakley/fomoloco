@@ -58,7 +58,9 @@ class HypeFeed extends Component {
   }
 
   componentDidUpdate() {
-    this.scrollToBottom();
+    if (window.focused) {
+      this.scrollToBottom();
+    }
   }
   
   render() {
