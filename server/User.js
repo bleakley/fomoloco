@@ -54,8 +54,7 @@ class User {
     this.id = uuid.v4();
     this.name = `user-${this.id}`;
     this.suggestedName = market.getUniqueUserName();
-    // this.cash = 100;
-    this.cash = 10000;
+    this.cash = 100;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;
     this.upgrades = {
