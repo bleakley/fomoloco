@@ -59,6 +59,10 @@ io.on("connection", function (socket) {
     newCash: user.cash.toFixed(2),
   });
 
+  socket.emit("usernameSuggestion", {
+    suggestion: user.suggestedName
+  });
+
   socket.emit("assetDescriptions", market.assets.map(a => ({symbol: a.symbol, name: a.name, color: a.color})));
 
   console.log(`user ${user.name} has connected`);
@@ -92,8 +96,12 @@ io.on("connection", function (socket) {
   });
 
   socket.on("set-username", (username) => {
-    user.name = username;
-    console.log(`${user.name} set username to ${username}`);
+    if (market.usernamesUsed.has(username) && username !== user.suggestedName) {
+      socket.emit("usernameRejected", {});
+    } else {
+      user.name = username;
+      console.log(`${user.name} set username to ${username}`);
+    }
   });
 
   socket.on("disconnect", () => {

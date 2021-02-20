@@ -21,8 +21,10 @@ class Market {
     this.botsCulledCount = 0;
     this.playersQuitCount = 0;
 
+    this.usernamesUsed = new Set();
+
     for (let i = 0; i < DESIRED_BOT_COUNT; i++) {
-      this.addTrader(new Bot(this));
+      this.addTrader(new Bot(this, this.getUniqueUserName()));
     }
 
     setInterval(() => this.broadcastPrices(), 1 * SECOND);
@@ -32,6 +34,47 @@ class Market {
     setInterval(() => this.tickBots(), 2 * SECOND);
     setInterval(() => this.cullBots(), 10 * SECOND);
     setInterval(() => this.payDividends(), SECONDS_BETWEEN_DIVIDENDS * SECOND);
+  }
+
+  getRandomUserName() {
+    return _.sample([
+      "Sexy",
+      "Diamond",
+      "Juicy",
+      "Horny",
+      "Paper",
+      "Joe",
+      "Badass",
+      "Slow",
+      "DeepFucking",
+      "1r0ny",
+      "Roaring"
+    ]) +
+    _.sample([
+      "Hands",
+      "Slut",
+      "Tendies",
+      "Doge",
+      "Ape",
+      "Banana",
+      "Waffle",
+      "Kitten",
+      "Ninja",
+      "Value",
+      "Man"
+    ]) +
+    Math.round(Math.random() * 90 + 10).toString();
+  }
+
+  getUniqueUserName() {
+    let name = this.getRandomUserName();
+    let attempts = 0;
+    while (this.usernamesUsed.has(name) && attempts < 50) {
+      attempts++;
+      name = this.getRandomUserName();
+    }
+    this.usernamesUsed.add(name);
+    return name;
   }
 
   tickBots() {
@@ -181,6 +224,7 @@ class Market {
 
   generateShillMessage(symbol) {
     return _.sample([
+      `🤑 \$${symbol} will go 📈${_.sample(['VERTICAL', 'PARABOLIC', 'NUCLEAR', 'GALACTIC', 'CRITICAL'])}📈 very SOON 🚀`,
       `short interest on \$${symbol} is STILL GOING UP`,
       `HOLD \$${symbol}${"!".repeat(
         _.sample([1, 2, 3, 4])
@@ -261,7 +305,7 @@ class Market {
     } else {
       asset = _.sample(this.assets);
       let significance = Math.random();
-      if (Math.random() < 0.52) {
+      if (Math.random() < 0.51) {
         message = _.sample([
           `${asset.name} (\$${
             asset.symbol
@@ -351,6 +395,8 @@ class Market {
     quittingTraders.forEach((trader) => {
       this.botsCulledCount++;
       trader.sellEverything();
+      // Bots can reuse names but players won't
+      this.usernamesUsed.delete(trader.name);
       console.log(`bot ${trader.name} is quitting`);
     });
 
@@ -408,7 +454,7 @@ class Market {
   payDividends() {
     let dividends = {};
     this.assets.forEach(
-      (asset) => (dividends[asset.symbol] = asset.fundamentalPrice * 0.01)
+      (asset) => (dividends[asset.symbol] = asset.fundamentalPrice * 0.0075)
     );
     if (Math.random() < 0.05) {
       this.io.emit("news", {

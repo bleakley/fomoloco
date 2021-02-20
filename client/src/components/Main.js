@@ -18,7 +18,7 @@ let socket = openConnection(SERVER_URL, {
 });
 
 const getDefaultState = () => ({
-  loginDialogOpen: true,
+  loginDialogOpen: false,
   assetDescriptions: []
 });
 
@@ -33,6 +33,19 @@ class Main extends Component {
       this.setState({
         assetDescriptions: descriptions
       });
+    });
+
+    socket.on("usernameSuggestion", () => {
+      this.setState({
+        loginDialogOpen: true,
+      });
+    });
+
+    socket.on("usernameRejected", () => {
+      this.setState({
+        loginDialogOpen: true,
+      });
+      alert("That username is not available. Please pick another one.");
     });
 
     socket.on("alert", (message) => {

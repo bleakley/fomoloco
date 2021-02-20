@@ -4,35 +4,8 @@ const constants = require("./constants");
 const uuid = require('uuid');
 
 class Bot {
-  constructor(market) {
-    this.name =
-      _.sample([
-        "Sexy",
-        "Diamond",
-        "Juicy",
-        "Horny",
-        "Paper",
-        "Joe",
-        "Badass",
-        "Slow",
-        "DeepFucking",
-        "1r0ny",
-        "Roaring"
-      ]) +
-      _.sample([
-        "Hands",
-        "Slut",
-        "Tendies",
-        "Doge",
-        "Ape",
-        "Banana",
-        "Waffle",
-        "Kitten",
-        "Ninja",
-        "Value",
-        "Man"
-      ]) +
-      Math.round(Math.random() * 90 + 10).toString();
+  constructor(market, name) {
+    this.name = name;
     this.id = uuid.v4();
     this.cash = 100;
     this.totalSpentOnUpgrades = 0;

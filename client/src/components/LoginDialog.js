@@ -10,7 +10,13 @@ import DialogActions from "@material-ui/core/DialogActions";
 class LoginDialog extends Component {
   constructor(props) {
     super(props);
-    this.state = { name: "dfv" };
+    this.state = { name: "" };
+
+    this.props.socket.on("usernameSuggestion", (message) => {
+      this.setState({
+        name: message.suggestion
+      });
+    });
   }
 
   handleClose() {
