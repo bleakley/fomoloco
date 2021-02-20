@@ -404,12 +404,10 @@ class Market {
       trader.sellEverything();
       // Bots can reuse names but players won't
       this.usernamesUsed.delete(trader.name);
-      console.log(`bot ${trader.name} is quitting`);
     });
 
     if (this.getBots().length < DESIRED_BOT_COUNT) {
       this.addTrader(new Bot(this));
-      console.log(`a new bot joins`);
     }
   }
 

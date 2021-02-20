@@ -69,26 +69,18 @@ io.on("connection", function (socket) {
   console.log(`user ${user.name} has connected`);
 
   socket.on("buy-asset", (order) => {
-    console.log(
-      `${user.name} requested to buy ${order.shares} ${order.symbol}`
-    );
     market.buy(order.symbol, user, order.shares, socket);
   });
 
   socket.on("sell-asset", (order) => {
-    console.log(
-      `${user.name} requested to sell ${order.shares} ${order.symbol}`
-    );
     market.sell(order.symbol, user, order.shares, socket);
   });
 
   socket.on("shill-asset", (symbol) => {
-    console.log(`${user.name} requested to shill ${symbol}`);
     market.shill(symbol, user);
   });
 
   socket.on("buy-upgrade", (upgradeType) => {
-    console.log(`${user.name} requested upgrade ${upgradeType}`);
     user.upgrade(upgradeType, socket);
   });
 
@@ -112,5 +104,5 @@ io.on("connection", function (socket) {
 });
 
 http.listen(port, () => {
-  console.log("listening on port " + port + "...");
+  console.log(new Date().toString() + " listening on port " + port + "...");
 });

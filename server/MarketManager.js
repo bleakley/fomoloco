@@ -1,8 +1,11 @@
+const _ = require("lodash");
 let Market = require("./Market.js");
 
-const MAX_DESIRED_MARKET_AGE = 30 * 60 * 1000;
+const MINUTE = 60 * 1000;
+const HOUR = 60 * MINUTE;
+const MAX_DESIRED_MARKET_AGE = 30 * MINUTE;
 const MAX_DESIRED_PLAYERS = 20;
-const MAX_MARKET_AGE = 5 * 60 * 60 * 1000;
+const MAX_MARKET_AGE = 5 * HOUR;
 
 class MarketManager {
     constructor(io) {
@@ -10,7 +13,7 @@ class MarketManager {
         this.markets = [];
         this.marketsCulled = 0;
 
-        setInterval(() => this.cullMarkets(), 5 * 60 * 1000);
+        setInterval(() => this.cullMarkets(), 5 * MINUTE);
     }
 
     getStats() {
@@ -22,7 +25,7 @@ class MarketManager {
                 playersQuit: market.playersQuitCount,
                 bots: market.getBots().length,
                 botsCulled: market.botsCulledCount,
-                hours: (market.getAge() / (60 * 60 * 1000))
+                hours: (market.getAge() / (HOUR))
             }))
         }
     }
@@ -34,6 +37,7 @@ class MarketManager {
         } else {
             nextMarket = new Market(this.io);
             this.markets.push(nextMarket);
+            console.log(new Date().toString() + " new market created");
             return nextMarket;
         }
     }
