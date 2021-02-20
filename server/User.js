@@ -1,11 +1,50 @@
 const constants = require("./constants");
 const uuid = require("uuid");
 
-const upgradeCosts = {
-  buy: [150, 500, 1000],
-  sell: [150, 500, 1000],
-  hype: [150, 500, 1000],
-  volume: [1000, 2000],
+const upgrades = {
+  buy: {
+    class: "Connection",
+    levels: [
+      { cost: 0, name: "28.8 kbps modem", description: "1x buy speed" },
+      { cost: 150, name: "DSL", description: "2x buy speed" },
+      { cost: 500, name: "gigabit fiber", description: "4x buy speed" },
+      { cost: 1000, name: "HFT server", description: "8x buy speed" },
+    ],
+  },
+  sell: {
+    class: "Hardware",
+    levels: [
+      { cost: 0, name: "dirty keyboard", description: "1x sell speed" },
+      { cost: 150, name: "clean keyboard", description: "2x sell speed" },
+      { cost: 500, name: "gaming keyboard", description: "4x sell speed" },
+      {
+        cost: 1000,
+        name: "gaming keyboard w/ LEDs",
+        description: "8x sell speed",
+      },
+    ],
+  },
+  hype: {
+    class: "Influence",
+    levels: [
+      { cost: 0, name: "basic account", description: "1x hype speed" },
+      { cost: 150, name: "high karma account", description: "2x hype speed" },
+      { cost: 500, name: "moderator account", description: "4x hype speed" },
+      { cost: 1000, name: "botnet", description: "8x hype speed" },
+    ],
+  },
+  volume: {
+    class: "Platform",
+    levels: [
+      { cost: 0, name: "Nottingham app", description: "1x volume" },
+      { cost: 1000, name: "brokerage account", description: "10x volume" },
+      {
+        cost: 2000,
+        name: "brokerage backchannel",
+        description: "100x volume",
+      },
+    ],
+  },
 };
 
 class User {
@@ -15,7 +54,8 @@ class User {
     this.id = uuid.v4();
     this.name = `user-${this.id}`;
     this.suggestedName = market.getUniqueUserName();
-    this.cash = 100;
+    // this.cash = 100;
+    this.cash = 10000;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;
     this.upgrades = {
@@ -31,10 +71,10 @@ class User {
   }
 
   upgrade(type, socket) {
-    if (this.upgrades[type] >= upgradeCosts.length) {
+    if (this.upgrades[type] + 1 >= upgrades[type].levels.length) {
       return false;
     }
-    let cost = upgradeCosts[type][this.upgrades[type]];
+    let cost = upgrades[type].levels[this.upgrades[type] + 1].cost;
     if (this.cash >= cost) {
       this.upgrades[type]++;
       this.cash -= cost;
