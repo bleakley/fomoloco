@@ -16,7 +16,7 @@ const io = require("socket.io")(http, {
   },
 });
 
-const port = 8080;
+const port = process.env.PORT || 80;
 
 let MarketManager = require("./MarketManager.js");
 let User = require("./User.js");

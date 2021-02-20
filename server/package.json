@@ -2,9 +2,9 @@
   "name": "fomoloco",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "PORT=8080 node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
