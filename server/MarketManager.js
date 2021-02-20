@@ -21,7 +21,8 @@ class MarketManager {
             marketsActive: this.markets.length,
             marketsCulled: this.marketsCulled,
             markets: this.markets.map(market => ({
-                players: market.getPlayers().length,
+                players: market.getPlayers().map(p => p.name),
+                playerCount: market.getPlayers().length,
                 playersQuit: market.playersQuitCount,
                 bots: market.getBots().length,
                 botsCulled: market.botsCulledCount,
