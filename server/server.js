@@ -18,24 +18,21 @@ const io = require("socket.io")(http, {
 
 const port = 8080;
 
-let Market = require("./Market.js");
+let MarketManager = require("./MarketManager.js");
 let User = require("./User.js");
 
 const game_client_root = require('path').join(__dirname, '..', 'client', 'build');
 app.use(express.static(game_client_root));
 
-let market = new Market(io);
+let marketManager = new MarketManager(io);
 
 let serverCreatedAt = new Date();
 
 app.get("/status", (req, res) => {
   res.send({
     status: "online",
-    players: market.getPlayers().length,
-    playersQuit: market.playersQuitCount,
-    bots: market.getBots().length,
-    botsCulled: market.botsCulledCount,
-    hours: ((new Date() - serverCreatedAt) / (60 * 60 * 1000)).toFixed(2)
+    serverHours: ((new Date() - serverCreatedAt) / (60 * 60 * 1000)),
+    ...marketManager.getStats()
   });
 });
 
@@ -51,8 +48,12 @@ app.post("/message", (req, res) => {
 
 io.on("connection", function (socket) {
 
+  //let requestedRoom = socket.handshake.query.requestedRoom;
+  let market = marketManager.getNextMarket();
   let user = new User(market, socket);
   market.addTrader(user);
+
+  socket.join(market.id);
 
   socket.emit("transaction", {
     type: "starting-cash",

@@ -138,6 +138,10 @@ function generateCelebrity() {
     "Psy",
     "Hayden Christensen",
     "Maren Altman",
+    "Tai Lopez",
+    "Ludacris",
+    "Dasha Nekrasova",
+    "Anna Khachiyan",
     _.sample([
       "Sporty Spice",
       "Baby Spice",

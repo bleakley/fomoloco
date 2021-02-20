@@ -4,6 +4,7 @@ const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
 const SECOND = 1000;
 const Bot = require("./Bot.js");
+const uuid = require('uuid');
 const { remove } = require("lodash");
 
 const LEADERBOARD_SIZE = 10;
@@ -16,6 +17,8 @@ const SECONDS_BETWEEN_DIVIDENDS = 60;
 class Market {
   constructor(io) {
     this.io = io;
+    this.id = uuid.v4();
+    this.createdAt = new Date();
     this.generateInitialAssets();
     this.traders = [];
     this.botsCulledCount = 0;
@@ -84,6 +87,10 @@ class Market {
   addTrader(trader) {
     this.traders.push(trader);
     trader.startingNetWorth = this.getNetWorth(trader);
+  }
+
+  getAge() {
+    return new Date() - this.createdAt;
   }
 
   getBots() {
@@ -257,7 +264,7 @@ class Market {
   shill(symbol, trader) {
     let asset = this.getAssetBySymbol(symbol);
     asset.hype = 1 - (1 - asset.hype) * 0.95;
-    this.io.emit("hype-message", {
+    this.io.to(this.id).emit("hype-message", {
       text: this.generateShillMessage(symbol),
       name: trader.name,
       symbol: symbol,
@@ -274,7 +281,7 @@ class Market {
       // );
       data.push({ symbol: asset.symbol, price: asset.price.toFixed(2) });
     }
-    this.io.emit("prices", data);
+    this.io.to(this.id).emit("prices", data);
   }
 
   getExuberance(asset) {
@@ -374,7 +381,7 @@ class Market {
         );
       }
     }
-    this.io.emit("news", { text: message });
+    this.io.to(this.id).emit("news", { text: message });
   }
 
   getNetWorth(trader) {
@@ -445,7 +452,7 @@ class Market {
       });
     });
     if (Math.random() < 0.02) {
-      this.io.emit("news", {
+      this.io.to(this.id).emit("news", {
         text: `FOMO LOCO trader ${top[0].name} called to testify before House Committee on Financial Services`,
       });
     }
@@ -457,7 +464,7 @@ class Market {
       (asset) => (dividends[asset.symbol] = asset.fundamentalPrice * 0.0075)
     );
     if (Math.random() < 0.05) {
-      this.io.emit("news", {
+      this.io.to(this.id).emit("news", {
         text: `Dividends per share ${this.assets
           .map(
             (asset) =>
