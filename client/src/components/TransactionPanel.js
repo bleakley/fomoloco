@@ -213,18 +213,6 @@ class TransactionPanel extends Component {
       <div style={{ userSelect: "none" }}>
         <table>
           <tbody>
-            <tr key={"header"}>
-              <td></td>
-              <td>
-                <b>Price</b>
-              </td>
-              <td>
-                <b>Shares</b>
-              </td>
-              <td>
-                <b>Value</b>
-              </td>
-            </tr>
             {this.props.assetDescriptions.map((asset) => (
               <tr key={asset.symbol + "-row"}>
                 <td

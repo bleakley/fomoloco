@@ -8,7 +8,7 @@ const uuid = require("uuid");
 const { remove } = require("lodash");
 
 const LEADERBOARD_SIZE = 10;
-const BOT_QUITTING_THRESHOLD = 50;
+const BOT_QUITTING_THRESHOLD = 40;
 const DESIRED_BOT_COUNT = 15;
 const MAX_FUNDAMENTAL_PRICE = 200;
 const MIN_FUNDAMENTAL_PRICE = 0.05;

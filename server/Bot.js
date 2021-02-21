@@ -7,7 +7,7 @@ class Bot {
   constructor(market, name) {
     this.name = name;
     this.id = uuid.v4();
-    this.cash = 100;
+    this.cash = 60;
     this.totalSpentOnUpgrades = 0;
     this.totalSpentOnPowerups = 0;
     this.shares = {};

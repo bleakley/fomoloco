@@ -72,9 +72,6 @@ class Upgrade extends Component {
         : null;
     return (
       <tr>
-        <td>
-          <b>{upgrades[this.props.type].class}</b>
-        </td>
         <td style={{ minWidth: "280px", whiteSpace: "nowrap" }}>
           {currentLevel.name}{" "}
           {currentLevel.description ? `(${currentLevel.description})` : ""}
@@ -89,7 +86,7 @@ class Upgrade extends Component {
                 this.props.socket.emit("buy-upgrade", this.props.type)
               }
             >
-              Upgrade ${nextLevel.cost}
+              Upgrade {upgrades[this.props.type].class} ${nextLevel.cost}
             </Button>
           ) : (
             ""
