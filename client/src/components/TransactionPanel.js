@@ -349,7 +349,7 @@ class TransactionPanel extends Component {
                     <div style={{ fontSize: "1.4em", minWidth: "200px" }}>
                       Companies periodically pay dividends to their shareholders
                       based on how successful the business is. In the last
-                      dividend period, you received
+                      dividend period, you received{" "}
                       {`\$${this.state.lastDividend}`}.
                     </div>
                   }
