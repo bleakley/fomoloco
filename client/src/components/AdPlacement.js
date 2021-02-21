@@ -85,6 +85,16 @@ class DonationAd extends Component {
             </div>
           </div>
         </div>
+        <div
+          style={{
+            display: "flex",
+            justifyItems: "center",
+            justifyContent: "center",
+            marginTop: "5px",
+          }}
+        >
+          Created with love for &nbsp;<a href="https://itch.io/jam/brackeys-5" target="_blank">Brackeys Game Jam 2021.1</a>
+        </div>
       </div>
     );
   }

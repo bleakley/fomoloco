@@ -253,6 +253,17 @@ class TransactionPanel extends Component {
       );
     };
 
+    const getQuantity = (symbol) => {
+      return `${this.props.playerHoldings[symbol] < 0 ? "−" : ""}${Math.abs(this.props.playerHoldings[symbol]) || 0}`
+    }
+
+    const getTotal = (symbol) => {
+      return `${this.props.playerHoldings[symbol] < 0 ? "−" : ""}\$${(
+        (Math.abs(this.props.playerHoldings[symbol]) || 0) *
+        this.props.currentPrices[symbol]
+      ).toFixed(2)}`
+    }
+
     return (
       <div style={{ userSelect: "none" }}>
         <table>
@@ -271,19 +282,13 @@ class TransactionPanel extends Component {
                   </Tooltip>
                 </td>
                 <td>
-                  ${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}{" "}
+                  ${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}
                 </td>
                 <td>
-                  {" "}
-                  {this.props.playerHoldings[asset.symbol] < 0 ? "−" : ""}
-                  {Math.abs(this.props.playerHoldings[asset.symbol]) || 0}{" "}
+                  x {getQuantity(asset.symbol)}
                 </td>
                 <td style={{ whiteSpace: "nowrap" }}>
-                  {this.props.playerHoldings[asset.symbol] < 0 ? "−" : ""}$
-                  {(
-                    (Math.abs(this.props.playerHoldings[asset.symbol]) || 0) *
-                    this.props.currentPrices[asset.symbol]
-                  ).toFixed(2)}{" "}
+                  = {getTotal(asset.symbol)}
                 </td>
                 <td style={{ whiteSpace: "nowrap" }}>
                   {!this.props.playerHoldings[asset.symbol] ||
