@@ -40,7 +40,7 @@ function generateAstronomicalBody() {
 function generateAstrologicalEvent() {
   let planets = generatePlanetPair();
   return _.sample(
-    [`${planets[0]}  in retrograde`],
+    [`${planets[0]} in retrograde`],
     [`${planets[0]}-${planets[1]} conjunction`]
   );
 }
@@ -142,6 +142,7 @@ function generateCelebrity() {
     "Ludacris",
     "Dasha Nekrasova",
     "Anna Khachiyan",
+    "Kim Dotcom",
     _.sample([
       "Sporty Spice",
       "Baby Spice",
