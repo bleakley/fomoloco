@@ -215,6 +215,41 @@ class Market {
     }
   }
 
+  closeOut(symbol, trader, numShares, socket) {
+    let asset = this.getAssetBySymbol(symbol);
+
+    let numSharesTraderCanAfford =
+      asset.poolShares -
+      (asset.poolCash * asset.poolShares) / (asset.poolCash + trader.cash);
+
+    if (numSharesTraderCanAfford < numShares) {
+      numShares = Math.floor(numSharesTraderCanAfford);
+    }
+
+    let buyValue =
+      (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
+      asset.poolCash;
+
+    asset.poolShares -= numShares;
+    asset.poolCash += buyValue;
+    asset.price = asset.poolCash / asset.poolShares;
+
+    trader.shares[symbol] += numShares;
+    asset.brokerShares += numShares;
+    trader.cash -= buyValue;
+
+    if (socket) {
+      socket.emit("transaction", {
+        type: "close-out",
+        symbol: symbol,
+        shares: numShares,
+        price: (buyValue / numShares).toFixed(2),
+        newCash: trader.cash.toFixed(2),
+        newShares: trader.shares[symbol],
+      });
+    }
+  }
+
   short(symbol, trader, numShares, socket) {
     if (trader.shares[symbol] > 0) return;
 

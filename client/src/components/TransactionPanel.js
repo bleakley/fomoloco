@@ -88,6 +88,16 @@ class TransactionPanel extends Component {
     });
   }
 
+  closeOut(symbol, cooldown) {
+    this.props.socket.emit("close-out-asset", {
+      symbol: symbol,
+      shares: 10 ** this.props.upgrades.volume,
+    });
+    this.setState({
+      buyTime: cooldown,
+    });
+  }
+
   sell(symbol, cooldown) {
     this.props.socket.emit("sell-asset", {
       symbol: symbol,
@@ -159,12 +169,21 @@ class TransactionPanel extends Component {
                   ).toFixed(2)}{" "}
                 </td>
                 <td>
-                  <TransactionButton
-                    label="Buy"
-                    onClick={() => this.buy(asset.symbol, cooldowns.buy)}
-                    time={this.state.buyTime}
-                    cooldown={cooldowns.buy}
-                  />
+                  {this.props.playerHoldings[asset.symbol] >= 0 ? (
+                    <TransactionButton
+                      label="Buy"
+                      onClick={() => this.buy(asset.symbol, cooldowns.buy)}
+                      time={this.state.buyTime}
+                      cooldown={cooldowns.buy}
+                    />
+                  ) : (
+                    <TransactionButton
+                      label="Close out"
+                      onClick={() => this.closeOut(asset.symbol, cooldowns.buy)}
+                      time={this.state.buyTime}
+                      cooldown={cooldowns.buy}
+                    />
+                  )}
                 </td>
                 <td>
                   {this.props.playerHoldings[asset.symbol] > 0 ? (
