@@ -166,6 +166,9 @@ class TransactionPanel extends Component {
       sell: 6 / 2 ** this.props.upgrades.sell,
       hype: 40 / 2 ** this.props.upgrades.hype,
     };
+    this.props.assetDescriptions.map((asset) =>
+      console.log(this.props.playerHoldings[asset.symbol])
+    );
 
     return (
       <div style={{ userSelect: "none" }}>
@@ -174,10 +177,10 @@ class TransactionPanel extends Component {
             <tr key={"header"}>
               <td></td>
               <td>
-                <b>Quantity</b>
+                <b>Price</b>
               </td>
               <td>
-                <b>Price</b>
+                <b>Shares</b>
               </td>
               <td>
                 <b>Value</b>
@@ -192,19 +195,24 @@ class TransactionPanel extends Component {
                 >
                   <b>${asset.symbol}</b>{" "}
                 </td>
-                <td>{this.props.playerHoldings[asset.symbol] || 0} </td>
                 <td>
                   ${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}{" "}
                 </td>
                 <td>
-                  $
+                  {" "}
+                  {this.props.playerHoldings[asset.symbol] < 0 ? "−" : ""}
+                  {Math.abs(this.props.playerHoldings[asset.symbol]) || 0}{" "}
+                </td>
+                <td style={{ whiteSpace: "nowrap" }}>
+                  {this.props.playerHoldings[asset.symbol] < 0 ? "−" : ""}$
                   {(
-                    (this.props.playerHoldings[asset.symbol] || 0) *
+                    (Math.abs(this.props.playerHoldings[asset.symbol]) || 0) *
                     this.props.currentPrices[asset.symbol]
                   ).toFixed(2)}{" "}
                 </td>
-                <td>
-                  {this.props.playerHoldings[asset.symbol] >= 0 ? (
+                <td style={{ whiteSpace: "nowrap" }}>
+                  {!this.props.playerHoldings[asset.symbol] ||
+                  this.props.playerHoldings[asset.symbol] >= 0 ? (
                     <TransactionButton
                       label="Buy"
                       onClick={() => this.buy(asset.symbol, cooldowns.buy)}
