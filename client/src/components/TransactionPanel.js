@@ -114,47 +114,57 @@ class TransactionPanel extends Component {
   }
 
   buy(symbol, cooldown) {
-    this.props.socket.emit("buy-asset", {
-      symbol: symbol,
-      shares: 10 ** this.props.upgrades.volume,
-    });
+    setTimeout(() => {
+      this.props.socket.emit("buy-asset", {
+        symbol: symbol,
+        shares: 10 ** this.props.upgrades.volume,
+      });
+    }, 1000 * cooldown);
     this.setState({
       buyTime: cooldown,
     });
   }
 
   closeOut(symbol, cooldown) {
-    this.props.socket.emit("close-out-asset", {
-      symbol: symbol,
-      shares: 10 ** this.props.upgrades.volume,
-    });
+    setTimeout(() => {
+      this.props.socket.emit("close-out-asset", {
+        symbol: symbol,
+        shares: 10 ** this.props.upgrades.volume,
+      });
+    }, 1000 * cooldown);
     this.setState({
       buyTime: cooldown,
     });
   }
 
   sell(symbol, cooldown) {
-    this.props.socket.emit("sell-asset", {
-      symbol: symbol,
-      shares: 10 ** this.props.upgrades.volume,
-    });
+    setTimeout(() => {
+      this.props.socket.emit("sell-asset", {
+        symbol: symbol,
+        shares: 10 ** this.props.upgrades.volume,
+      });
+    }, 1000 * cooldown);
     this.setState({
       sellTime: cooldown,
     });
   }
 
   short(symbol, cooldown) {
-    this.props.socket.emit("short-asset", {
-      symbol: symbol,
-      shares: 10 ** this.props.upgrades.volume,
-    });
+    setTimeout(() => {
+      this.props.socket.emit("short-asset", {
+        symbol: symbol,
+        shares: 10 ** this.props.upgrades.volume,
+      });
+    }, 1000 * cooldown);
     this.setState({
       sellTime: cooldown,
     });
   }
 
   hype(symbol, cooldown) {
-    this.props.socket.emit("shill-asset", symbol);
+    setTimeout(() => {
+      this.props.socket.emit("shill-asset", symbol);
+    }, 1000 * cooldown);
     this.setState({
       hypeTime: cooldown,
     });
