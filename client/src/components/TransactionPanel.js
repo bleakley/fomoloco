@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
-import Tooltip from '@material-ui/core/Tooltip';
+import Tooltip from "@material-ui/core/Tooltip";
 
 function CooldownTimer(props) {
   if (!props.current) {
@@ -61,7 +61,7 @@ class TransactionPanel extends Component {
       lastDividend: 0,
       timeToNextDividend: 60,
       timeToNextMarginCheck: 20,
-      marketMetrics: []
+      marketMetrics: [],
     };
 
     setInterval(() => {
@@ -194,20 +194,64 @@ class TransactionPanel extends Component {
     let margin = this.getMargin();
 
     let getTooltip = (asset) => {
-      let metrics = this.state.marketMetrics.find(m => m.symbol === asset.symbol);
+      let metrics = this.state.marketMetrics.find(
+        (m) => m.symbol === asset.symbol
+      );
       let unlocked = metrics && this.metricsUnlocked();
       return (
         <React.Fragment>
-          <div style={{ fontSize: '1.4em', minWidth: '200px'}}>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>{asset.name}</div><div>(${asset.symbol})</div></div>
+          <div style={{ fontSize: "1.4em", minWidth: "200px" }}>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>{asset.name}</div>
+              <div>(${asset.symbol})</div>
+            </div>
             <br />
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Share price:</div><div>${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}</div></div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Dividend:</div><div>{unlocked ? '$' + metrics.dividendRate.toFixed(4) : 'unknown'}</div></div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Hype factor:</div><div>{unlocked ? metrics.hype.toFixed(3) : 'unknown'}</div></div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Short interest:</div><div>{unlocked ? Math.floor(metrics.shortInterest * 100) + '%' : 'unknown'}</div></div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Share price</div>
+              <div>
+                ${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Dividend</div>
+              <div>
+                {unlocked ? (
+                  "$" + metrics.dividendRate.toFixed(4)
+                ) : (
+                  <span style={{ color: "#bbbbbb" }}>
+                    <i>unknown</i>
+                  </span>
+                )}
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Hype factor</div>
+              <div>
+                {unlocked ? (
+                  metrics.hype.toFixed(3)
+                ) : (
+                  <span style={{ color: "#bbbbbb" }}>
+                    <i>unknown</i>
+                  </span>
+                )}
+              </div>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Short interest</div>
+              <div>
+                {unlocked ? (
+                  Math.floor(metrics.shortInterest * 100) + "%"
+                ) : (
+                  <span style={{ color: "#bbbbbb" }}>
+                    <i>unknown</i>
+                  </span>
+                )}
+              </div>
+            </div>
           </div>
-        </React.Fragment>);
-    }
+        </React.Fragment>
+      );
+    };
 
     return (
       <div style={{ userSelect: "none" }}>
@@ -221,7 +265,9 @@ class TransactionPanel extends Component {
                   }}
                 >
                   <Tooltip title={getTooltip(asset)} placement="right">
-                    <span><b>${asset.symbol}</b>{" "}</span>
+                    <span>
+                      <b>${asset.symbol}</b>{" "}
+                    </span>
                   </Tooltip>
                 </td>
                 <td>

@@ -126,7 +126,7 @@ class Market {
   generateInitialAssets() {
     this.assets = [
       {
-        name: "Blueberrry Technologies",
+        name: "Blueberry Technologies",
         symbol: "BB",
         color: "#1f77b4",
         poolShares: 100,
