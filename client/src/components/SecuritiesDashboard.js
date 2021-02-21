@@ -108,6 +108,9 @@ class SecuritiesDashboard extends Component {
           priceHistories[security.symbol].head.detach();
         }
       }
+    });
+
+    setInterval(() => {
       let comp = this.chartComponent.current;
       if (comp && comp.chart) {
         let data = Object.values(priceHistories).map((list) =>
@@ -121,7 +124,7 @@ class SecuritiesDashboard extends Component {
         }
         comp.chart.load({ columns: data, colors: colors });
       }
-    });
+    }, 1000);
 
     this.props.socket.on("upgrade", (message) => {
       this.setState({
