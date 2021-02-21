@@ -63,9 +63,16 @@ class Market {
         "Joe",
         "Badass",
         "Slow",
+        "Fast",
         "Deep",
         "1r0ny",
         "Roaring",
+        "Stock",
+        "Coin",
+        "Hungry",
+        "Hype",
+        "Crypto",
+        "Market",
       ]) +
       _.sample([
         "Hands",
@@ -79,6 +86,17 @@ class Market {
         "Ninja",
         "Value",
         "Man",
+        "Woman",
+        "Boy",
+        "Girl",
+        "Surfer",
+        "Dude",
+        "Dog",
+        "Cat",
+        "Shill",
+        "Beast",
+        "Pepe",
+        "Trader",
       ]) +
       Math.round(Math.random() * 90 + 10).toString()
     );
