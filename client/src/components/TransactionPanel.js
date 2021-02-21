@@ -170,9 +170,7 @@ class TransactionPanel extends Component {
   }
 
   hype(symbol, cooldown) {
-    setTimeout(() => {
-      this.props.socket.emit("shill-asset", symbol);
-    }, 1000 * cooldown);
+    this.props.socket.emit("shill-asset", symbol);
     this.setState({
       hypeTime: cooldown,
     });
