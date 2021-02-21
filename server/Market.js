@@ -463,7 +463,12 @@ class Market {
             ["10k", "100k", "500k"]
           )} \$${Math.ceil(
             (1.5 + 2 * significance) * asset.price
-          )} calls on \$${asset.symbol}`,
+          )} calls on \$${asset.symbol}${_.sample([
+            "",
+            "",
+            ': "I like the stock"',
+            ': "The fundamentals are strong"',
+          ])}`,
           `${asset.name} (\$${
             asset.symbol
           }) receives approval to open ${Math.round(
