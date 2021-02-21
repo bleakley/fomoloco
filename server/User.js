@@ -1,6 +1,8 @@
 const constants = require("./constants");
 const uuid = require("uuid");
 
+const powerupCosts = { "short-selling": 1000, "short-interest": 500 };
+
 const upgrades = {
   buy: {
     class: "Connection",
@@ -55,6 +57,7 @@ class User {
     this.name = `user-${this.id}`;
     this.suggestedName = market.getUniqueUserName();
     this.cash = 100;
+    this.cash = 10000;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;
     this.upgrades = {
@@ -63,7 +66,9 @@ class User {
       hype: 0,
       volume: 0,
     };
+    this.powerups = [];
     this.totalSpentOnUpgrades = 0;
+    this.totalSpentOnPowerups = 0;
     for (let asset of market.assets) {
       this.shares[asset.symbol] = 0;
     }
@@ -81,6 +86,21 @@ class User {
       socket.emit("upgrade", {
         type,
         level: this.upgrades[type],
+        cash: this.cash.toFixed(2),
+      });
+    }
+  }
+
+  buyPowerup(powerup, socket) {
+    if (this.powerups.indexOf(powerup) > -1) {
+      return false;
+    }
+    let cost = powerupCosts[powerup];
+    if (this.cash >= cost) {
+      this.cash -= cost;
+      this.totalSpentOnPowerups += cost;
+      socket.emit("powerup", {
+        powerup: powerup,
         cash: this.cash.toFixed(2),
       });
     }

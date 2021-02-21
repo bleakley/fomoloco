@@ -18,14 +18,20 @@ class PowerupPanel extends Component {
               name="Glombourg Terminal"
               description="reveals short interest"
               buyCost="1000"
-            />
-            <Powerup
-              socket={this.props.socket}
-              cash={this.props.cash}
-              name="ISDA"
-              description="unlocks short selling"
-              buyCost="1000"
             /> */}
+            {this.props.upgrades["volume"] >= 1 &&
+            this.props.powerups.indexOf("short-selling") == -1 ? (
+              <Powerup
+                socket={this.props.socket}
+                cash={this.props.cash}
+                id="short-selling"
+                name="ISDA"
+                description="unlocks short selling"
+                buyCost="1000"
+              />
+            ) : (
+              ""
+            )}
           </tbody>
         </table>
       </div>

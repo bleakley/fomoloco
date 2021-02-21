@@ -1,7 +1,7 @@
 const _ = require("lodash");
 const utils = require("./utils");
 const constants = require("./constants");
-const uuid = require('uuid');
+const uuid = require("uuid");
 
 class Bot {
   constructor(market, name) {
@@ -9,6 +9,7 @@ class Bot {
     this.id = uuid.v4();
     this.cash = 100;
     this.totalSpentOnUpgrades = 0;
+    this.totalSpentOnPowerups = 0;
     this.shares = {};
     this.market = market;
     this.shillCoolDownTime = 20000;

@@ -575,7 +575,8 @@ class Market {
         profit: (
           this.getNetWorth(trader) -
           trader.startingNetWorth +
-          trader.totalSpentOnUpgrades
+          trader.totalSpentOnUpgrades +
+          trader.totalSpentOnPowerups
         ).toFixed(2),
       }))
       .sort((a, b) => b.profit - a.profit);

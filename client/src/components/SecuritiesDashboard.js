@@ -20,6 +20,7 @@ const getDefaultState = () => ({
     hype: 0,
     volume: 0,
   },
+  powerups: [],
 });
 
 class PricePoint extends LinkedList.Item {
@@ -129,6 +130,15 @@ class SecuritiesDashboard extends Component {
       });
     });
 
+    this.props.socket.on("powerup", (message) => {
+      console.log("powerup")
+      console.log(message)
+      this.setState({
+        cash: message.cash,
+        powerups: [...this.state.powerups, message.powerup],
+      });
+    });
+
     setInterval(() => {
       this.setState({
         timeToNextDividend: Math.max(0, this.state.timeToNextDividend - 1),
@@ -144,6 +154,7 @@ class SecuritiesDashboard extends Component {
             cash={this.state.cash}
             currentPrices={this.state.currentPrices}
             upgrades={this.state.upgrades}
+            powerups={this.state.powerups}
             socket={this.props.socket}
             playerHoldings={this.state.playerHoldings}
             assetDescriptions={this.props.assetDescriptions}
@@ -159,6 +170,7 @@ class SecuritiesDashboard extends Component {
             <PowerupPanel
               cash={this.state.cash}
               upgrades={this.state.upgrades}
+              powerups={this.state.powerups}
               socket={this.props.socket}
             />
           </div>

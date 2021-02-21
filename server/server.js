@@ -104,7 +104,7 @@ io.on("connection", function (socket) {
   });
 
   socket.on("buy-powerup", (powerup) => {
-    console.log(`${user.name} requested powerup ${powerup}`);
+    user.buyPowerup(powerup, socket);
   });
 
   socket.on("set-username", (username) => {

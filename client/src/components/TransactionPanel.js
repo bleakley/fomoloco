@@ -166,10 +166,7 @@ class TransactionPanel extends Component {
       sell: 6 / 2 ** this.props.upgrades.sell,
       hype: 40 / 2 ** this.props.upgrades.hype,
     };
-    this.props.assetDescriptions.map((asset) =>
-      console.log(this.props.playerHoldings[asset.symbol])
-    );
-
+    
     return (
       <div style={{ userSelect: "none" }}>
         <table>
