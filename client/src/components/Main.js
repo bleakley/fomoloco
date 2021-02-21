@@ -93,9 +93,7 @@ class Main extends Component {
         <Card className="HypeFeed">
           <HypeFeed socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
         </Card>
-        <Card className="SecuritiesDashboard">
-          <SecuritiesDashboard socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
-        </Card>
+        <SecuritiesDashboard socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
         <Card className="NewsTicker">
           <NewsTicker socket={this.socket} assetDescriptions={this.state.assetDescriptions} debug={DEBUG_MODE} />
         </Card>

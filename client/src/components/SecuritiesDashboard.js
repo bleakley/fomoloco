@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { Card } from "@material-ui/core";
 import _ from "lodash";
 import LinkedList from "linked-list";
 import PriceChart from "./PriceChart";
@@ -151,8 +152,8 @@ class SecuritiesDashboard extends Component {
 
   render() {
     return (
-      <div style={{ display: "flex", gap: "20px", flexDirection: "column" }}>
-        <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <>
+        <Card className="TransactionPanel">
           <TransactionPanel
             cash={this.state.cash}
             currentPrices={this.state.currentPrices}
@@ -162,27 +163,27 @@ class SecuritiesDashboard extends Component {
             playerHoldings={this.state.playerHoldings}
             assetDescriptions={this.props.assetDescriptions}
           />
-          <div
-            style={{ display: "flex", gap: "20px", flexDirection: "column" }}
-          >
-            <UpgradePanel
-              cash={this.state.cash}
-              upgrades={this.state.upgrades}
-              socket={this.props.socket}
-            />
-            <PowerupPanel
-              cash={this.state.cash}
-              upgrades={this.state.upgrades}
-              powerups={this.state.powerups}
-              socket={this.props.socket}
-            />
-          </div>
-        </div>
-        <PriceChart
-          assetDescriptions={this.props.assetDescriptions}
-          ref={this.chartComponent}
-        />
-      </div>
+        </Card>
+        <Card className="UpgradePanel">
+          <UpgradePanel
+            cash={this.state.cash}
+            upgrades={this.state.upgrades}
+            socket={this.props.socket}
+          />
+          <PowerupPanel
+            cash={this.state.cash}
+            upgrades={this.state.upgrades}
+            powerups={this.state.powerups}
+            socket={this.props.socket}
+          />
+        </Card>
+        <Card className="PriceChart">
+          <PriceChart
+            assetDescriptions={this.props.assetDescriptions}
+            ref={this.chartComponent}
+          />
+        </Card>
+      </>
     );
   }
 }
