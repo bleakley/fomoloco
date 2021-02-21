@@ -75,11 +75,11 @@ class Upgrade extends Component {
         <td>
           <b>{upgrades[this.props.type].class}</b>
         </td>
-        <td style={{ minWidth: "300px" }}>
+        <td style={{ minWidth: "280px", whiteSpace: "nowrap" }}>
           {currentLevel.name}{" "}
           {currentLevel.description ? `(${currentLevel.description})` : ""}
         </td>
-        <td style={{ minWidth: "100px" }}>
+        <td style={{ minWidth: "100px", whiteSpace: "nowrap" }}>
           {nextLevel ? (
             <Button
               size="small"

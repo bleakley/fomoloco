@@ -4,6 +4,7 @@ import LinkedList from "linked-list";
 import PriceChart from "./PriceChart";
 import TransactionPanel from "./TransactionPanel";
 import UpgradePanel from "./UpgradePanel";
+import PowerupPanel from "./PowerupPanel";
 
 const PRICE_HISTORY_PRUNE_COUNT = 100;
 
@@ -147,11 +148,20 @@ class SecuritiesDashboard extends Component {
             playerHoldings={this.state.playerHoldings}
             assetDescriptions={this.props.assetDescriptions}
           />
-          <UpgradePanel
-            cash={this.state.cash}
-            upgrades={this.state.upgrades}
-            socket={this.props.socket}
-          />
+          <div
+            style={{ display: "flex", gap: "20px", flexDirection: "column" }}
+          >
+            <UpgradePanel
+              cash={this.state.cash}
+              upgrades={this.state.upgrades}
+              socket={this.props.socket}
+            />
+            <PowerupPanel
+              cash={this.state.cash}
+              upgrades={this.state.upgrades}
+              socket={this.props.socket}
+            />
+          </div>
         </div>
         <PriceChart
           assetDescriptions={this.props.assetDescriptions}
