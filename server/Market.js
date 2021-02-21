@@ -645,7 +645,18 @@ class Market {
     setTimeout(() => this.settleBrokers(), SECONDS_BROKER_SETTLEMENT);
   }
 
-  settleBrokers() {}
+  settleBrokers() {
+    this.assets.forEach((asset) => {
+      if (asset.brokerShares > 0) {
+        let sellValue =
+          asset.poolCash -
+          (asset.poolCash * asset.poolShares) /
+            (asset.poolShares + asset.brokerShares);
+        asset.poolShares += asset.brokerShares;
+        asset.poolCash -= sellValue;
+      }
+    });
+  }
 }
 
 module.exports = Market;
