@@ -90,18 +90,18 @@ class TransactionPanel extends Component {
   }
 
   getMargin() {
-    let totalHoldings = this.props.cash;
+    let totalHoldings = parseFloat(this.props.cash);
     let totalBorrowed = 0;
     Object.keys(this.props.playerHoldings).forEach((symbol) => {
       if (this.props.playerHoldings[symbol]) {
         if (this.props.playerHoldings[symbol] > 0) {
           totalHoldings +=
             this.props.playerHoldings[symbol] *
-            this.props.currentPrices[symbol];
+            parseFloat(this.props.currentPrices[symbol]);
         } else {
           totalBorrowed -=
             this.props.playerHoldings[symbol] *
-            this.props.currentPrices[symbol];
+            parseFloat(this.props.currentPrices[symbol]);
         }
       }
     });
