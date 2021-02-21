@@ -4,6 +4,9 @@ import "../App.css";
 const MAX_LENGTH = 15;
 
 const truncate = (name) => {
+  if (!name) {
+    return name;
+  }
   if (name.length > MAX_LENGTH) {
     return name.slice(0, MAX_LENGTH - 3) + '...';
   }
