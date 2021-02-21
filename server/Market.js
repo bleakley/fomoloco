@@ -25,7 +25,7 @@ class Market {
     this.traders = [];
     this.botsCulledCount = 0;
     this.playersQuitCount = 0;
-    this.maxMargin = 1.5;
+    this.maxMargin = 2;
 
     this.usernamesUsed = new Set();
 

@@ -10,24 +10,36 @@ class PriceChart extends Component {
   componentDidMount() {
     let colors = {};
     for (let i = 0; i < this.props.assetDescriptions.length; i++) {
-      colors[this.props.assetDescriptions[i].symbol] = this.props.assetDescriptions[i].color;
+      colors[
+        this.props.assetDescriptions[i].symbol
+      ] = this.props.assetDescriptions[i].color;
     }
     this.chart = c3.generate({
       bindto: "#chart",
       data: {
-        columns: this.props.assetDescriptions.map(a => [a.symbol]),
+        columns: this.props.assetDescriptions.map((a) => [a.symbol]),
         type: "line",
         colors: colors,
+      },
+      point: {
+        show: false,
       },
       transition: {
         duration: null,
       },
       size: {
         height: 250,
-        width: 950
+        width: 950,
       },
       legend: {
         hide: true,
+      },
+      tooltip: {
+        format: {
+          title: function (d) {
+            return null;
+          },
+        },
       },
       axis: {
         x: {
@@ -51,7 +63,7 @@ class PriceChart extends Component {
   }
 
   render() {
-    return <div id="chart" style={{marginTop: 0}} />;
+    return <div id="chart" style={{ marginTop: 0 }} />;
   }
 }
 

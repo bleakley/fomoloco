@@ -310,7 +310,7 @@ class TransactionPanel extends Component {
                 }`}</td>
               </tr>
             ) : (
-              <tr></tr>
+              <tr style={{ height: "12px" }}></tr>
             )}
           </tbody>
         </table>
