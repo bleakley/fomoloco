@@ -61,6 +61,7 @@ class TransactionPanel extends Component {
       lastDividend: 0,
       timeToNextDividend: 60,
       timeToNextMarginCheck: 20,
+      marketMetrics: []
     };
 
     setInterval(() => {
@@ -90,13 +91,8 @@ class TransactionPanel extends Component {
     });
 
     this.props.socket.on("market-metrics", (marketMetrics) => {
-      marketMetrics.forEach((assetMetrics) => {
-        console.log(`${assetMetrics.symbol}:`);
-        console.log(
-          `Short interest: ${(assetMetrics.shortInterest * 100).toFixed(0)}%`
-        );
-        console.log(`Dividends per share: \$${assetMetrics.dividendRate}`);
-        console.log(`Hype: ${assetMetrics.hype}`);
+      this.setState({
+        marketMetrics,
       });
     });
   }
@@ -186,6 +182,10 @@ class TransactionPanel extends Component {
     return this.props.powerups.indexOf("short-selling") > -1;
   }
 
+  metricsUnlocked() {
+    return this.props.powerups.indexOf("market-metrics") > -1;
+  }
+
   render() {
     let cooldowns = {
       buy: 6 / 2 ** this.props.upgrades.buy,
@@ -196,15 +196,17 @@ class TransactionPanel extends Component {
     let margin = this.getMargin();
 
     let getTooltip = (asset) => {
+      let metrics = this.state.marketMetrics.find(m => m.symbol === asset.symbol);
+      let unlocked = metrics && this.metricsUnlocked();
       return (
         <React.Fragment>
-          <div style={{ fontSize: '1.4em'}}>
-            <div>{asset.name} (${asset.symbol})</div>
+          <div style={{ fontSize: '1.4em', minWidth: '200px'}}>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>{asset.name}</div><div>(${asset.symbol})</div></div>
             <br />
             <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Share price:</div><div>${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}</div></div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Share dividend:</div><div>unknown</div></div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Hype factor:</div><div>unknown</div></div>
-            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Short interest:</div><div>unknown</div></div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Dividend:</div><div>{unlocked ? '$' + metrics.dividendRate.toFixed(4) : 'unknown'}</div></div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Hype factor:</div><div>{unlocked ? metrics.hype.toFixed(3) : 'unknown'}</div></div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Short interest:</div><div>{unlocked ? Math.floor(metrics.shortInterest * 100) + '%' : 'unknown'}</div></div>
           </div>
         </React.Fragment>);
     }
