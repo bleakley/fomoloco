@@ -344,34 +344,63 @@ class TransactionPanel extends Component {
             </tr>
             <tr key={"dividend-row"}>
               <td>
-                <div style={{ position: "relative" }}>
-                  <b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <div
-                    style={{ position: "absolute", top: "2px", left: "72px" }}
-                  >
-                    <CooldownTimer
-                      current={this.state.timeToNextDividend}
-                      max={60}
-                    />
+                <Tooltip
+                  title={
+                    <div style={{ fontSize: "1.4em", minWidth: "200px" }}>
+                      Companies periodically pay dividends to their shareholders
+                      based on how successful the business is. In the last
+                      dividend period, you received
+                      {`\$${this.state.lastDividend}`}.
+                    </div>
+                  }
+                  placement="right"
+                >
+                  <div style={{ position: "relative" }}>
+                    <b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div
+                      style={{ position: "absolute", top: "2px", left: "72px" }}
+                    >
+                      <CooldownTimer
+                        current={this.state.timeToNextDividend}
+                        max={60}
+                      />
+                    </div>
                   </div>
-                </div>
+                </Tooltip>
               </td>
               <td>{`\$${this.state.lastDividend}`}</td>
             </tr>
             {this.shortSellingUnlocked() ? (
               <tr key={"margin-row"}>
                 <td>
-                  <div style={{ position: "relative" }}>
-                    <b>Margin</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <div
-                      style={{ position: "absolute", top: "2px", left: "72px" }}
-                    >
-                      <CooldownTimer
-                        current={this.state.timeToNextMarginCheck}
-                        max={20}
-                      />
+                  {" "}
+                  <Tooltip
+                    title={
+                      <div style={{ fontSize: "1.4em", minWidth: "200px" }}>
+                        If the value of your shares and cash relative to the
+                        value of shares you have borrowed is below 200% when
+                        margin call happens, your broker may use your shares and
+                        cash to close out all or part of your short position.
+                      </div>
+                    }
+                    placement="right"
+                  >
+                    <div style={{ position: "relative" }}>
+                      <b>Margin</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      <div
+                        style={{
+                          position: "absolute",
+                          top: "2px",
+                          left: "72px",
+                        }}
+                      >
+                        <CooldownTimer
+                          current={this.state.timeToNextMarginCheck}
+                          max={20}
+                        />
+                      </div>
                     </div>
-                  </div>
+                  </Tooltip>
                 </td>
                 <td
                   style={{

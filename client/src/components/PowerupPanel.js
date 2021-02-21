@@ -5,7 +5,7 @@ import _ from "lodash";
 const powerups = [
   {
     id: "market-metrics",
-    name: "Glombourg Terminal",
+    name: "Gloombourg Terminal",
     description: "reveals key metrics",
     buyCost: 400,
     accesible: (upgrades) => upgrades["buy"] >= 1 && upgrades["sell"] >= 1,
