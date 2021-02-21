@@ -59,6 +59,7 @@ class TransactionPanel extends Component {
       hypeTime: 0,
       lastDividend: 0,
       timeToNextDividend: 60,
+      timeToNextMarginCheck: 20,
     };
 
     setInterval(() => {
@@ -67,6 +68,10 @@ class TransactionPanel extends Component {
         sellTime: Math.max(0, this.state.sellTime - 0.1),
         hypeTime: Math.max(0, this.state.hypeTime - 0.1),
         timeToNextDividend: Math.max(0, this.state.timeToNextDividend - 0.1),
+        timeToNextMarginCheck: Math.max(
+          0,
+          this.state.timeToNextMarginCheck - 0.1
+        ),
       });
     }, 100);
 
@@ -76,6 +81,36 @@ class TransactionPanel extends Component {
         timeToNextDividend: transaction.timeToNextDividend,
       });
     });
+
+    this.props.socket.on("margin-call", (marginCallEvent) => {
+      this.setState({
+        timeToNextMarginCheck: marginCallEvent.timeToNextMarginCheck,
+      });
+    });
+  }
+
+  getMargin() {
+    let totalHoldings = this.props.cash;
+    let totalBorrowed = 0;
+    Object.keys(this.props.playerHoldings).forEach((symbol) => {
+      if (this.props.playerHoldings[symbol]) {
+        if (this.props.playerHoldings[symbol] > 0) {
+          totalHoldings +=
+            this.props.playerHoldings[symbol] *
+            this.props.currentPrices[symbol];
+        } else {
+          totalBorrowed -=
+            this.props.playerHoldings[symbol] *
+            this.props.currentPrices[symbol];
+        }
+      }
+    });
+    if (totalBorrowed === 0) return null;
+    else return ((100 * totalHoldings) / totalBorrowed).toFixed(0);
+  }
+
+  isMarginSafe() {
+    return this.getMargin() > 150;
   }
 
   buy(symbol, cooldown) {
@@ -233,6 +268,30 @@ class TransactionPanel extends Component {
                 </div>
               </td>
               <td>{`\$${this.state.lastDividend}`}</td>
+            </tr>
+            <tr key={"margin-row"}>
+              <td>
+                <div style={{ position: "relative" }}>
+                  <b>Margin</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                  <div
+                    style={{ position: "absolute", top: "2px", left: "72px" }}
+                  >
+                    <CooldownTimer
+                      current={this.state.timeToNextMarginCheck}
+                      max={20}
+                    />
+                  </div>
+                </div>
+              </td>
+              <td
+                style={{
+                  color: this.getMargin()
+                    ? this.isMarginSafe()
+                      ? "green"
+                      : "red"
+                    : "black",
+                }}
+              >{`${this.getMargin() ? `${this.getMargin()}%` : "-"}`}</td>
             </tr>
           </tbody>
         </table>
