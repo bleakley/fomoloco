@@ -231,6 +231,9 @@ class TransactionPanel extends Component {
                       onClick={() => this.buy(asset.symbol, cooldowns.buy)}
                       time={this.state.buyTime}
                       cooldown={cooldowns.buy}
+                      disabled={
+                        this.props.cash < parseFloat(this.props.currentPrices[asset.symbol])
+                      }
                     />
                   ) : (
                     <TransactionButton
