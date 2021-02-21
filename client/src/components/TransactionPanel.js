@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
+import Tooltip from '@material-ui/core/Tooltip';
 
 function CooldownTimer(props) {
   if (!props.current) {
@@ -194,6 +195,20 @@ class TransactionPanel extends Component {
 
     let margin = this.getMargin();
 
+    let getTooltip = (asset) => {
+      return (
+        <React.Fragment>
+          <div style={{ fontSize: '1.4em'}}>
+            <div>{asset.name} (${asset.symbol})</div>
+            <br />
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Share price:</div><div>${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}</div></div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Share dividend:</div><div>unknown</div></div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Hype factor:</div><div>unknown</div></div>
+            <div style={{display: 'flex', justifyContent: 'space-between'}}><div>Short interest:</div><div>unknown</div></div>
+          </div>
+        </React.Fragment>);
+    }
+
     return (
       <div style={{ userSelect: "none" }}>
         <table>
@@ -217,7 +232,9 @@ class TransactionPanel extends Component {
                     color: asset.color,
                   }}
                 >
-                  <b>${asset.symbol}</b>{" "}
+                  <Tooltip title={getTooltip(asset)} placement="right">
+                    <span><b>${asset.symbol}</b>{" "}</span>
+                  </Tooltip>
                 </td>
                 <td>
                   ${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}{" "}
