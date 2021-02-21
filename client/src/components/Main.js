@@ -9,6 +9,7 @@ import NewsTicker from "./NewsTicker";
 import HypeFeed from "./HypeFeed";
 import SecuritiesDashboard from "./SecuritiesDashboard";
 import openConnection from "socket.io-client";
+import AdPlacement from "./AdPlacement";
 
 const DEBUG_MODE = true;
 const SERVER_URL = process.env.NODE_ENV === 'production' ? "http://fomolo.co" : "http://localhost:8080";
@@ -86,7 +87,9 @@ class Main extends Component {
         <Card className="CashLeaderboard">
           <Leaderboard socket={this.socket} />
         </Card>
-        <Card className="Advertisement">Super annoying ad</Card>
+        <Card className="Advertisement">
+          <AdPlacement />
+        </Card>
         <Card className="HypeFeed">
           <HypeFeed socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
         </Card>
