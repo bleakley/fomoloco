@@ -17,6 +17,32 @@ const powerups = [
     buyCost: 1000,
     accesible: (upgrades) => upgrades["volume"] >= 1,
   },
+  {
+    id: "gift",
+    name: `Buy a present for your ${_.sample([
+      "dog",
+      "cat",
+      "mom",
+      "dad",
+      "sister",
+      "boyfriend",
+      "girlfriend",
+      "husband",
+      "wife",
+      "wife's boyfriend",
+      "hamster",
+    ])}`,
+    description: "",
+    buyCost: 10,
+    accesible: (upgrades, cash) => cash >= 200,
+  },
+  {
+    id: "astrologer",
+    name: "Consult an astrologer",
+    description: "",
+    buyCost: 50,
+    accesible: (upgrades, cash) => cash >= 50,
+  },
 ];
 
 class PowerupPanel extends Component {
@@ -30,7 +56,7 @@ class PowerupPanel extends Component {
         <table>
           <tbody>
             {powerups.map((powerup) =>
-              powerup.accesible(this.props.upgrades) &&
+              powerup.accesible(this.props.upgrades, this.props.cash) &&
               this.props.powerups.indexOf(powerup.id) == -1 ? (
                 <Powerup
                   socket={this.props.socket}

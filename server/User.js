@@ -1,7 +1,12 @@
 const constants = require("./constants");
 const uuid = require("uuid");
 
-const powerupCosts = { "short-selling": 1000, "market-metrics": 400 };
+const powerupCosts = {
+  "short-selling": 1000,
+  "market-metrics": 400,
+  gift: 10,
+  astrologer: 50,
+};
 
 const upgrades = {
   buy: {
@@ -64,7 +69,7 @@ class User {
     this.id = uuid.v4();
     this.name = `u${this.id}`;
     this.suggestedName = market.getUniqueUserName();
-    this.cash = 30;
+    this.cash = 300;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;
     this.upgrades = {
@@ -110,6 +115,15 @@ class User {
         powerup: powerup,
         cash: this.cash.toFixed(2),
       });
+
+      if (powerup === "astrologer") {
+        setTimeout(() => {
+          this.cash += Math.random() * 100 + 50;
+          socket.emit("gift", {
+            newCash: this.cash.toFixed(2),
+          });
+        }, Math.random() * 5 + 5);
+      }
     }
   }
 
