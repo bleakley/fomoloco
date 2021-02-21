@@ -37,12 +37,12 @@ class PriceHistory extends LinkedList {
   toDataColumn() {
     var item = this.head;
     var result = [this.symbol];
-  
+
     while (item) {
       result.push(item.value);
       item = item.next;
     }
-  
+
     return result;
   }
 }
@@ -73,10 +73,17 @@ class SecuritiesDashboard extends Component {
       }
     });
 
+    this.props.socket.on("margin-call", (marginCallEvent) => {
+      this.setState({
+        cash: marginCallEvent.newCash,
+        playerHoldings: marginCallEvent.newShares,
+      });
+    });
+
     this.props.socket.on("dividend", (transaction) => {
-      this.setState({ 
-        cash: transaction.newCash
-       });
+      this.setState({
+        cash: transaction.newCash,
+      });
     });
 
     this.props.socket.on("prices", (message) => {
@@ -92,23 +99,26 @@ class SecuritiesDashboard extends Component {
         if (!priceHistories[security.symbol]) {
           priceHistories[security.symbol] = new PriceHistory(security.symbol);
         }
-        priceHistories[security.symbol].append(new PricePoint(Number(security.price)));
-        if (
-          priceHistories[security.symbol].size >
-          PRICE_HISTORY_PRUNE_COUNT
-        ) {
+        priceHistories[security.symbol].append(
+          new PricePoint(Number(security.price))
+        );
+        if (priceHistories[security.symbol].size > PRICE_HISTORY_PRUNE_COUNT) {
           priceHistories[security.symbol].head.detach();
         }
       }
       let comp = this.chartComponent.current;
-        if (comp && comp.chart) {
-          let data = Object.values(priceHistories).map(list => list.toDataColumn());
-          let colors = {};
-          for (let i = 0; i < this.props.assetDescriptions.length; i++) {
-            colors[this.props.assetDescriptions[i].symbol] = this.props.assetDescriptions[i].color;
-          }
-          comp.chart.load({columns: data, colors: colors});
+      if (comp && comp.chart) {
+        let data = Object.values(priceHistories).map((list) =>
+          list.toDataColumn()
+        );
+        let colors = {};
+        for (let i = 0; i < this.props.assetDescriptions.length; i++) {
+          colors[
+            this.props.assetDescriptions[i].symbol
+          ] = this.props.assetDescriptions[i].color;
         }
+        comp.chart.load({ columns: data, colors: colors });
+      }
     });
 
     this.props.socket.on("upgrade", (message) => {
@@ -120,7 +130,7 @@ class SecuritiesDashboard extends Component {
 
     setInterval(() => {
       this.setState({
-        timeToNextDividend: Math.max(0, this.state.timeToNextDividend - 1)
+        timeToNextDividend: Math.max(0, this.state.timeToNextDividend - 1),
       });
     }, 1000);
   }

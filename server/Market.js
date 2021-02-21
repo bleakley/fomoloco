@@ -13,6 +13,7 @@ const DESIRED_BOT_COUNT = 15;
 const MAX_FUNDAMENTAL_PRICE = 200;
 const MIN_FUNDAMENTAL_PRICE = 0.05;
 const SECONDS_BETWEEN_DIVIDENDS = 60;
+const SECONDS_BETWEEN_MARGIN_CHECKS = 5;
 
 class Market {
   constructor(io) {
@@ -38,6 +39,10 @@ class Market {
     setInterval(() => this.tickBots(), 2 * SECOND);
     setInterval(() => this.cullBots(), 10 * SECOND);
     setInterval(() => this.payDividends(), SECONDS_BETWEEN_DIVIDENDS * SECOND);
+    setInterval(
+      () => this.checkMargins(),
+      SECONDS_BETWEEN_MARGIN_CHECKS * SECOND
+    );
   }
 
   getRandomUserName() {
@@ -236,6 +241,31 @@ class Market {
         newShares: trader.shares[symbol],
       });
     }
+  }
+
+  liquidate(asset, trader, value) {
+    let numShares;
+    let liquidationValue;
+    let maxSellValue =
+      asset.poolCash -
+      (asset.poolCash * asset.poolShares) /
+        (asset.poolShares + trader.shares[asset.symbol]);
+    if (maxSellValue < value) {
+      numShares = trader.shares[asset.symbol];
+      liquidationValue = maxSellValue;
+      return maxSellValue;
+    } else {
+      numShares =
+        (asset.poolCash * asset.poolShares) / (asset.poolCash - value) -
+        asset.poolShares;
+      numShares = Math.ceil(numShares);
+      liquidationValue =
+        asset.poolCash -
+        (asset.poolCash * asset.poolShares) / (asset.poolShares + numShares);
+    }
+    asset.poolShares += numShares;
+    asset.poolCash -= liquidationValue;
+    return liquidationValue;
   }
 
   sell(symbol, trader, numShares, socket) {
@@ -528,6 +558,49 @@ class Market {
           totalPayout: totalPayout.toFixed(2),
           newCash: trader.cash.toFixed(2),
           timeToNextDividend: SECONDS_BETWEEN_DIVIDENDS,
+        });
+      }
+    });
+  }
+
+  checkMargins() {
+    this.traders.forEach((trader) => {
+      let totalHoldings = 0;
+      let totalBorrowed = 0;
+      this.assets.forEach((asset) => {
+        totalHoldings +=
+          trader.shares[asset.symbol] > 0
+            ? trader.shares[asset.symbol] * asset.price
+            : 0;
+        totalBorrowed -=
+          trader.shares[asset.symbol] < 0
+            ? trader.shares[asset.symbol] * asset.price
+            : 0;
+      });
+
+      let maxCanBorrow = totalHoldings / this.maxMargin;
+      if (totalBorrowed > maxCanBorrow) {
+        let valueToLiquidate =
+          (this.maxMargin * totalBorrowed - totalHoldings) /
+          (this.maxMargin - 1);
+
+        if (trader.cash > valueToLiquidate) {
+          trader.cash -= valueToLiquidate;
+          valueToLiquidate = 0;
+        } else {
+          valueToLiquidate -= trader.cash;
+          trader.cash = 0;
+        }
+
+        _.shuffle(this.assets).map((asset) => {
+          valueToLiquidate -= this.liquidate(asset, trader, valueToLiquidate);
+        });
+      }
+      if (trader.type === constants.TRADER_TYPE_PLAYER) {
+        trader.socket.emit("margin-call", {
+          newCash: trader.cash.toFixed(2),
+          newShares: trader.shares,
+          timeToNextMarginCheck: SECONDS_BETWEEN_MARGIN_CHECKS,
         });
       }
     });
