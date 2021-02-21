@@ -14,6 +14,7 @@ const MAX_FUNDAMENTAL_PRICE = 200;
 const MIN_FUNDAMENTAL_PRICE = 0.05;
 const SECONDS_BETWEEN_DIVIDENDS = 60;
 const SECONDS_BETWEEN_MARGIN_CHECKS = 5;
+const SECONDS_BROKER_SETTLEMENT = 10;
 
 class Market {
   constructor(io) {
@@ -126,6 +127,7 @@ class Market {
         poolCash: 100,
         hype: 0,
         velocity: 0,
+        brokerShares: 0,
       },
       {
         name: "Mooncoin",
@@ -135,6 +137,7 @@ class Market {
         poolCash: 100,
         hype: 0,
         velocity: 0,
+        brokerShares: 0,
       },
       {
         name: "Brook Video Rental",
@@ -144,6 +147,7 @@ class Market {
         poolCash: 100,
         hype: 0,
         velocity: 0,
+        brokerShares: 0,
       },
       {
         name: "Sundog Growers",
@@ -153,6 +157,7 @@ class Market {
         poolCash: 100,
         hype: 0,
         velocity: 0,
+        brokerShares: 0,
       },
     ];
 
@@ -244,6 +249,7 @@ class Market {
   }
 
   liquidate(asset, trader, value) {
+    if (trader.shares[asset.symbol] <= 0) return 0;
     let numShares;
     let liquidationValue;
     let maxSellValue =
@@ -253,7 +259,6 @@ class Market {
     if (maxSellValue < value) {
       numShares = trader.shares[asset.symbol];
       liquidationValue = maxSellValue;
-      return maxSellValue;
     } else {
       numShares =
         (asset.poolCash * asset.poolShares) / (asset.poolCash - value) -
@@ -266,6 +271,34 @@ class Market {
     asset.poolShares += numShares;
     asset.poolCash -= liquidationValue;
     return liquidationValue;
+  }
+
+  forceCloseOut(asset, trader, value) {
+    if (trader.shares[asset.symbol] >= 0) return 0;
+    let numShares;
+    let closeOutValue;
+
+    let maxCloseOutValue =
+      asset.poolCash -
+      (asset.poolCash * asset.poolShares) /
+        (asset.poolShares - trader.shares[asset.symbol]);
+    if (maxCloseOutValue < value) {
+      numShares = -trader.shares[asset.symbol];
+      closeOutValue = maxCloseOutValue;
+    } else {
+      numShares =
+        asset.poolShares -
+        (asset.poolCash * asset.poolShares) / (asset.poolCash + value);
+      numShares = Math.min(Math.ceil(numShares), asset.poolShares - 1);
+      closeOutValue =
+        (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
+        asset.poolCash;
+    }
+    asset.poolShares -= numShares;
+    asset.poolCash += closeOutValue;
+    asset.brokerShares += numShares;
+    trader.shares[asset.symbol] += numShares;
+    return closeOutValue;
   }
 
   sell(symbol, trader, numShares, socket) {
@@ -565,7 +598,7 @@ class Market {
 
   checkMargins() {
     this.traders.forEach((trader) => {
-      let totalHoldings = 0;
+      let totalHoldings = trader.cash;
       let totalBorrowed = 0;
       this.assets.forEach((asset) => {
         totalHoldings +=
@@ -583,6 +616,7 @@ class Market {
         let valueToLiquidate =
           (this.maxMargin * totalBorrowed - totalHoldings) /
           (this.maxMargin - 1);
+        let valueToCloseOut = Math.min(valueToLiquidate, totalHoldings);
 
         if (trader.cash > valueToLiquidate) {
           trader.cash -= valueToLiquidate;
@@ -595,6 +629,10 @@ class Market {
         _.shuffle(this.assets).map((asset) => {
           valueToLiquidate -= this.liquidate(asset, trader, valueToLiquidate);
         });
+
+        _.shuffle(this.assets).map((asset) => {
+          valueToCloseOut -= this.forceCloseOut(asset, trader, valueToCloseOut);
+        });
       }
       if (trader.type === constants.TRADER_TYPE_PLAYER) {
         trader.socket.emit("margin-call", {
@@ -604,7 +642,10 @@ class Market {
         });
       }
     });
+    setTimeout(() => this.settleBrokers(), SECONDS_BROKER_SETTLEMENT);
   }
+
+  settleBrokers() {}
 }
 
 module.exports = Market;
