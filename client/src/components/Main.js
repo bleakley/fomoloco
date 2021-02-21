@@ -11,7 +11,7 @@ import SecuritiesDashboard from "./SecuritiesDashboard";
 import openConnection from "socket.io-client";
 import AdPlacement from "./AdPlacement";
 
-const DEBUG_MODE = true;
+const DEBUG_MODE = false;
 const SERVER_URL = process.env.NODE_ENV === 'production' ? "http://fomolo.co" : "http://localhost:8080";
 
 let socket = openConnection(SERVER_URL, {
