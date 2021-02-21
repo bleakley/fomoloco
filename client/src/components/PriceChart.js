@@ -23,7 +23,7 @@ class PriceChart extends Component {
         duration: null,
       },
       size: {
-        height: 280,
+        height: 250,
         width: 950
       },
       legend: {
