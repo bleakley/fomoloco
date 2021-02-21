@@ -26,7 +26,8 @@ class MarketManager {
                 playersQuit: market.playersQuitCount,
                 bots: market.getBots().length,
                 botsCulled: market.botsCulledCount,
-                hours: (market.getAge() / (HOUR))
+                hours: (market.getAge() / (HOUR)),
+                assets: market.assets,
             }))
         }
     }

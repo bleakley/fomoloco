@@ -552,7 +552,7 @@ class Market {
     });
 
     if (this.getBots().length < DESIRED_BOT_COUNT) {
-      this.addTrader(new Bot(this));
+      this.addTrader(new Bot(this, this.getUniqueUserName()));
     }
   }
 
