@@ -41,7 +41,7 @@ class TransactionButton extends Component {
         size="small"
         color="primary"
         onClick={this.props.onClick}
-        disabled={Boolean(this.props.time)}
+        disabled={Boolean(this.props.time) || this.props.disabled}
       >
         {this.props.label}{" "}
         <CooldownTimer current={this.props.time} max={this.props.cooldown} />
@@ -160,13 +160,19 @@ class TransactionPanel extends Component {
     });
   }
 
+  shortSellingUnlocked() {
+    return this.props.powerups.indexOf("short-selling") > -1;
+  }
+
   render() {
     let cooldowns = {
       buy: 6 / 2 ** this.props.upgrades.buy,
       sell: 6 / 2 ** this.props.upgrades.sell,
       hype: 40 / 2 ** this.props.upgrades.hype,
     };
-    
+
+    let margin = this.getMargin();
+
     return (
       <div style={{ userSelect: "none" }}>
         <table>
@@ -226,12 +232,14 @@ class TransactionPanel extends Component {
                   )}
                 </td>
                 <td>
-                  {this.props.playerHoldings[asset.symbol] > 0 ? (
+                  {this.props.playerHoldings[asset.symbol] > 0 ||
+                  !this.shortSellingUnlocked() ? (
                     <TransactionButton
                       label="Sell"
                       onClick={() => this.sell(asset.symbol, cooldowns.sell)}
                       time={this.state.sellTime}
                       cooldown={cooldowns.sell}
+                      disabled={!this.props.playerHoldings[asset.symbol] > 0}
                     />
                   ) : (
                     <TransactionButton
@@ -274,30 +282,36 @@ class TransactionPanel extends Component {
               </td>
               <td>{`\$${this.state.lastDividend}`}</td>
             </tr>
-            <tr key={"margin-row"}>
-              <td>
-                <div style={{ position: "relative" }}>
-                  <b>Margin</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                  <div
-                    style={{ position: "absolute", top: "2px", left: "72px" }}
-                  >
-                    <CooldownTimer
-                      current={this.state.timeToNextMarginCheck}
-                      max={20}
-                    />
+            {this.shortSellingUnlocked() ? (
+              <tr key={"margin-row"}>
+                <td>
+                  <div style={{ position: "relative" }}>
+                    <b>Margin</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div
+                      style={{ position: "absolute", top: "2px", left: "72px" }}
+                    >
+                      <CooldownTimer
+                        current={this.state.timeToNextMarginCheck}
+                        max={20}
+                      />
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td
-                style={{
-                  color: this.getMargin()
-                    ? this.isMarginSafe()
-                      ? "green"
-                      : "red"
-                    : "black",
-                }}
-              >{`${this.getMargin() ? `${this.getMargin()}%` : "-"}`}</td>
-            </tr>
+                </td>
+                <td
+                  style={{
+                    color: this.getMargin()
+                      ? this.isMarginSafe()
+                        ? "green"
+                        : "red"
+                      : "black",
+                  }}
+                >{`${
+                  margin ? `${margin > 1000 ? ">1000" : margin}%` : "-"
+                }`}</td>
+              </tr>
+            ) : (
+              <tr></tr>
+            )}
           </tbody>
         </table>
       </div>
