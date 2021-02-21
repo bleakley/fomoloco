@@ -273,6 +273,7 @@ class TransactionPanel extends Component {
                 <td
                   style={{
                     color: asset.color,
+                    minWidth: '100px'
                   }}
                 >
                   <Tooltip title={getTooltip(asset)} placement="right">
