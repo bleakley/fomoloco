@@ -14,6 +14,7 @@ const MAX_FUNDAMENTAL_PRICE = 200;
 const MIN_FUNDAMENTAL_PRICE = 0.05;
 const SECONDS_BETWEEN_DIVIDENDS = 60;
 const SECONDS_BETWEEN_MARGIN_CHECKS = 20;
+const SECONDS_BETWEEN_MARKET_METRICS_BROADCASTS = 5;
 const SECONDS_BROKER_SETTLEMENT = 10;
 
 class Market {
@@ -40,6 +41,11 @@ class Market {
     setInterval(() => this.tickBots(), 2 * SECOND);
     setInterval(() => this.cullBots(), 10 * SECOND);
     setInterval(() => this.payDividends(), SECONDS_BETWEEN_DIVIDENDS * SECOND);
+    setInterval(
+      () => this.broadcastMarketMetrics(),
+      SECONDS_BETWEEN_MARKET_METRICS_BROADCASTS * SECOND
+    );
+
     setInterval(
       () => this.checkMargins(),
       SECONDS_BETWEEN_MARGIN_CHECKS * SECOND
@@ -419,9 +425,25 @@ class Market {
       //     asset.poolShares * asset.poolCash
       //   }`
       // );
-      data.push({ symbol: asset.symbol, price: asset.price.toFixed(2) });
+      data.push({
+        symbol: asset.symbol,
+        price: asset.price.toFixed(2),
+      });
     }
     this.io.to(this.id).emit("prices", data);
+  }
+
+  broadcastMarketMetrics() {
+    let data = [];
+    for (let asset of this.assets) {
+      data.push({
+        symbol: asset.symbol,
+        shortInterest: this.getShortInterest(asset),
+        dividendRate: this.getDividendRate(asset),
+        hype: asset.hype,
+      });
+    }
+    this.io.to(this.id).emit("market-metrics", data);
   }
 
   getExuberance(asset) {
@@ -604,10 +626,27 @@ class Market {
     }
   }
 
+  getShortInterest(asset) {
+    let shortedShares = 0;
+    let totalShares = asset.poolShares + asset.brokerShares;
+    this.traders.forEach((trader) => {
+      if (trader.shares[asset.symbol] < 0) {
+        shortedShares -= trader.shares[asset.symbol];
+      } else {
+        totalShares += trader.shares[asset.symbol];
+      }
+    });
+    return shortedShares / totalShares;
+  }
+
+  getDividendRate(asset) {
+    return asset.fundamentalPrice * 0.0075;
+  }
+
   payDividends() {
     let dividends = {};
     this.assets.forEach(
-      (asset) => (dividends[asset.symbol] = asset.fundamentalPrice * 0.0075)
+      (asset) => (dividends[asset.symbol] = this.getDividendRate(asset))
     );
     if (Math.random() < 0.05) {
       this.io.to(this.id).emit("news", {

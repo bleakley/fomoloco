@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import _ from "lodash";
-import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 const upgrades = {
   buy: {

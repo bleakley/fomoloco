@@ -1,7 +1,7 @@
 const constants = require("./constants");
 const uuid = require("uuid");
 
-const powerupCosts = { "short-selling": 1000, "short-interest": 500 };
+const powerupCosts = { "short-selling": 1000, "market-metrics": 400 };
 
 const upgrades = {
   buy: {
@@ -64,7 +64,7 @@ class User {
     this.id = uuid.v4();
     this.name = `u${this.id}`;
     this.suggestedName = market.getUniqueUserName();
-    this.cash = 30;
+    this.cash = 30000;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;
     this.upgrades = {

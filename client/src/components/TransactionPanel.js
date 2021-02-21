@@ -87,6 +87,17 @@ class TransactionPanel extends Component {
         timeToNextMarginCheck: marginCallEvent.timeToNextMarginCheck,
       });
     });
+
+    this.props.socket.on("market-metrics", (marketMetrics) => {
+      marketMetrics.forEach((assetMetrics) => {
+        console.log(`${assetMetrics.symbol}:`);
+        console.log(
+          `Short interest: ${(assetMetrics.shortInterest * 100).toFixed(0)}%`
+        );
+        console.log(`Dividends per share: \$${assetMetrics.dividendRate}`);
+        console.log(`Hype: ${assetMetrics.hype}`);
+      });
+    });
   }
 
   getMargin() {
@@ -232,7 +243,8 @@ class TransactionPanel extends Component {
                       time={this.state.buyTime}
                       cooldown={cooldowns.buy}
                       disabled={
-                        this.props.cash < parseFloat(this.props.currentPrices[asset.symbol])
+                        this.props.cash <
+                        parseFloat(this.props.currentPrices[asset.symbol])
                       }
                     />
                   ) : (

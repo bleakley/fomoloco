@@ -12,13 +12,20 @@ class PowerupPanel extends Component {
       <div>
         <table>
           <tbody>
-            {/* <Powerup
-              socket={this.props.socket}
-              cash={this.props.cash}
-              name="Glombourg Terminal"
-              description="reveals short interest"
-              buyCost="1000"
-            /> */}
+            {this.props.upgrades["buy"] >= 1 &&
+            this.props.upgrades["sell"] >= 1 &&
+            this.props.powerups.indexOf("market-metrics") == -1 ? (
+              <Powerup
+                socket={this.props.socket}
+                cash={this.props.cash}
+                id="market-metrics"
+                name="Glombourg Terminal"
+                description="reveals key metrics"
+                buyCost={400}
+              />
+            ) : (
+              ""
+            )}
             {this.props.upgrades["volume"] >= 1 &&
             this.props.powerups.indexOf("short-selling") == -1 ? (
               <Powerup
@@ -27,7 +34,7 @@ class PowerupPanel extends Component {
                 id="short-selling"
                 name="ISDA"
                 description="unlocks short selling"
-                buyCost="1000"
+                buyCost={1000}
               />
             ) : (
               ""
