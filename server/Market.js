@@ -566,19 +566,20 @@ class Market {
   }
 
   broadcastLeaderboard() {
+    const makeLeaderboardEntry = (trader) => ({
+      name: trader.name,
+      id: trader.id,
+      type: trader.type,
+      profit: (
+        this.getNetWorth(trader) -
+        trader.startingNetWorth +
+        trader.totalSpentOnUpgrades +
+        trader.totalSpentOnPowerups
+      ).toFixed(2),
+    });
+
     let leaderboard = this.traders
-      .map((trader) => ({
-        name: trader.name,
-        id: trader.id,
-        netWorth: this.getNetWorth(trader).toFixed(2),
-        cash: trader.cash.toFixed(2),
-        profit: (
-          this.getNetWorth(trader) -
-          trader.startingNetWorth +
-          trader.totalSpentOnUpgrades +
-          trader.totalSpentOnPowerups
-        ).toFixed(2),
-      }))
+      .map((trader) => makeLeaderboardEntry(trader))
       .sort((a, b) => b.profit - a.profit);
     let rankLookup = {};
     for (let i = 0; i < leaderboard.length; i++) {
@@ -590,8 +591,9 @@ class Market {
     );
     this.getPlayers().forEach((trader) => {
       trader.socket.emit("leaderboard", {
+        you: makeLeaderboardEntry(trader),
         rank: rankLookup[trader.id],
-        total: leaderboard.length,
+        count: this.traders.length,
         top,
       });
     });

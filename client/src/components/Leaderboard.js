@@ -1,7 +1,12 @@
 import React, { Component } from "react";
 import "../App.css";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
-const MAX_LENGTH = 15;
+const MAX_LENGTH = 50;
 
 const truncate = (name) => {
   if (!name) {
@@ -11,6 +16,26 @@ const truncate = (name) => {
     return name.slice(0, MAX_LENGTH - 3) + '...';
   }
   return name;
+}
+
+class LeaderboardRow extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    let trader = this.props.trader;
+    return (
+      <TableRow>
+        <TableCell>{this.props.rank}.</TableCell>
+        <TableCell>{this.props.you ? '🤑' : trader.type ? '😃' : '🤖'}</TableCell>
+        <TableCell>
+          <b>{trader.name}</b>
+        </TableCell>
+        <TableCell align="right">${trader.profit}</TableCell>
+      </TableRow>
+    );
+  }
 }
 
 class Leaderboard extends Component {
@@ -31,18 +56,34 @@ class Leaderboard extends Component {
   }
 
   render() {
+    let ranksToShow = 7;
+
+    if (this.state.leaderboard.top.length < 7) {
+      return null;
+    }
+
+    let playerRanked = this.state.leaderboard.rank <= ranksToShow;
+
     return (
       <div>
-        <div>Total Profits (<em>your rank: {this.state.leaderboard.rank} of {this.state.leaderboard.total}</em>)</div>
-        <br />
-        <div style={{display: 'grid', gridTemplate: '1fr 1fr 1fr 1fr 1fr / 1fr', gridAutoFlow: 'column', columnGap: '10px'}}>
-        {this.state.leaderboard.top.map((row, i) => (
-            <div key={i} style={{display: 'flex', justifyContent: 'space-between'}}>
-              <div>{i + 1}. <b>{truncate(row.name)}</b></div>
-              <div>${row.profit}</div>
-            </div>
-          ))}
-        </div>
+        <Table size="small" padding="none" aria-label="a dense table">
+          <TableHead>
+            <TableRow>
+              <TableCell>Rank</TableCell>
+              <TableCell>Type</TableCell>
+              <TableCell>Name</TableCell>
+              <TableCell align="right">Total Profits</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {(playerRanked ? [0, 1, 2, 3, 4, 5, 6] : [0, 1, 2, 3, 4, 5]).map((index) => (
+              <LeaderboardRow key={index} rank={index + 1} trader={this.state.leaderboard.top[index]} you={this.state.leaderboard.top[index].id === this.state.leaderboard.you.id} />
+            ))}
+            {!playerRanked && (
+              <LeaderboardRow rank={this.state.leaderboard.rank} trader={this.state.leaderboard.you} you={true} />
+            )}
+          </TableBody>
+        </Table>
       </div>
     );
   }
