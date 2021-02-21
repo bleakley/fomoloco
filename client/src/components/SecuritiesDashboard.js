@@ -22,6 +22,7 @@ const getDefaultState = () => ({
     volume: 0,
   },
   powerups: [],
+  giftCount: 0
 });
 
 class PricePoint extends LinkedList.Item {
@@ -137,6 +138,14 @@ class SecuritiesDashboard extends Component {
     this.props.socket.on("powerup", (message) => {
       console.log("powerup")
       console.log(message)
+      if (message.powerup === 'gift') {
+        this.setState({
+          giftCount: this.state.giftCount + 1,
+        });
+      }
+      if (['gift', 'astrologer'].includes(message.powerup)) {
+        setTimeout(() => this.state.powerups = this.state.powerups.filter(p => p !== 'gift' && p !== 'astrologer'), _.sample([2, 3, 4]) * 60 * 1000)
+      }
       this.setState({
         cash: message.cash,
         powerups: [...this.state.powerups, message.powerup],
@@ -175,6 +184,7 @@ class SecuritiesDashboard extends Component {
             upgrades={this.state.upgrades}
             powerups={this.state.powerups}
             socket={this.props.socket}
+            giftCount={this.state.giftCount}
           />
         </Card>
         <Card className="PriceChart">

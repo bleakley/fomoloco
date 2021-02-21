@@ -1,25 +1,56 @@
 import React, { Component } from "react";
 import Powerup from "./Powerup";
 import _ from "lodash";
+import { createGenerateClassName } from "@material-ui/core";
 
 const powerups = [
   {
     id: "market-metrics",
-    name: "Gloombourg Terminal",
     description: "reveals key metrics",
     buyCost: 400,
     accesible: (upgrades) => upgrades["buy"] >= 1 && upgrades["sell"] >= 1,
+    repeatable: false
   },
   {
     id: "short-selling",
-    name: "ISDA",
     description: "unlocks short selling",
     buyCost: 1000,
     accesible: (upgrades) => upgrades["volume"] >= 1,
+    repeatable: false
   },
   {
     id: "gift",
-    name: `Buy a present for your ${_.sample([
+    description: "",
+    buyCost: 10,
+    accesible: (upgrades, cash) => cash >= 200,
+  },
+  {
+    id: "astrologer",
+    description: "",
+    buyCost: 50,
+    accesible: (upgrades, cash) => cash >= 50,
+  },
+];
+
+function getName(powerupId, lovedOne) {
+  switch (powerupId) {
+    case 'astrologer':
+      return "Consult an astrologer";
+    case "short-selling":
+      return "ISDA";
+    case "market-metrics":
+      return "Gloombourg Terminal";
+    case "gift":
+      return `Buy a present for your ${lovedOne}`;
+    default:
+      return 'unnamed upgrade';
+  }
+}
+
+class PowerupPanel extends Component {
+  constructor(props) {
+    super(props);
+    this.lovedOnes = _.shuffle([
       "dog",
       "cat",
       "mom",
@@ -31,23 +62,7 @@ const powerups = [
       "wife",
       "wife's boyfriend",
       "hamster",
-    ])}`,
-    description: "",
-    buyCost: 10,
-    accesible: (upgrades, cash) => cash >= 200,
-  },
-  {
-    id: "astrologer",
-    name: "Consult an astrologer",
-    description: "",
-    buyCost: 50,
-    accesible: (upgrades, cash) => cash >= 50,
-  },
-];
-
-class PowerupPanel extends Component {
-  constructor(props) {
-    super(props);
+    ]);
   }
 
   render() {
@@ -62,7 +77,7 @@ class PowerupPanel extends Component {
                   socket={this.props.socket}
                   cash={this.props.cash}
                   id={powerup.id}
-                  name={powerup.name}
+                  name={getName(powerup.id, this.lovedOnes[this.props.giftCount % this.lovedOnes.length])}
                   description={powerup.description}
                   buyCost={powerup.buyCost}
                 />

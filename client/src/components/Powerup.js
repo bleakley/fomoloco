@@ -11,7 +11,7 @@ class Powerup extends Component {
   render() {
     return (
       <tr>
-        <td style={{ minWidth: "100px", whiteSpace: "nowrap" }}>
+        <td style={{ minWidth: "290px", whiteSpace: "nowrap" }}>
           {this.props.name}{" "}
           {this.props.description ? `(${this.props.description})` : ""}
         </td>

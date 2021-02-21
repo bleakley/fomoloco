@@ -72,7 +72,7 @@ class Upgrade extends Component {
         : null;
     return (
       <tr>
-        <td style={{ minWidth: "280px", whiteSpace: "nowrap" }}>
+        <td style={{ minWidth: "290px", whiteSpace: "nowrap" }}>
           {currentLevel.name}{" "}
           {currentLevel.description ? `(${currentLevel.description})` : ""}
         </td>

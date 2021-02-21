@@ -45,7 +45,7 @@ const upgrades = {
       { cost: 0, name: "basic account", description: "1x hype speed" },
       { cost: 40, name: "high karma account", description: "2x hype speed" },
       { cost: 200, name: "moderator account", description: "4x hype speed" },
-      { cost: 1000, name: "botnet", description: "8x hype speed" },
+      { cost: 1000, name: "distributed botnet", description: "8x hype speed" },
     ],
   },
   volume: {
@@ -122,7 +122,7 @@ class User {
           socket.emit("gift", {
             newCash: this.cash.toFixed(2),
           });
-        }, Math.random() * 5 + 5);
+        }, Math.random() * 5000 + 5000);
       }
     }
   }
