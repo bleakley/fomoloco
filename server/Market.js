@@ -4,7 +4,7 @@ const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
 const SECOND = 1000;
 const Bot = require("./Bot.js");
-const uuid = require('uuid');
+const uuid = require("uuid");
 const { remove } = require("lodash");
 
 const LEADERBOARD_SIZE = 10;
@@ -23,6 +23,7 @@ class Market {
     this.traders = [];
     this.botsCulledCount = 0;
     this.playersQuitCount = 0;
+    this.maxMargin = 1.5;
 
     this.usernamesUsed = new Set();
 
@@ -40,33 +41,35 @@ class Market {
   }
 
   getRandomUserName() {
-    return _.sample([
-      "Sexy",
-      "Diamond",
-      "Juicy",
-      "Horny",
-      "Paper",
-      "Joe",
-      "Badass",
-      "Slow",
-      "Deep",
-      "1r0ny",
-      "Roaring"
-    ]) +
-    _.sample([
-      "Hands",
-      "Slut",
-      "Tendies",
-      "Doge",
-      "Ape",
-      "Banana",
-      "Waffle",
-      "Kitten",
-      "Ninja",
-      "Value",
-      "Man"
-    ]) +
-    Math.round(Math.random() * 90 + 10).toString();
+    return (
+      _.sample([
+        "Sexy",
+        "Diamond",
+        "Juicy",
+        "Horny",
+        "Paper",
+        "Joe",
+        "Badass",
+        "Slow",
+        "Deep",
+        "1r0ny",
+        "Roaring",
+      ]) +
+      _.sample([
+        "Hands",
+        "Slut",
+        "Tendies",
+        "Doge",
+        "Ape",
+        "Banana",
+        "Waffle",
+        "Kitten",
+        "Ninja",
+        "Value",
+        "Man",
+      ]) +
+      Math.round(Math.random() * 90 + 10).toString()
+    );
   }
 
   getUniqueUserName() {
@@ -202,6 +205,39 @@ class Market {
     }
   }
 
+  short(symbol, trader, numShares, socket) {
+    if (trader.shares[symbol] > 0) return;
+
+    let asset = this.getAssetBySymbol(symbol);
+    let numSharesTraderCanAfford =
+      (asset.poolShares -
+        (asset.poolCash * asset.poolShares) /
+          (asset.poolCash + this.getNetWorth(trader))) /
+      this.maxMargin;
+
+    if (numSharesTraderCanAfford < numShares) {
+      numShares = Math.floor(numSharesTraderCanAfford);
+    }
+
+    let buyValue =
+      (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
+      asset.poolCash;
+
+    trader.shares[symbol] -= numShares;
+    trader.cash += buyValue;
+
+    if (socket) {
+      socket.emit("transaction", {
+        type: "short",
+        symbol: symbol,
+        shares: numShares,
+        price: (buyValue / numShares).toFixed(2),
+        newCash: trader.cash.toFixed(2),
+        newShares: trader.shares[symbol],
+      });
+    }
+  }
+
   sell(symbol, trader, numShares, socket) {
     numShares = Math.min(numShares, trader.shares[symbol]);
 
@@ -231,7 +267,13 @@ class Market {
 
   generateShillMessage(symbol) {
     return _.sample([
-      `🤑 \$${symbol} will go 📈${_.sample(['VERTICAL', 'PARABOLIC', 'NUCLEAR', 'GALACTIC', 'CRITICAL'])}📈 very SOON 🚀`,
+      `🤑 \$${symbol} will go 📈${_.sample([
+        "VERTICAL",
+        "PARABOLIC",
+        "NUCLEAR",
+        "GALACTIC",
+        "CRITICAL",
+      ])}📈 very SOON 🚀`,
       `short interest on \$${symbol} is STILL GOING UP`,
       `HOLD \$${symbol}${"!".repeat(
         _.sample([1, 2, 3, 4])
@@ -475,7 +517,10 @@ class Market {
       let totalPayout = 0;
       this.assets.forEach(
         (asset) =>
-          (totalPayout += trader.shares[asset.symbol] * dividends[asset.symbol])
+          (totalPayout +=
+            trader.shares[asset.symbol] > 0
+              ? trader.shares[asset.symbol] * dividends[asset.symbol]
+              : 0)
       );
       trader.cash += totalPayout;
       if (trader.type === constants.TRADER_TYPE_PLAYER) {

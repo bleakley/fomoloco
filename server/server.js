@@ -76,6 +76,10 @@ io.on("connection", function (socket) {
     market.sell(order.symbol, user, order.shares, socket);
   });
 
+  socket.on("short-asset", (order) => {
+    market.short(order.symbol, user, order.shares, socket);
+  });
+
   socket.on("shill-asset", (symbol) => {
     market.shill(symbol, user);
   });

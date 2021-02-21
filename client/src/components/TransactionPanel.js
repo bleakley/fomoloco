@@ -98,6 +98,16 @@ class TransactionPanel extends Component {
     });
   }
 
+  short(symbol, cooldown) {
+    this.props.socket.emit("short-asset", {
+      symbol: symbol,
+      shares: 10 ** this.props.upgrades.volume,
+    });
+    this.setState({
+      sellTime: cooldown,
+    });
+  }
+
   hype(symbol, cooldown) {
     this.props.socket.emit("shill-asset", symbol);
     this.setState({
@@ -157,12 +167,21 @@ class TransactionPanel extends Component {
                   />
                 </td>
                 <td>
-                  <TransactionButton
-                    label="Sell"
-                    onClick={() => this.sell(asset.symbol, cooldowns.sell)}
-                    time={this.state.sellTime}
-                    cooldown={cooldowns.sell}
-                  />
+                  {this.props.playerHoldings[asset.symbol] > 0 ? (
+                    <TransactionButton
+                      label="Sell"
+                      onClick={() => this.sell(asset.symbol, cooldowns.sell)}
+                      time={this.state.sellTime}
+                      cooldown={cooldowns.sell}
+                    />
+                  ) : (
+                    <TransactionButton
+                      label="Short"
+                      onClick={() => this.short(asset.symbol, cooldowns.sell)}
+                      time={this.state.sellTime}
+                      cooldown={cooldowns.sell}
+                    />
+                  )}
                 </td>
                 <td>
                   <TransactionButton
