@@ -29,14 +29,14 @@ class DonationAd extends Component {
               justifyItems: "center",
               justifyContent: "center",
               alignItems: "center",
-              marginTop: "20px",
+              marginTop: "17px",
               flexDirection: "column",
             }}
           >
             <div style={{ marginTop: "2px", marginRight: "15px" }}>
               💎PayPal💎
             </div>
-            <div>
+            <div style={{ marginTop: "15px", marginRight: "15px" }}>
               <PaypalButton />
             </div>
           </div>
