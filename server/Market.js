@@ -49,7 +49,7 @@ class Market {
       "Joe",
       "Badass",
       "Slow",
-      "DeepFucking",
+      "Deep",
       "1r0ny",
       "Roaring"
     ]) +

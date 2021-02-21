@@ -1,6 +1,15 @@
 import React, { Component } from "react";
 import "../App.css";
 
+const MAX_LENGTH = 15;
+
+const truncate = (name) => {
+  if (name.length > MAX_LENGTH) {
+    return name.slice(0, MAX_LENGTH - 3) + '...';
+  }
+  return name;
+}
+
 class Leaderboard extends Component {
   constructor(props) {
     super(props);
@@ -26,7 +35,7 @@ class Leaderboard extends Component {
         <div style={{display: 'grid', gridTemplate: '1fr 1fr 1fr 1fr 1fr / 1fr', gridAutoFlow: 'column', columnGap: '10px'}}>
         {this.state.leaderboard.top.map((row, i) => (
             <div key={i} style={{display: 'flex', justifyContent: 'space-between'}}>
-              <div>{i + 1}. <b>{row.name}</b></div>
+              <div>{i + 1}. <b>{truncate(row.name)}</b></div>
               <div>${row.profit}</div>
             </div>
           ))}
