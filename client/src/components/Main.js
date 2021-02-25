@@ -12,7 +12,7 @@ import openConnection from "socket.io-client";
 import AdPlacement from "./AdPlacement";
 
 const DEBUG_MODE = false;
-const SERVER_URL = process.env.NODE_ENV === 'production' ? "http://fomolo.co" : "http://localhost:8080";
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || (process.env.NODE_ENV === 'production' ? "http://fomolo.co" : "http://localhost:8080");
 
 let socket = openConnection(SERVER_URL, {
   query: "username=dfv",
