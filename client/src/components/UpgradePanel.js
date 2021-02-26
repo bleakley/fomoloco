@@ -36,7 +36,7 @@ const upgrades = {
   hype: {
     class: "Influence",
     levels: [
-      { cost: 0, name: "Basic account", description: "1x hype speed" },
+      { cost: 0, name: "Basic TikTak account", description: "1x hype speed" },
       { cost: 40, name: "High karma account", description: "2x hype speed" },
       { cost: 200, name: "Moderator account", description: "4x hype speed" },
       { cost: 1000, name: "Botnet", description: "8x hype speed" },
