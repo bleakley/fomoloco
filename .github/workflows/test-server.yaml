@@ -5,9 +5,12 @@ name: Server CI
 
 on:
   push:
-    branches: ['*']
+    branches: ["*"]
   pull_request:
-    branches: ['*']
+    branches: ["*"]
+
+env:
+  CI: true
 
 jobs:
   build:
