@@ -38,9 +38,11 @@ test("sell asset", () => {
   let asset = market.assets[0];
   let initialPoolShares = asset.poolShares;
   let initialTraderShares = testTrader.shares[asset.symbol];
+  let initialPoolCash = asset.poolCash;
   market.sell(asset.symbol, testTrader, 1);
   expect(asset.poolShares).toBe(initialPoolShares + 1);
   expect(testTrader.shares[asset.symbol]).toBe(initialTraderShares - 1);
+  expect(asset.price).toBe(initialPoolCash - asset.poolCash);
 });
 
 test("short", () => {

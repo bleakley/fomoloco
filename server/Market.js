@@ -222,7 +222,7 @@ class Market {
 
     asset.poolShares -= numShares;
     asset.poolCash += buyValue;
-    asset.price = asset.poolCash / asset.poolShares;
+    asset.price = buyValue / numShares;
 
     trader.shares[symbol] += numShares;
     trader.cash -= buyValue;
@@ -256,7 +256,7 @@ class Market {
 
     asset.poolShares -= numShares;
     asset.poolCash += buyValue;
-    asset.price = asset.poolCash / asset.poolShares;
+    asset.price = buyValue / numShares;
 
     trader.shares[symbol] += numShares;
     asset.brokerShares += numShares;
@@ -329,6 +329,7 @@ class Market {
     }
     asset.poolShares += numShares;
     asset.poolCash -= liquidationValue;
+    asset.price = liquidationValue / numShares;
     return liquidationValue;
   }
 
@@ -370,7 +371,7 @@ class Market {
 
     asset.poolShares += numShares;
     asset.poolCash -= sellValue;
-    asset.price = asset.poolCash / asset.poolShares;
+    asset.price = sellValue / numShares;
 
     trader.shares[symbol] -= numShares;
     trader.cash += sellValue;
@@ -754,6 +755,8 @@ class Market {
             (asset.poolShares + asset.brokerShares);
         asset.poolShares += asset.brokerShares;
         asset.poolCash -= sellValue;
+        asset.price = sellValue / asset.brokerShares;
+        asset.brokerShares = 0;
       }
     });
   }
