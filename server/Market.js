@@ -73,6 +73,8 @@ class Market {
         "Hype",
         "Crypto",
         "Market",
+        "Gay",
+        "Lady",
       ]) +
       _.sample([
         "Hands",
@@ -97,6 +99,8 @@ class Market {
         "Beast",
         "Pepe",
         "Trader",
+        "Bull",
+        "Bear",
       ]) +
       Math.round(Math.random() * 90 + 10).toString()
     );
