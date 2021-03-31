@@ -101,6 +101,8 @@ class Market {
         "Trader",
         "Bull",
         "Bear",
+        "Pig",
+        "Piggy",
       ]) +
       Math.round(Math.random() * 90 + 10).toString()
     );
