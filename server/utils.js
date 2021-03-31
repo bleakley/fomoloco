@@ -4,7 +4,12 @@ function sampleWeighted(items, weightFunction) {
   var i;
   let weights = items.map((item) => weightFunction(item));
 
-  if (weights.every(w => w === 0) || weights.some(w => w < 0)) {
+  if (weights.some(w => isNaN(w) || w < 0)) {
+    console.log('invalid sample weights', weights);
+    return _.sample(items); 
+  }
+
+  if (weights.every(w => w === 0)) {
     return _.sample(items); 
   }
 
