@@ -220,6 +220,10 @@ class Market {
       numShares = Math.floor(numSharesTraderCanAfford);
     }
 
+    if (numShares <= 0) {
+      return;
+    }
+
     let buyValue =
       (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
       asset.poolCash;
@@ -252,6 +256,10 @@ class Market {
 
     if (numSharesTraderCanAfford < numShares) {
       numShares = Math.floor(numSharesTraderCanAfford);
+    }
+
+    if (numShares <= 0) {
+      return;
     }
 
     let buyValue =
@@ -290,6 +298,10 @@ class Market {
 
     if (numSharesTraderCanAfford < numShares) {
       numShares = Math.floor(numSharesTraderCanAfford);
+    }
+
+    if (numShares <= 0) {
+      return;
     }
 
     let buyValue =
@@ -331,6 +343,11 @@ class Market {
         asset.poolCash -
         (asset.poolCash * asset.poolShares) / (asset.poolShares + numShares);
     }
+
+    if (numShares <= 0) {
+      return;
+    }
+
     asset.poolShares += numShares;
     asset.poolCash -= liquidationValue;
     asset.price = liquidationValue / numShares;
@@ -358,6 +375,11 @@ class Market {
         (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
         asset.poolCash;
     }
+
+    if (numShares <= 0) {
+      return;
+    }
+
     asset.poolShares -= numShares;
     asset.poolCash += closeOutValue;
     asset.brokerShares += numShares;
@@ -367,6 +389,10 @@ class Market {
 
   sell(symbol, trader, numShares, socket) {
     numShares = Math.min(numShares, trader.shares[symbol]);
+
+    if (numShares <= 0) {
+      return;
+    }
 
     let asset = this.getAssetBySymbol(symbol);
     let sellValue =
