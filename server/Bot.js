@@ -95,7 +95,7 @@ class Bot {
     let sentiment = this.hypeWeight * asset.hype;
     sentiment +=
       this.velocityWeight *
-      (Math.min(Math.max(asset.velocity, 2), -2) / 4 + 0.5);
+      (Math.max(Math.min(asset.velocity, 2), -2) / 4 + 0.5);
     sentiment +=
       this.fundamentalWeight *
       (1 -
@@ -110,6 +110,10 @@ class Bot {
     }
     if (sentiment < 0) {
       console.log(`Warning sentiment is less than 0: ${sentiment}`);
+      sentiment = 0;
+    }
+    if (isNaN(sentiment)) {
+      console.log(`Warning sentiment is NaN`);
       sentiment = 0;
     }
     return sentiment;
