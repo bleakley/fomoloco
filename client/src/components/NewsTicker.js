@@ -4,6 +4,52 @@ import _ from "lodash";
 
 let serverNews = [];
 
+const getLocalNewsItem = () => _.sample([
+    {
+      text: `${_.sample([
+        "Florida",
+        "Connecticut",
+        "Georgia",
+        "Colorado",
+      ])} ${_.sample(["man", "woman"])} ${_.sample([
+        "wins lottery",
+        "dies in car crash",
+        "struck by lightning",
+      ])} after receiving COVID-19 vaccine`,
+    },
+    {
+      text:
+        "New study links black-rinded futsu squash to lower rates of Groat's disease",
+    },
+    {
+      text: `${_.sample([
+        "Misinterpretation of horoscope",
+        "Scientist's dog",
+      ])} blamed for loss of spacecraft during attempted flyby of ${_.sample([
+        "Mars",
+        "Jupiter",
+        "Venus",
+      ])}`,
+    },
+    {
+      text: `Video shows ${_.sample([
+        "dog",
+        "goat",
+        "horse",
+      ])} save ${_.sample([
+        "cat",
+        "guinea pig",
+        "baby racoon",
+        "kitten",
+        "hedgehog",
+      ])} from ${_.sample(["fire", "drowning", "shark"])} `,
+    },
+    {
+      text: "BREAKING NEWS",
+    },
+  ]);
+
+
 class NewsTicker extends Component {
   constructor(props) {
     super(props);
@@ -12,51 +58,6 @@ class NewsTicker extends Component {
       serverNewsCount: 0,
       expiredNewsCount: 0,
     };
-
-    this.localNews = _.shuffle([
-      {
-        text: `${_.sample([
-          "Florida",
-          "Connecticut",
-          "Georgia",
-          "Colorado",
-        ])} ${_.sample(["man", "woman"])} ${_.sample([
-          "wins lottery",
-          "dies in car crash",
-          "struck by lightning",
-        ])} after receiving COVID-19 vaccine`,
-      },
-      {
-        text:
-          "New study links black-rinded futsu squash to lower rates of Groat's disease",
-      },
-      {
-        text: `${_.sample([
-          "Misinterpretation of horoscope",
-          "Scientist's dog",
-        ])} blamed for loss of spacecraft during attempted flyby of ${_.sample([
-          "Mars",
-          "Jupiter",
-          "Venus",
-        ])}`,
-      },
-      {
-        text: `Video shows ${_.sample([
-          "dog",
-          "goat",
-          "horse",
-        ])} save ${_.sample([
-          "cat",
-          "guinea pig",
-          "baby racoon",
-          "kitten",
-          "hedgehog",
-        ])} from ${_.sample(["fire", "drowning", "shark"])} `,
-      },
-      {
-        text: "BREAKING NEWS",
-      },
-    ]);
 
     this.props.socket.on("news", (news) => {
       serverNews.push({ ...news, receivedAt: new Date() });
@@ -96,7 +97,7 @@ class NewsTicker extends Component {
         return this.getNewsText(index);
       }
     }
-    return this.localNews[index % this.localNews.length];
+    return getLocalNewsItem();
   }
 
   render() {
