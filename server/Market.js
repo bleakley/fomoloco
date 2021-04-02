@@ -287,7 +287,6 @@ class Market {
         asset.poolCash -
         (asset.poolCash * asset.poolShares) / (asset.poolShares + numShares);
     }
-
     if (numShares <= 0) {
       return 0;
     }
@@ -295,6 +294,9 @@ class Market {
     asset.poolShares += numShares;
     asset.poolCash -= liquidationValue;
     asset.price = liquidationValue / numShares;
+
+    trader.shares[asset.symbol] -= numShares;
+
     return liquidationValue;
   }
 

@@ -66,19 +66,20 @@ test("liquidate all shares", () => {
   asset.poolShares = 100;
   asset.poolCash = 100;
   testTrader.shares[asset.symbol] = 1;
+  testTrader.cash = 0;
 
   let initialPoolShares = asset.poolShares;
   let initialTraderShares = testTrader.shares[asset.symbol];
   let initialPoolCash = asset.poolCash;
 
   // When
-  market.liquidate(asset, testTrader, 10);
+  liquidationValue = market.liquidate(asset, testTrader, 100);
 
   // Then
   expect(asset.poolShares).toBe(initialPoolShares + initialTraderShares);
   expect(asset.price).toBe(
-    (asset.poolCash - initialPoolCash) / initialTraderShares
+    (initialPoolCash - asset.poolCash) / initialTraderShares
   );
   expect(testTrader.shares[asset.symbol]).toBe(0);
-  expect(testTrade.cash).toBe(asset.poolCash - initalPoolCash);
+  expect(liquidationValue).toBe(initialPoolCash - asset.poolCash);
 });
