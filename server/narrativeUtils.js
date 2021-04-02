@@ -143,6 +143,7 @@ function generateCelebrity() {
     "Dasha Nekrasova",
     "Anna Khachiyan",
     "Kim Dotcom",
+    "Lil Nas X",
     _.sample([
       "Sporty Spice",
       "Baby Spice",
