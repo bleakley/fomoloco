@@ -57,3 +57,28 @@ test("short", () => {
   expect(asset.brokerShares).toBe(initialbrokerShares);
   expect(testTrader.shares[asset.symbol]).toBe(-1);
 });
+
+test("liquidate all shares", () => {
+  // Given
+  let market = getTestMarket();
+  let testTrader = market.traders[0];
+  let asset = market.assets[0];
+  asset.poolShares = 100;
+  asset.poolCash = 100;
+  testTrader.shares[asset.symbol] = 1;
+
+  let initialPoolShares = asset.poolShares;
+  let initialTraderShares = testTrader.shares[asset.symbol];
+  let initialPoolCash = asset.poolCash;
+
+  // When
+  market.liquidate(asset, testTrader, 10);
+
+  // Then
+  expect(asset.poolShares).toBe(initialPoolShares + initialTraderShares);
+  expect(asset.price).toBe(
+    (asset.poolCash - initialPoolCash) / initialTraderShares
+  );
+  expect(testTrader.shares[asset.symbol]).toBe(0);
+  expect(testTrade.cash).toBe(asset.poolCash - initalPoolCash);
+});

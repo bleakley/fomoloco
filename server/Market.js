@@ -2,6 +2,7 @@ const _ = require("lodash");
 const utils = require("./utils.js");
 const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
+const Asset = require("./Asset.js");
 const SECOND = 1000;
 const Bot = require("./Bot.js");
 const uuid = require("uuid");
@@ -149,53 +150,11 @@ class Market {
 
   generateInitialAssets() {
     this.assets = [
-      {
-        name: "Blueberry Technologies",
-        symbol: "BB",
-        color: "#1f77b4",
-        poolShares: 100,
-        poolCash: 100,
-        hype: 0,
-        velocity: 0,
-        brokerShares: 0,
-      },
-      {
-        name: "Mooncoin",
-        symbol: "MNC",
-        color: "#2ca02c",
-        poolShares: 100,
-        poolCash: 100,
-        hype: 0,
-        velocity: 0,
-        brokerShares: 0,
-      },
-      {
-        name: "Brook Video Rental",
-        symbol: "BVR",
-        color: "#d62728",
-        poolShares: 100,
-        poolCash: 100,
-        hype: 0,
-        velocity: 0,
-        brokerShares: 0,
-      },
-      {
-        name: "Sundog Growers",
-        symbol: "SDG",
-        color: "#ff7f0e",
-        poolShares: 100,
-        poolCash: 100,
-        hype: 0,
-        velocity: 0,
-        brokerShares: 0,
-      },
+      new Asset("Blueberry Technologies", "BB", "#1f77b4"),
+      new Asset("Mooncoin", "MNC", "#2ca02c"),
+      new Asset("Brook Video Rental", "BVR", "#d62728"),
+      new Asset("Sundog Growers", "SDG", "#ff7f0e"),
     ];
-
-    this.assets.forEach((asset) => {
-      asset.price = asset.poolCash / asset.poolShares;
-      asset.previousPrice = asset.price;
-      asset.fundamentalPrice = asset.price;
-    });
   }
 
   getAssetBySymbol(symbol) {
@@ -203,12 +162,7 @@ class Market {
   }
 
   updateMarketMetrics() {
-    this.assets.forEach((asset) => {
-      asset.velocity =
-        (asset.price - asset.previousPrice) / asset.previousPrice;
-      asset.previousPrice = 0.5 * asset.previousPrice + 0.5 * asset.price;
-      asset.hype = asset.hype * 0.95;
-    });
+    this.assets.forEach((asset) => asset.updateMarketMetrics());
   }
 
   buy(symbol, trader, numShares, socket) {
@@ -226,14 +180,8 @@ class Market {
       return;
     }
 
-    let buyValue =
-      (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
-      asset.poolCash;
-
-    asset.poolShares -= numShares;
-    asset.poolCash += buyValue;
-    asset.price = buyValue / numShares;
-
+    let buyValue = asset.getBuyValue(numShares);
+    asset.buy(numShares);
     trader.shares[symbol] += numShares;
     trader.cash -= buyValue;
 
@@ -264,14 +212,8 @@ class Market {
       return;
     }
 
-    let buyValue =
-      (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
-      asset.poolCash;
-
-    asset.poolShares -= numShares;
-    asset.poolCash += buyValue;
-    asset.price = buyValue / numShares;
-
+    let buyValue = asset.getBuyValue(numShares);
+    asset.buy(numShares);
     trader.shares[symbol] += numShares;
     asset.brokerShares += numShares;
     trader.cash -= buyValue;
@@ -347,7 +289,7 @@ class Market {
     }
 
     if (numShares <= 0) {
-      return;
+      return 0;
     }
 
     asset.poolShares += numShares;
@@ -379,7 +321,7 @@ class Market {
     }
 
     if (numShares <= 0) {
-      return;
+      return 0;
     }
 
     asset.poolShares -= numShares;
