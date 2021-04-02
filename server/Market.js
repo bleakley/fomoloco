@@ -311,23 +311,15 @@ class Market {
         (asset.poolShares - trader.shares[asset.symbol]);
     if (maxCloseOutValue < value) {
       numShares = -trader.shares[asset.symbol];
-      closeOutValue = maxCloseOutValue;
     } else {
       numShares =
         asset.poolShares -
         (asset.poolCash * asset.poolShares) / (asset.poolCash + value);
       numShares = Math.min(Math.ceil(numShares), asset.poolShares - 1);
-      closeOutValue =
-        (asset.poolCash * asset.poolShares) / (asset.poolShares - numShares) -
-        asset.poolCash;
     }
 
-    if (numShares <= 0) {
-      return 0;
-    }
-
-    asset.poolShares -= numShares;
-    asset.poolCash += closeOutValue;
+    closeOutValue = asset.getBuyValue(numShares);
+    asset.buy(numShares);
     asset.brokerShares += numShares;
     trader.shares[asset.symbol] += numShares;
     return closeOutValue;
