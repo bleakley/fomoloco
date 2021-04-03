@@ -76,6 +76,7 @@ class Market {
         "Market",
         "Gay",
         "Lady",
+        "Thirsty",
       ]) +
       _.sample([
         "Hands",
@@ -150,7 +151,7 @@ class Market {
 
   generateInitialAssets() {
     this.assets = [
-      new Asset("Blueberry Technologies", "BB", "#1f77b4"),
+      new Asset("Bluberrry Technologies", "BB", "#1f77b4"),
       new Asset("Mooncoin", "MNC", "#2ca02c"),
       new Asset("Brook Video Rental", "BVR", "#d62728"),
       new Asset("Sundog Growers", "SDG", "#ff7f0e"),
@@ -384,7 +385,7 @@ class Market {
         "star wars miniatures",
         narrativeUtils.generateCcgCard(),
       ])}- gotta buy more \$${symbol} 🤑`,
-      `I'm so HORNY for \$${symbol} 😍🥵🥵💦`,
+      `I'm so HORNY for \$${symbol} 😍🥵💦`,
       `APES STRONGER TOGETHER - BUY \$${symbol} ${"🍌".repeat(
         _.sample([1, 2, 3])
       )}${"🐵".repeat(_.sample([1, 2, 3]))}`,
