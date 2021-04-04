@@ -51,6 +51,16 @@ app.post("/message", (req, res) => {
   }
 });
 
+app.post("/boost", (req, res) => {
+  if (req.body.secret === "44440570-52bf-4dfc-b81b-f7837528ee8d") {
+    marketManager.boost(req.body.symbol);
+    res.json({ message: `boost applied to \$${req.body.symbol}` });
+  } else {
+    res.status(403);
+    res.json({ message: "wrong secret" });
+  }
+});
+
 io.on("connection", function (socket) {
   //let requestedRoom = socket.handshake.query.requestedRoom;
   let market = marketManager.getNextMarket();

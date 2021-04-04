@@ -32,6 +32,10 @@ class MarketManager {
         }
     }
 
+    boost(symbol) {
+        this.markets.forEach(m => m.boost(symbol));
+    }
+ 
     getNextMarket() {
         let nextMarket = this.markets.find(market => market.getPlayers().length < MAX_DESIRED_PLAYERS && market.getAge() < MAX_DESIRED_MARKET_AGE);
         if (nextMarket) {

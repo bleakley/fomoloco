@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 
-const ads = ['BB', 'MNC', 'BVR', 'SDG'];
+const ads = ['BB', 'BVR', 'MNC', 'SDG'];
 
 class DonateDialog extends Component {
   constructor(props) {
@@ -29,7 +29,7 @@ class DonateDialog extends Component {
         <DialogContent>
           <p style={{textAlign: 'center'}}>🤑 Please support FOMO LOCO web hosting and development 🤑</p>
           <p>Donating via PayPal helps us keep this game running, and there's a special bonus as well! Because you clicked on the ad for {asset.name}, you must really like the stock. By donating, you'll be supporting <span style={{color: asset.color}}><b>${asset.symbol}</b></span>.</p>
-          <p>At the end of each day, the asset that received the highest donation total will get a boost to its fundamental value the following day. This information is made public in the news ticker and does not provide any player with a competitive advantage, it's just for fun!</p>
+          <p>At the end of each day, the asset that received the highest donation total will get a boost to its fundamental value (on all servers) the following day. This information is made public in the news ticker and does not provide any player with a competitive advantage, it's just for fun!</p>
         </DialogContent>
         <DialogActions>
           <PaypalButton symbol={this.props.symbol} />

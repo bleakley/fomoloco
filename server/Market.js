@@ -153,9 +153,13 @@ class Market {
     this.assets = [
       new Asset("Bluberrry Technologies", "BB", "#1f77b4"),
       new Asset("Mooncoin", "MNC", "#2ca02c"),
-      new Asset("Brook Video Rental", "BVR", "#d62728"),
-      new Asset("Sundog Growers", "SDG", "#ff7f0e"),
+      new Asset("Brook Video Rental", "BVR", "#ff7f0e"),
+      new Asset("Sundog Growers", "SDG", "#d62728"),
     ];
+  }
+
+  boost(symbol) {
+    this.assets.forEach((a) => a.boosted = a.symbol === symbol.toUpperCase());
   }
 
   getAssetBySymbol(symbol) {
@@ -462,7 +466,8 @@ class Market {
     } else {
       asset = _.sample(this.assets);
       let significance = Math.random();
-      if (Math.random() < 0.51) {
+      let chanceOfGoodNews = asset.boosted ? 0.54 : 0.51;
+      if (Math.random() < chanceOfGoodNews) {
         message = _.sample([
           `${asset.name} (\$${
             asset.symbol
@@ -492,6 +497,9 @@ class Market {
             asset.symbol
           } price`,
         ]);
+        if (Math.random() < 0.05 && asset.boosted) {
+          `Retailers report consumer demand is surging for ${asset.name} (\$${asset.symbol}) products`
+        }
         asset.fundamentalPrice = Math.min(
           MAX_FUNDAMENTAL_PRICE,
           asset.fundamentalPrice * (1 + significance)
