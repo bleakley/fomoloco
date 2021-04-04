@@ -1,111 +1,55 @@
 import React, { Component } from "react";
 import PaypalButton from "./PaypalButton";
+import Dialog from "@material-ui/core/Dialog";
+import Button from "@material-ui/core/Button";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogActions from "@material-ui/core/DialogActions";
 
-const AdaWallet =
-  "addr1q9sz5cunrh9r6syfwpd9h6wgv8lpd0c60n4yhetv0m9xdg0kmcxwts5fppwf8zewaw05cc3yvamwzu6ytf9q3923sm6qetwcqk";
-const DogeWallet = "DAbzsgE1oaxLvqsrvfEA1QHTNqXVtDHhtF";
+const ads = ['BB', 'MNC', 'BVR', 'SDG'];
 
-class DonationAd extends Component {
+class DonateDialog extends Component {
   constructor(props) {
     super(props);
   }
+
+  handleClose() {
+    this.props.onClose();
+  }
+
   render() {
+    let asset = this.props.assetDescriptions.find(a => a.symbol === this.props.symbol) || {};
     return (
-      <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", paddingRight:"16px", paddingLeft:"16px"}}>
-        <div
-          style={{
-            display: "flex",
-            justifyItems: "center",
-            justifyContent: "center",
-            marginTop: "20px",
-          }}
-        >
-          🤑 Please support FOMO LOCO web hosting and development 🤑
-        </div>
-        <div style={{ display: "flex", flexDirection: "row" , justifyContent: "space-between", alignItems: "flex-start"}}>
-          <div
-            style={{
-              display: "flex",
-              justifyItems: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "17px",
-              flexDirection: "column",
-            }}
-          >
-            <div style={{ marginTop: "2px", marginRight: "15px" }}>
-              💎PayPal💎
-            </div>
-            <div style={{ marginTop: "15px", marginRight: "15px" }}>
-              <PaypalButton />
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyItems: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "0px",
-              flexDirection: "column",
-            }}
-          >
-            <div style={{ marginTop: "18px", marginRight: "15px" }}>
-              🚀ADA🚀
-            </div>
-            <div>
-              <pre
-                style={{
-                  maxWidth: "150px",
-                  overflowX: "scroll",
-                  marginRight: "15px",
-                }}
-              >
-                {AdaWallet}
-              </pre>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyItems: "center",
-              justifyContent: "center",
-              alignItems: "center",
-              marginTop: "0px",
-              flexDirection: "column",
-            }}
-          >
-            <div style={{ marginTop: "18px", marginRight: "15px" }}>
-              📈DOGE📈
-            </div>
-            <div>
-              <pre style={{ maxWidth: "150px", overflowX: "scroll" }}>
-                {DogeWallet}
-              </pre>
-            </div>
-          </div>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyItems: "center",
-            justifyContent: "center",
-            marginTop: "5px",
-          }}
-        >
-          Created with love for &nbsp;<a href="https://itch.io/jam/brackeys-5" target="_blank">Brackeys Game Jam 2021.1</a>
-        </div>
-      </div>
+      <Dialog
+        onClose={() => this.handleClose()}
+        aria-labelledby="simple-dialog-title"
+        open={this.props.open}
+        disableBackdropClick={true}
+        disableEscapeKeyDown={true}
+      >
+        <DialogContent>
+          <p style={{textAlign: 'center'}}>🤑 Please support FOMO LOCO web hosting and development 🤑</p>
+          <p>Donating via PayPal helps us keep this game running, and there's a special bonus as well! Because you clicked on the ad for {asset.name}, you must really like the stock. By donating, you'll be supporting <span style={{color: asset.color}}><b>${asset.symbol}</b></span>.</p>
+          <p>At the end of each day, the asset that received the highest donation total will get a boost to its fundamental value the following day. This information is made public in the news ticker and does not provide any player with a competitive advantage, it's just for fun!</p>
+        </DialogContent>
+        <DialogActions>
+          <PaypalButton symbol={this.props.symbol} />
+          <Button onClick={() => this.handleClose()} color="primary">
+            Cancel
+          </Button>
+        </DialogActions>
+      </Dialog>
     );
   }
 }
 
-const ads = ['bb', 'mnc', 'bvr', 'sdg'];
-
 class AdPlacement extends Component {
   constructor(props) {
     super(props);
-    this.state = { adIndex: 0 };
+    this.state = {
+      adIndex: 0,
+      donateDialogOpen: false,
+      donateTo: null
+    };
   }
 
   componentDidMount() {
@@ -114,7 +58,15 @@ class AdPlacement extends Component {
 
   render() {
     let ad = ads[this.state.adIndex];
-    return <img src={`${ad}_ad.png`} width="380px" height="250px"></img>;
+    return <>
+      <DonateDialog
+        open={this.state.donateDialogOpen}
+        onClose={() => this.setState({ donateDialogOpen: false, donateTo: null })}
+        symbol={this.state.donateTo}
+        assetDescriptions={this.props.assetDescriptions}
+      />
+      <img src={`${ad.toLowerCase()}_ad.png`} width="380px" height="250px" style={{cursor: 'pointer'}} onClick={() => this.setState({ donateDialogOpen: true, donateTo: ad })} />
+    </>;
   }
 }
 

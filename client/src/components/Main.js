@@ -88,7 +88,7 @@ class Main extends Component {
           <Leaderboard socket={this.socket} />
         </Card>
         <Card className="Advertisement">
-          <AdPlacement />
+          <AdPlacement assetDescriptions={this.state.assetDescriptions} />
         </Card>
         <Card className="HypeFeed">
           <HypeFeed socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
