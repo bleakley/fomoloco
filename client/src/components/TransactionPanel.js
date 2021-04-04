@@ -361,7 +361,7 @@ class TransactionPanel extends Component {
                   }
                   placement="right"
                 >
-                  <div style={{ position: "relative" }}>
+                  <div style={{ position: "relative", marginTop: "5px" }}>
                     <b>Dividend</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <div
                       style={{ position: "absolute", top: "2px", left: "72px" }}
@@ -391,7 +391,7 @@ class TransactionPanel extends Component {
                     }
                     placement="right"
                   >
-                    <div style={{ position: "relative" }}>
+                    <div style={{ position: "relative",  marginTop: "5px" }}>
                       <b>Margin</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <div
                         style={{

@@ -136,8 +136,6 @@ class SecuritiesDashboard extends Component {
     });
 
     this.props.socket.on("powerup", (message) => {
-      console.log("powerup")
-      console.log(message)
       if (message.powerup === 'gift') {
         this.setState({
           giftCount: this.state.giftCount + 1,

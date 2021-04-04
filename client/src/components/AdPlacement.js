@@ -100,12 +100,21 @@ class DonationAd extends Component {
   }
 }
 
+const ads = ['bb', 'mnc', 'bvr', 'sdg'];
+
 class AdPlacement extends Component {
   constructor(props) {
     super(props);
+    this.state = { adIndex: 0 };
   }
+
+  componentDidMount() {
+    setInterval(() => this.setState({adIndex: (this.state.adIndex + 1) % ads.length}), 60 * 1000)
+  }
+
   render() {
-    return <DonationAd />;
+    let ad = ads[this.state.adIndex];
+    return <img src={`${ad}_ad.png`} width="380px" height="250px"></img>;
   }
 }
 

@@ -56,9 +56,9 @@ class Leaderboard extends Component {
   }
 
   render() {
-    let ranksToShow = 7;
+    let ranksToShow = 10;
 
-    if (this.state.leaderboard.top.length < 7) {
+    if (this.state.leaderboard.top.length < ranksToShow) {
       return null;
     }
 
@@ -76,7 +76,7 @@ class Leaderboard extends Component {
             </TableRow>
           </TableHead>
           <TableBody>
-            {(playerRanked ? [0, 1, 2, 3, 4, 5, 6] : [0, 1, 2, 3, 4, 5]).map((index) => (
+            {(playerRanked ? [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] : [0, 1, 2, 3, 4, 5, 6, 7, 8]).map((index) => (
               <LeaderboardRow key={index} rank={index + 1} trader={this.state.leaderboard.top[index]} you={this.state.leaderboard.top[index].id === this.state.leaderboard.you.id} />
             ))}
             {!playerRanked && (
