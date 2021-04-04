@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 
-const ads = ['BB', 'BVR', 'MNC', 'SDG'];
+const ads = ['BB', 'BVR', 'MNC', 'SDG', 'help'];
 
 class DonateDialog extends Component {
   constructor(props) {
@@ -42,6 +42,23 @@ class DonateDialog extends Component {
   }
 }
 
+class HelpAd extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div style={{margin: "10px"}}>
+        <p style={{textAlign: 'center'}}>🤑 Thanks for playing FOMO LOCO! 🤑</p>
+        <p>We've set up a small discord server to talk about the game.</p>
+        <p>Please reach out if you have any questions, bug reports, suggestions, or if you want to chat with other players.</p>
+        <p style={{textAlign: 'center'}}><a href="https://discord.gg/vjZtHw9Fnw" target="_blank">discord.gg/vjZtHw9Fnw</a></p>
+      </div>
+    );
+  }
+}
+
 class AdPlacement extends Component {
   constructor(props) {
     super(props);
@@ -58,6 +75,7 @@ class AdPlacement extends Component {
 
   render() {
     let ad = ads[this.state.adIndex];
+    let showHelp = ad === 'help';
     return <>
       <DonateDialog
         open={this.state.donateDialogOpen}
@@ -65,7 +83,9 @@ class AdPlacement extends Component {
         symbol={this.state.donateTo}
         assetDescriptions={this.props.assetDescriptions}
       />
+      { showHelp ? <HelpAd /> :
       <img src={`${ad.toLowerCase()}_ad.png`} width="380px" height="250px" style={{cursor: 'pointer'}} onClick={() => this.setState({ donateDialogOpen: true, donateTo: ad })} />
+      }
     </>;
   }
 }
