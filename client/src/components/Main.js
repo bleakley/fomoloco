@@ -97,6 +97,7 @@ class Main extends Component {
         <Card className="NewsTicker">
           <NewsTicker socket={this.socket} assetDescriptions={this.state.assetDescriptions} debug={DEBUG_MODE} />
         </Card>
+        <a className="DiscordLink" href="https://discord.gg/vjZtHw9Fnw" target="_blank"><img src="Discord-Logo-White.png" width="45px" height="45px" /></a>
         {DEBUG_MODE && <FpsView top={800} />}
       </div>
     );

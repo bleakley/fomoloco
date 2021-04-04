@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 
-const ads = ['BB', 'BVR', 'MNC', 'SDG', 'help'];
+const ads = ['BB', 'BVR', 'MNC', 'SDG'];
 
 class DonateDialog extends Component {
   constructor(props) {
@@ -75,7 +75,6 @@ class AdPlacement extends Component {
 
   render() {
     let ad = ads[this.state.adIndex];
-    let showHelp = ad === 'help';
     return <>
       <DonateDialog
         open={this.state.donateDialogOpen}
@@ -83,9 +82,7 @@ class AdPlacement extends Component {
         symbol={this.state.donateTo}
         assetDescriptions={this.props.assetDescriptions}
       />
-      { showHelp ? <HelpAd /> :
       <img src={`${ad.toLowerCase()}_ad.png`} width="380px" height="250px" style={{cursor: 'pointer'}} onClick={() => this.setState({ donateDialogOpen: true, donateTo: ad })} />
-      }
     </>;
   }
 }
