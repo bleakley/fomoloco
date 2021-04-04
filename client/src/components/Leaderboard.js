@@ -6,7 +6,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
-const MAX_LENGTH = 50;
+const MAX_LENGTH = 25;
 
 const truncate = (name) => {
   if (!name) {

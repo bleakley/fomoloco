@@ -41,12 +41,12 @@
   display: grid;
   background-color: gray;
   grid-template-rows: 275px 270px 250px 60px;
-  grid-template-columns: 400px 600px 400px;
+  grid-template-columns: 400px 600px 400px 25px;
   grid-template-areas: 
-    "leaderboard upgrades hype"
-    "advertisement transactions hype"
-    "chart chart hype"
-    "news news news";
+    "leaderboard upgrades hype ."
+    "advertisement transactions hype ."
+    "chart chart hype ."
+    "news news news discord";
 }
 
 .CashLeaderboard {
@@ -88,4 +88,9 @@
   padding: 10px;
   margin: 10px;
   grid-area: chart;
+}
+
+.DiscordLink {
+  margin-top: 10px;
+  grid-area: discord;
 }

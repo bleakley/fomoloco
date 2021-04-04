@@ -42,6 +42,23 @@ class DonateDialog extends Component {
   }
 }
 
+class HelpAd extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div style={{margin: "10px"}}>
+        <p style={{textAlign: 'center'}}>🤑 Thanks for playing FOMO LOCO! 🤑</p>
+        <p>We've set up a small discord server to talk about the game.</p>
+        <p>Please reach out if you have any questions, bug reports, suggestions, or if you want to chat with other players.</p>
+        <p style={{textAlign: 'center'}}><a href="https://discord.gg/vjZtHw9Fnw" target="_blank">discord.gg/vjZtHw9Fnw</a></p>
+      </div>
+    );
+  }
+}
+
 class AdPlacement extends Component {
   constructor(props) {
     super(props);
