@@ -274,32 +274,13 @@ class Market {
 
   liquidate(asset, trader, value) {
     if (trader.shares[asset.symbol] <= 0) return 0;
-    let numShares;
-    let liquidationValue;
-    let maxSellValue =
-      asset.poolCash -
-      (asset.poolCash * asset.poolShares) /
-        (asset.poolShares + trader.shares[asset.symbol]);
-    if (maxSellValue < value) {
-      numShares = trader.shares[asset.symbol];
-      liquidationValue = maxSellValue;
-    } else {
-      numShares =
-        (asset.poolCash * asset.poolShares) / (asset.poolCash - value) -
-        asset.poolShares;
-      numShares = Math.ceil(numShares);
-      liquidationValue =
-        asset.poolCash -
-        (asset.poolCash * asset.poolShares) / (asset.poolShares + numShares);
-    }
-    if (numShares <= 0) {
-      return 0;
-    }
-
-    asset.poolShares += numShares;
-    asset.poolCash -= liquidationValue;
-    asset.price = liquidationValue / numShares;
-
+    let numShares =
+      (asset.poolCash * asset.poolShares) / (asset.poolCash - value) -
+      asset.poolShares;
+    numShares = Math.ceil(numShares);
+    numShares = Math.min(trader.shares[asset.symbol], numShares);
+    let liquidationValue = asset.getSellValue(numShares);
+    asset.sell(numShares);
     trader.shares[asset.symbol] -= numShares;
 
     return liquidationValue;
@@ -330,13 +311,9 @@ class Market {
     }
 
     let asset = this.getAssetBySymbol(symbol);
-    let sellValue =
-      asset.poolCash -
-      (asset.poolCash * asset.poolShares) / (asset.poolShares + numShares);
+    let sellValue = asset.getSellValue(numShares);
 
-    asset.poolShares += numShares;
-    asset.poolCash -= sellValue;
-    asset.price = sellValue / numShares;
+    asset.sell(numShares);
 
     trader.shares[symbol] -= numShares;
     trader.cash += sellValue;
@@ -725,13 +702,7 @@ class Market {
   settleBrokers() {
     this.assets.forEach((asset) => {
       if (asset.brokerShares > 0) {
-        let sellValue =
-          asset.poolCash -
-          (asset.poolCash * asset.poolShares) /
-            (asset.poolShares + asset.brokerShares);
-        asset.poolShares += asset.brokerShares;
-        asset.poolCash -= sellValue;
-        asset.price = sellValue / asset.brokerShares;
+        asset.sell(asset.brokerShares);
         asset.brokerShares = 0;
       }
     });

@@ -37,9 +37,27 @@ class Asset {
       );
       return;
     }
+
+    this.price = this.getBuyValue(numShares) / numShares;
     this.poolShares -= numShares;
     this.poolCash += this.getBuyValue(numShares);
-    this.price = this.getBuyValue(numShares) / numShares;
+  }
+
+  getSellValue(numShares) {
+    return (
+      this.poolCash -
+      (this.poolCash * this.poolShares) / (this.poolShares + numShares)
+    );
+  }
+
+  sell(numShares) {
+    if (numShares <= 0) {
+      console.log(`Invalid request to sell ${numShares} of ${this.symbol}.`);
+      return;
+    }
+    this.poolShares += numShares;
+    this.poolCash -= this.getSellValue(numShares);
+    this.price = this.getSellValue(numShares) / numShares;
   }
 }
 
