@@ -83,3 +83,51 @@ test("liquidate all shares", () => {
   expect(testTrader.shares[asset.symbol]).toBe(0);
   expect(liquidationValue).toBe(initialPoolCash - asset.poolCash);
 });
+
+test("force close out", () => {
+  // Given
+  let market = getTestMarket();
+  let testTrader = market.traders[0];
+  let asset = market.assets[0];
+  asset.poolShares = 100;
+  asset.poolCash = 100;
+  asset.brokerShares = 0;
+  testTrader.shares[asset.symbol] = -1;
+  testTrader.cash = 0;
+
+  let initialPoolShares = asset.poolShares;
+
+  // When
+  let buyValue = asset.getBuyValue(1);
+  let closeOutValue = market.forceCloseOut(asset, testTrader, buyValue + 1);
+
+  // Then
+  expect(asset.poolShares).toBe(initialPoolShares - 1);
+  expect(testTrader.shares[asset.symbol]).toBe(0);
+  expect(asset.brokerShares).toBe(1);
+  expect(closeOutValue).toBe(buyValue);
+});
+
+test("force close out unowned asset", () => {
+  // Given
+  let market = getTestMarket();
+  let testTrader = market.traders[0];
+  let asset = market.assets[0];
+  asset.poolShares = 100;
+  asset.poolCash = 100;
+  asset.brokerShares = 0;
+  testTrader.shares[asset.symbol] = 0;
+  testTrader.cash = 0;
+
+  let initialPoolShares = asset.poolShares;
+
+  // When
+  let buyValue = asset.getBuyValue(1);
+  let closeOutValue = market.forceCloseOut(asset, testTrader, buyValue + 1);
+
+  // Then
+  expect(asset.poolShares).toBe(initialPoolShares);
+  expect(testTrader.shares[asset.symbol]).toBe(0);
+  expect(asset.brokerShares).toBe(0);
+  expect(closeOutValue).toBe(0);
+});

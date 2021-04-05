@@ -159,7 +159,7 @@ class Market {
   }
 
   boost(symbol) {
-    this.assets.forEach((a) => a.boosted = a.symbol === symbol.toUpperCase());
+    this.assets.forEach((a) => (a.boosted = a.symbol === symbol.toUpperCase()));
   }
 
   getAssetBySymbol(symbol) {
@@ -307,23 +307,15 @@ class Market {
 
   forceCloseOut(asset, trader, value) {
     if (trader.shares[asset.symbol] >= 0) return 0;
-    let numShares;
-    let closeOutValue;
 
-    let maxCloseOutValue =
-      asset.poolCash -
-      (asset.poolCash * asset.poolShares) /
-        (asset.poolShares - trader.shares[asset.symbol]);
-    if (maxCloseOutValue < value) {
-      numShares = -trader.shares[asset.symbol];
-    } else {
-      numShares =
-        asset.poolShares -
-        (asset.poolCash * asset.poolShares) / (asset.poolCash + value);
-      numShares = Math.min(Math.ceil(numShares), asset.poolShares - 1);
-    }
+    let numShares = Math.floor(
+      asset.poolShares -
+        (asset.poolCash * asset.poolShares) / (asset.poolCash + value)
+    );
 
-    closeOutValue = asset.getBuyValue(numShares);
+    numShares = Math.min(numShares, -trader.shares[asset.symbol]);
+
+    let closeOutValue = asset.getBuyValue(numShares);
     asset.buy(numShares);
     asset.brokerShares += numShares;
     trader.shares[asset.symbol] += numShares;
@@ -498,7 +490,7 @@ class Market {
           } price`,
         ]);
         if (Math.random() < 0.05 && asset.boosted) {
-          `Retailers report consumer demand is surging for ${asset.name} (\$${asset.symbol}) products`
+          `Retailers report consumer demand is surging for ${asset.name} (\$${asset.symbol}) products`;
         }
         asset.fundamentalPrice = Math.min(
           MAX_FUNDAMENTAL_PRICE,
@@ -695,22 +687,29 @@ class Market {
           (this.maxMargin * totalBorrowed - totalHoldings) /
           (this.maxMargin - 1);
         let valueToCloseOut = Math.min(valueToLiquidate, totalHoldings);
+        let liquidatedCash = 0;
 
         if (trader.cash > valueToLiquidate) {
+          liquidatedCash += valueToLiquidate;
           trader.cash -= valueToLiquidate;
-          valueToLiquidate = 0;
         } else {
-          valueToLiquidate -= trader.cash;
+          liquidatedCash += trader.cash;
           trader.cash = 0;
         }
 
         _.shuffle(this.assets).map((asset) => {
-          valueToLiquidate -= this.liquidate(asset, trader, valueToLiquidate);
+          liquidatedCash += this.liquidate(
+            asset,
+            trader,
+            valueToLiquidate - liquidatedCash
+          );
         });
 
         _.shuffle(this.assets).map((asset) => {
-          valueToCloseOut -= this.forceCloseOut(asset, trader, valueToCloseOut);
+          liquidatedCash -= this.forceCloseOut(asset, trader, liquidatedCash);
         });
+
+        trader.cash += liquidatedCash;
       }
       if (trader.type === constants.TRADER_TYPE_PLAYER) {
         trader.socket.emit("margin-call", {
