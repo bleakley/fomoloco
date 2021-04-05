@@ -37,10 +37,10 @@ class Asset {
       );
       return;
     }
-
-    this.price = this.getBuyValue(numShares) / numShares;
+    let buyValue = this.getBuyValue(numShares);
     this.poolShares -= numShares;
-    this.poolCash += this.getBuyValue(numShares);
+    this.poolCash += buyValue;
+    this.price = buyValue / numShares;
   }
 
   getSellValue(numShares) {
@@ -55,9 +55,10 @@ class Asset {
       console.log(`Invalid request to sell ${numShares} of ${this.symbol}.`);
       return;
     }
+    let sellValue = this.getSellValue(numShares);
     this.poolShares += numShares;
-    this.poolCash -= this.getSellValue(numShares);
-    this.price = this.getSellValue(numShares) / numShares;
+    this.poolCash -= sellValue;
+    this.price = sellValue / numShares;
   }
 }
 

@@ -131,3 +131,32 @@ test("force close out unowned asset", () => {
   expect(asset.brokerShares).toBe(0);
   expect(closeOutValue).toBe(0);
 });
+
+test("margin call", () => {
+  // Given
+  let market = getTestMarket();
+  let testTrader = market.traders[0];
+  let asset = market.assets[0];
+  asset.poolShares = 100;
+  asset.poolCash = 100;
+  asset.brokerShares = 0;
+  testTrader.shares[asset.symbol] = -10;
+  testTrader.cash = 5;
+
+  let initialPoolShares = asset.poolShares;
+  let initialTraderShares = testTrader.shares[asset.symbol];
+  let initialTraderCash = testTrader.cash;
+
+  // When
+  market.checkMargins();
+
+  // Then
+  let sharesClosedOut = initialPoolShares - asset.poolShares;
+  expect(sharesClosedOut).toBeGreaterThan(0);
+  expect(testTrader.shares[asset.symbol] - initialTraderShares).toBe(
+    sharesClosedOut
+  );
+  expect(asset.brokerShares).toBe(sharesClosedOut);
+  expect(asset.price).toBeGreaterThan(0);
+  expect(testTrader.cash).toBeLessThan(initialTraderCash);
+});
