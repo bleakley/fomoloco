@@ -184,6 +184,25 @@ class TransactionPanel extends Component {
     return this.props.powerups.indexOf("market-metrics") > -1;
   }
 
+  componentDidUpdate(prevProps) {
+    let cashDelta = this.props.cash - prevProps.cash;
+    if (cashDelta) {
+      this.animateCash(cashDelta)
+    }
+  }
+
+  animateCash(cashDelta) {
+    let deltaString = (cashDelta < 0 ? '' : '+') + cashDelta.toFixed(2);
+    let positive = cashDelta >= 0;
+
+    const b = document.createElement("b");
+    b.innerText = deltaString;
+    b.className = positive ? 'cashGainAnimation' : 'cashLossAnimation';
+
+    b.onanimationend = () => document.getElementById("cashAnimation").removeChild(b);
+    document.getElementById("cashAnimation").appendChild(b);
+  }
+
   render() {
     let cooldowns = {
       buy: 6 / 2 ** this.props.upgrades.buy,
@@ -346,7 +365,11 @@ class TransactionPanel extends Component {
               <td>
                 <b>Cash</b>
               </td>
-              <td>{`\$${this.props.cash}`}</td>
+              <td>
+                <span>{`\$${this.props.cash}`}</span>
+                &nbsp;
+                <span id="cashAnimation" style={{position: 'absolute'}} />
+              </td>
             </tr>
             <tr key={"dividend-row"}>
               <td>

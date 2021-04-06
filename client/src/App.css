@@ -94,3 +94,41 @@
   margin-top: 10px;
   grid-area: discord;
 }
+
+.cashGainAnimation {
+  position: relative;
+  color: green;
+  animation: 1.5s ease-out 0s 1 slideUp;
+}
+
+.cashLossAnimation {
+  position: relative;
+  color: red;
+  animation: 1.5s ease-out 0s 1 slideDown;
+}
+
+@keyframes slideUp {
+  from {
+    bottom: 0;
+    left: 0;
+    opacity: 1;
+  }
+  to {
+    bottom: 20px;
+    left: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    top: 0;
+    left: 0;
+    opacity: 1;
+  }
+  to {
+    top: 20px;
+    left: 0;
+    opacity: 0;
+  }
+}
