@@ -6,13 +6,10 @@ const Asset = require("./Asset.js");
 const SECOND = 1000;
 const Bot = require("./Bot.js");
 const uuid = require("uuid");
-const { remove } = require("lodash");
 
 const LEADERBOARD_SIZE = 10;
 const BOT_QUITTING_THRESHOLD = 40;
 const DESIRED_BOT_COUNT = 15;
-const MAX_FUNDAMENTAL_PRICE = 200;
-const MIN_FUNDAMENTAL_PRICE = 0.05;
 const SECONDS_BETWEEN_DIVIDENDS = 60;
 const SECONDS_BETWEEN_MARGIN_CHECKS = 20;
 const SECONDS_BETWEEN_MARKET_METRICS_BROADCASTS = 5;
@@ -77,6 +74,9 @@ class Market {
         "Gay",
         "Lady",
         "Thirsty",
+        "Based",
+        "Cringe",
+        "1337",
       ]) +
       _.sample([
         "Hands",
@@ -105,6 +105,7 @@ class Market {
         "Bear",
         "Pig",
         "Piggy",
+        "Hacker",
       ]) +
       Math.round(Math.random() * 90 + 10).toString()
     );
@@ -416,101 +417,24 @@ class Market {
     let asset = utils.sampleWeighted(this.assets, (asset) =>
       this.getExuberance(asset)
     );
-    if (this.getExuberance(asset) > 1 && Math.random() < 0.4) {
-      message = _.sample([
-        `Analysts say \$${asset.symbol} trading ${Math.round(
-          asset.price / asset.fundamentalPrice
-        )} times above target`,
-        `${_.sample([
-          "Fed chairman warns",
-          "Fintech CEO warns",
-          "Hedge fund manager warns",
-          "Regulators warn",
-        ])} of ${_.sample([
-          '"irrational exuberance"',
-          '"unusual" market volatility',
-          '"imminent" collapse',
-        ])} in \$${asset.symbol} price`,
-      ]);
+    if (this.getExuberance(asset) > 1 && Math.random() < 0.2) {
+      message = asset.generateExuberantNews();
     } else {
       asset = _.sample(this.assets);
       let significance = Math.random();
+      let chanceOfCompetition = 0.05;
       let chanceOfGoodNews = asset.boosted ? 0.54 : 0.51;
-      if (Math.random() < chanceOfGoodNews) {
-        message = _.sample([
-          `${asset.name} (\$${
-            asset.symbol
-          }) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample(
-            [1, 2, 3, 4]
-          )}`,
-          `${narrativeUtils.generateCelebrity()} reveals purchase of ${_.sample(
-            ["10k", "100k", "500k"]
-          )} \$${Math.ceil(
-            (1.5 + 2 * significance) * asset.price
-          )} calls on \$${asset.symbol}${_.sample([
-            "",
-            "",
-            ': "I like the stock"',
-            ': "The fundamentals are strong"',
-          ])}`,
-          `${asset.name} (\$${
-            asset.symbol
-          }) receives approval to open ${Math.round(
-            significance * 20 + 2
-          )} new dispensaries`,
-          `Clinical trials show ${asset.name} (\$${asset.symbol}) ${_.sample([
-            "synthetic cannabinoids",
-            "psilocybin mushroom extracts",
-          ])} hold promise for treating Groat's syndrome`,
-          `Analyst: ${narrativeUtils.generateAstrologicalEvent()} a positive sign for \$${
-            asset.symbol
-          } price`,
-        ]);
-        if (Math.random() < 0.05 && asset.boosted) {
-          `Retailers report consumer demand is surging for ${asset.name} (\$${asset.symbol}) products`;
-        }
-        asset.fundamentalPrice = Math.min(
-          MAX_FUNDAMENTAL_PRICE,
-          asset.fundamentalPrice * (1 + significance)
-        );
-        setTimeout(
-          () => (asset.hype = 1 - (1 - asset.hype) * 0.75),
-          (1 + Math.random()) * 5 * SECOND
-        );
+      if (Math.random() < chanceOfCompetition) {
+        let enemyAsset = _.sample(this.assets.filter(a => a.symbol !== asset.symbol));
+        message = asset.generateCompetitiveNews(enemyAsset, significance);
+        asset.applyNewsBonus(significance);
+        enemyAsset.applyNewsPenalty(significance);
+      } else if (Math.random() < chanceOfGoodNews) {
+        message = asset.generatePositiveNews(significance);
+        asset.applyNewsBonus(significance);
       } else {
-        message = _.sample([
-          `${Math.round(significance * 40 + 1)} injured in \$${
-            asset.symbol
-          }-related incident`,
-          `${narrativeUtils.generateHackerOrg()} hackers exploit ${
-            asset.name
-          } (\$${asset.symbol}) zero-day vulnerability`,
-          `${asset.name} (\$${asset.symbol}) announcements draw ${_.sample([
-            "SEC",
-            "FDA",
-            "CFPB",
-            "CFTC",
-            "anti-trust",
-            "congressional",
-          ])} scrutiny`,
-          `${asset.name} (\$${asset.symbol}) CEO ${_.sample([
-            "arrested",
-            "indicted",
-          ])} on ${_.sample([
-            "embezzlement",
-            "drug",
-            "DUI",
-            "insider trading",
-            "conspiracy",
-          ])} charges`,
-          `Analyst: ${narrativeUtils.generateAstrologicalEvent()} suggests \$${
-            asset.symbol
-          } likely to fall`,
-        ]);
-        asset.fundamentalPrice = Math.max(
-          MIN_FUNDAMENTAL_PRICE,
-          asset.fundamentalPrice / (1 + significance)
-        );
+        message = asset.generateNegativeNews(significance);
+        asset.applyNewsPenalty(significance);
       }
     }
     this.io.to(this.id).emit("news", { text: message });

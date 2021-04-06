@@ -19,7 +19,7 @@ const getLocalNewsItem = () => _.sample([
     },
     {
       text:
-        "New study links black-rinded futsu squash to lower rates of Groat's disease",
+        `New study links black-rinded futsu squash to ${_.sample(['higher', 'lower', 'lower', 'lower'])} rates of Groat's disease`,
     },
     {
       text: `${_.sample([
