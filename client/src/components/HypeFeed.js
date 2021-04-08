@@ -10,14 +10,16 @@ class HypeMessage extends Component {
     );
   }
   render() {
-    let description = this.props.assetDescriptions.find(a => a.symbol === this.props.message.symbol);
-    let color = description ? description.color : 'black';
+    let description = this.props.assetDescriptions.find(
+      (a) => a.symbol === this.props.message.symbol
+    );
+    let color = description ? description.color : "black";
     return (
       <div>
         <b>{this.props.message.name}:</b> {this.textParts[0]}{" "}
         <span
           style={{
-            color: color
+            color: color,
           }}
         >
           <b>{`\$${this.props.message.symbol}`}</b>
@@ -33,7 +35,7 @@ class HypeFeed extends Component {
     super(props);
 
     this.state = {
-      hype: []
+      hype: [],
     };
 
     this.props.socket.on("hype-message", (message) => {
@@ -44,30 +46,30 @@ class HypeFeed extends Component {
             .concat([message]),
         });
       } else {
-        this.setState({ hype: this.state.hype.concat([message]) });
+        console.log("got new hype");
+        this.setState({
+          hype: this.state.hype.concat([message]),
+        });
       }
     });
   }
 
-  scrollToBottom() {
-    this.messagesEnd.scrollIntoView({ behavior: "smooth" });
-  }
-
-  componentDidMount() {
-    this.scrollToBottom();
-  }
-
-  componentDidUpdate() {
-    if (window.focused) {
-      this.scrollToBottom();
-    }
-  }
-  
   render() {
     return (
-      <div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          maxHeight: "100%",
+          justifyContent: "flex-end",
+        }}
+      >
         {this.state.hype.map((message, i) => (
-          <HypeMessage key={i} message={message} assetDescriptions={this.props.assetDescriptions}/>
+          <HypeMessage
+            key={i}
+            message={message}
+            assetDescriptions={this.props.assetDescriptions}
+          />
         ))}
         <div
           style={{ float: "left", clear: "both" }}
