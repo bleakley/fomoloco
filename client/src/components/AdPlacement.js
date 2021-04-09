@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 
-const ads = ['BB', 'BVR', 'MNC', 'SDG'];
+const ads = ["BB", "BVR", "MNC", "SDG"];
 
 class DonateDialog extends Component {
   constructor(props) {
@@ -17,7 +17,10 @@ class DonateDialog extends Component {
   }
 
   render() {
-    let asset = this.props.assetDescriptions.find(a => a.symbol === this.props.symbol) || {};
+    let asset =
+      this.props.assetDescriptions.find(
+        (a) => a.symbol === this.props.symbol
+      ) || {};
     return (
       <Dialog
         onClose={() => this.handleClose()}
@@ -27,9 +30,26 @@ class DonateDialog extends Component {
         disableEscapeKeyDown={true}
       >
         <DialogContent>
-          <p style={{textAlign: 'center'}}>🤑 Please support FOMO LOCO web hosting and development 🤑</p>
-          <p>Donating via PayPal helps us keep this game running, and there's a special bonus as well! Because you clicked on the ad for {asset.name}, you must really like the stock. By donating, you'll be supporting <span style={{color: asset.color}}><b>${asset.symbol}</b></span>.</p>
-          <p>At the end of each day, the asset that received the highest donation total will get a boost to its fundamental value (on all servers) the following day. This information is made public in the news ticker and does not provide any player with a competitive advantage, it's just for fun!</p>
+          <p style={{ textAlign: "center" }}>
+            🤑 Please support FOMO LOCO web hosting and development 🤑
+          </p>
+          <p>
+            Donating via PayPal helps us keep this game running, and there's a
+            special bonus as well! Because you clicked on the ad for{" "}
+            {asset.name}, you must really like the stock. By donating, you'll be
+            supporting{" "}
+            <span style={{ color: asset.color }}>
+              <b>${asset.symbol}</b>
+            </span>
+            .
+          </p>
+          <p>
+            At the end of each day, the asset that received the highest donation
+            total will get a boost to its fundamental value (on all servers) the
+            following day. This information is made public in the news ticker
+            and does not provide any player with a competitive advantage, it's
+            just for fun!
+          </p>
         </DialogContent>
         <DialogActions>
           <PaypalButton symbol={this.props.symbol} />
@@ -49,11 +69,20 @@ class HelpAd extends Component {
 
   render() {
     return (
-      <div style={{margin: "10px"}}>
-        <p style={{textAlign: 'center'}}>🤑 Thanks for playing FOMO LOCO! 🤑</p>
+      <div style={{ margin: "10px" }}>
+        <p style={{ textAlign: "center" }}>
+          🤑 Thanks for playing FOMO LOCO! 🤑
+        </p>
         <p>We've set up a small discord server to talk about the game.</p>
-        <p>Please reach out if you have any questions, bug reports, suggestions, or if you want to chat with other players.</p>
-        <p style={{textAlign: 'center'}}><a href="https://discord.gg/vjZtHw9Fnw" target="_blank">discord.gg/vjZtHw9Fnw</a></p>
+        <p>
+          Please reach out if you have any questions, bug reports, suggestions,
+          or if you want to chat with other players.
+        </p>
+        <p style={{ textAlign: "center" }}>
+          <a href="https://discord.gg/vjZtHw9Fnw" target="_blank">
+            discord.gg/vjZtHw9Fnw
+          </a>
+        </p>
       </div>
     );
   }
@@ -65,25 +94,47 @@ class AdPlacement extends Component {
     this.state = {
       adIndex: 0,
       donateDialogOpen: false,
-      donateTo: null
+      donateTo: null,
     };
   }
 
   componentDidMount() {
-    setInterval(() => this.setState({adIndex: (this.state.adIndex + 1) % ads.length}), 60 * 1000)
+    setInterval(
+      () => this.setState({ adIndex: (this.state.adIndex + 1) % ads.length }),
+      60 * 1000
+    );
+  }
+
+  handleClick() {
+    let ad = ads[this.state.adIndex];
+    this.setState({ donateDialogOpen: true, donateTo: ad });
+    window.gtag("event", "ad_click", {
+      send_to: "G-XF7G8SENJW",
+      ad: ad,
+    });
   }
 
   render() {
     let ad = ads[this.state.adIndex];
-    return <>
-      <DonateDialog
-        open={this.state.donateDialogOpen}
-        onClose={() => this.setState({ donateDialogOpen: false, donateTo: null })}
-        symbol={this.state.donateTo}
-        assetDescriptions={this.props.assetDescriptions}
-      />
-      <img src={`${ad.toLowerCase()}_ad.png`} width="380px" height="250px" style={{cursor: 'pointer'}} onClick={() => this.setState({ donateDialogOpen: true, donateTo: ad })} />
-    </>;
+    return (
+      <>
+        <DonateDialog
+          open={this.state.donateDialogOpen}
+          onClose={() =>
+            this.setState({ donateDialogOpen: false, donateTo: null })
+          }
+          symbol={this.state.donateTo}
+          assetDescriptions={this.props.assetDescriptions}
+        />
+        <img
+          src={`${ad.toLowerCase()}_ad.png`}
+          width="380px"
+          height="250px"
+          style={{ cursor: "pointer" }}
+          onClick={() => this.handleClick()}
+        />
+      </>
+    );
   }
 }
 

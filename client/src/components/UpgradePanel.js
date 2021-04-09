@@ -62,7 +62,6 @@ class Upgrade extends Component {
   }
 
   buy() {
-    console.log("buyingggg")
     this.props.socket.emit("buy-upgrade", this.props.type);
     window.gtag("event", "buy_upgrade", {
       send_to: "G-XF7G8SENJW",

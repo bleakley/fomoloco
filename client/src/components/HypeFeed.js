@@ -46,7 +46,6 @@ class HypeFeed extends Component {
             .concat([message]),
         });
       } else {
-        console.log("got new hype");
         this.setState({
           hype: this.state.hype.concat([message]),
         });
