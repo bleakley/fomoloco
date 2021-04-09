@@ -60,6 +60,16 @@ class Upgrade extends Component {
   constructor(props) {
     super(props);
   }
+
+  buy() {
+    console.log("buyingggg")
+    this.props.socket.emit("buy-upgrade", this.props.type);
+    window.gtag("event", "buy_upgrade", {
+      send_to: "G-XF7G8SENJW",
+      type: this.props.type,
+    });
+  }
+
   render() {
     let currentLevel =
       upgrades[this.props.type].levels[this.props.upgrades[this.props.type]];
@@ -82,9 +92,7 @@ class Upgrade extends Component {
               size="small"
               color="primary"
               disabled={this.props.cash <= nextLevel.cost}
-              onClick={() =>
-                this.props.socket.emit("buy-upgrade", this.props.type)
-              }
+              onClick={() => this.buy()}
             >
               Upgrade {upgrades[this.props.type].class} ${nextLevel.cost}
             </Button>
