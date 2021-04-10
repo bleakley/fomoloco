@@ -3,7 +3,7 @@ let Market = require("./Market.js");
 
 const MINUTE = 60 * 1000;
 const HOUR = 60 * MINUTE;
-const MAX_DESIRED_MARKET_AGE = 30 * MINUTE;
+const MAX_DESIRED_MARKET_AGE = 20 * MINUTE;
 const MAX_DESIRED_PLAYERS = 20;
 const MAX_MARKET_AGE = 5 * HOUR;
 
@@ -53,7 +53,7 @@ class MarketManager {
     }
 
     cullMarkets() {
-        let marketsToKill = _.remove(this.markets, market => market.getAge() > MAX_MARKET_AGE || (market.getAge() > MAX_DESIRED_MARKET_AGE && !market.getPlayers().length));
+        let marketsToKill = _.remove(this.markets, market => market.getAge() > MAX_MARKET_AGE || !market.getPlayers().length);
         this.marketsCulled += marketsToKill.length;
     }
 }
