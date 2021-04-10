@@ -26,8 +26,6 @@ class DonateDialog extends Component {
         onClose={() => this.handleClose()}
         aria-labelledby="simple-dialog-title"
         open={this.props.open}
-        disableBackdropClick={true}
-        disableEscapeKeyDown={true}
       >
         <DialogContent>
           <p style={{ textAlign: "center" }}>

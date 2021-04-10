@@ -13,6 +13,7 @@ import AdPlacement from "./AdPlacement";
 
 const DEBUG_MODE = false;
 const SERVER_URL = process.env.REACT_APP_SERVER_URL || (process.env.NODE_ENV === 'production' ? "http://fomolo.co" : "http://localhost:8080");
+const googleBlockedMessage = "We don't run any real ads on this site - just funny ads that are part of the game. But we do use Google for analytics, so please whitelist us in your adblocker! Thank you.";
 
 let socket = openConnection(SERVER_URL, {
   query: "username=dfv",
@@ -55,6 +56,9 @@ class Main extends Component {
   }
 
   componentDidMount() {
+    if (window.googleBlocked) {
+      console.log(googleBlockedMessage);
+    }
     window.focused = true;
     window.addEventListener("focus", this.onFocus);
     window.addEventListener("blur", this.onLoseFocus);
