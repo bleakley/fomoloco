@@ -87,6 +87,8 @@ io.on("connection", function (socket) {
     }))
   );
 
+  market.broadcastLeaderboard();
+
   console.log(`user ${user.name} has connected`);
 
   socket.on("buy-asset", (order) => {
@@ -123,6 +125,7 @@ io.on("connection", function (socket) {
     } else {
       user.name = username;
       console.log(`${user.name} set username to ${username}`);
+      market.broadcastLeaderboard();
     }
   });
 

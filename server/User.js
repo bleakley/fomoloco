@@ -67,8 +67,8 @@ class User {
     this.socket = socket;
     this.market = market;
     this.id = uuid.v4();
-    this.name = `u${this.id}`;
     this.suggestedName = market.getUniqueUserName();
+    this.name = this.suggestedName;
     this.cash = 30;
     this.shares = {};
     this.type = constants.TRADER_TYPE_PLAYER;
