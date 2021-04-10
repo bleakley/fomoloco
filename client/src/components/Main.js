@@ -77,6 +77,10 @@ class Main extends Component {
   }
 
   render() {
+    // TODO: React.StrictMode causes an error with MaterialUI < 5.0.0
+    // Until that's fixed we're moving StrictMode down from the top level component
+    // see https://stackoverflow.com/questions/61220424/material-ui-drawer-finddomnode-is-deprecated-in-strictmode
+
     return (
       <div className="Main">
         <LoginDialog
@@ -84,21 +88,23 @@ class Main extends Component {
           open={this.state.loginDialogOpen}
           onClose={() => this.onLoginDialogClose()}
         />
-        <Card className="CashLeaderboard">
-          <Leaderboard socket={this.socket} />
-        </Card>
-        <Card className="Advertisement">
-          <AdPlacement assetDescriptions={this.state.assetDescriptions} />
-        </Card>
-        <Card className="HypeFeed">
-          <HypeFeed socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
-        </Card>
-        <SecuritiesDashboard socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
-        <Card className="NewsTicker">
-          <NewsTicker socket={this.socket} assetDescriptions={this.state.assetDescriptions} debug={DEBUG_MODE} />
-        </Card>
-        <a className="DiscordLink" href="https://discord.gg/vjZtHw9Fnw" target="_blank"><img src="Discord-Logo-White.png" width="45px" height="45px" /></a>
-        {DEBUG_MODE && <FpsView top={800} />}
+        <React.StrictMode>
+          <Card className="CashLeaderboard">
+            <Leaderboard socket={this.socket} />
+          </Card>
+          <Card className="Advertisement">
+            <AdPlacement assetDescriptions={this.state.assetDescriptions} />
+          </Card>
+          <Card className="HypeFeed">
+            <HypeFeed socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
+          </Card>
+          <SecuritiesDashboard socket={this.socket} assetDescriptions={this.state.assetDescriptions} />
+          <Card className="NewsTicker">
+            <NewsTicker socket={this.socket} assetDescriptions={this.state.assetDescriptions} debug={DEBUG_MODE} />
+          </Card>
+          <a className="DiscordLink" href="https://discord.gg/vjZtHw9Fnw" target="_blank"><img src="Discord-Logo-White.png" width="45px" height="45px" /></a>
+          {DEBUG_MODE && <FpsView top={800} />}
+        </React.StrictMode>
       </div>
     );
   }

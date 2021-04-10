@@ -81,9 +81,7 @@ class PowerupPanel extends Component {
                   description={powerup.description}
                   buyCost={powerup.buyCost}
                 />
-              ) : (
-                ""
-              )
+              ) : null
             )}
           </tbody>
         </table>

@@ -46,7 +46,9 @@ class Leaderboard extends Component {
       leaderboard: {rank: 0, total: 0, top: []},
       leaderboardLastUpdated: Date.now()
     };
+  }
 
+  componentDidMount() {
     this.props.socket.on("leaderboard", (leaderboard) => {
       this.setState({
         leaderboard: leaderboard,

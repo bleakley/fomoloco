@@ -63,7 +63,9 @@ class TransactionPanel extends Component {
       timeToNextMarginCheck: 20,
       marketMetrics: [],
     };
+  }
 
+  componentDidMount() {
     setInterval(() => {
       this.setState({
         buyTime: Math.max(0, this.state.buyTime - 0.1),

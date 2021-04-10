@@ -114,8 +114,9 @@ class UpgradePanel extends Component {
       <div>
         <table>
           <tbody>
-            {Object.keys(upgrades).map((type) => (
+            {Object.keys(upgrades).map((type, i) => (
               <Upgrade
+                key={i}
                 type={type}
                 cash={this.props.cash}
                 upgrades={this.props.upgrades}

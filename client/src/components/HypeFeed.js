@@ -37,7 +37,9 @@ class HypeFeed extends Component {
     this.state = {
       hype: [],
     };
+  }
 
+  componentDidMount() {
     this.props.socket.on("hype-message", (message) => {
       if (this.state.hype.length > 2 * HYPE_MESSAGE_PRUNE_COUNT) {
         this.setState({

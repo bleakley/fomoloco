@@ -58,7 +58,9 @@ class NewsTicker extends Component {
       serverNewsCount: 0,
       expiredNewsCount: 0,
     };
+  }
 
+  componentDidMount() {
     this.props.socket.on("news", (news) => {
       serverNews.push({ ...news, receivedAt: new Date() });
       this.setState({ serverNewsCount: serverNews.length });
