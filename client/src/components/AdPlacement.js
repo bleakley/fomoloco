@@ -4,6 +4,7 @@ import Dialog from "@material-ui/core/Dialog";
 import Button from "@material-ui/core/Button";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
+import recordEvent from "../utils.js";
 
 const ads = ["BB", "BVR", "MNC", "SDG"];
 
@@ -106,10 +107,7 @@ class AdPlacement extends Component {
   handleClick() {
     let ad = ads[this.state.adIndex];
     this.setState({ donateDialogOpen: true, donateTo: ad });
-    window.gtag("event", "ad_click", {
-      send_to: "G-XF7G8SENJW",
-      ad: ad,
-    });
+    recordEvent("ad_click", { ad: ad });
   }
 
   render() {

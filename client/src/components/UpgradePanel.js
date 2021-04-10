@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Button } from "@material-ui/core";
+import recordEvent from "../utils.js";
 
 const upgrades = {
   buy: {
@@ -63,10 +64,7 @@ class Upgrade extends Component {
 
   buy() {
     this.props.socket.emit("buy-upgrade", this.props.type);
-    window.gtag("event", "buy_upgrade", {
-      send_to: "G-XF7G8SENJW",
-      type: this.props.type,
-    });
+    recordEvent("buy_upgrade", { type: this.props.type });
   }
 
   render() {

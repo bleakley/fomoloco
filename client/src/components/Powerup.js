@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Button } from "@material-ui/core";
+import recordEvent from "../utils.js";
 
 class Powerup extends Component {
   constructor(props) {
@@ -10,11 +11,7 @@ class Powerup extends Component {
 
   buy() {
     this.props.socket.emit("buy-powerup", this.props.id);
-    window.gtag("event", "buy_powerup", {
-      send_to: "G-XF7G8SENJW",
-      id: this.props.id,
-      name: this.props.name,
-    });
+    recordEvent("buy_powerup", { id: this.props.id, name: this.props.name });
   }
 
   render() {
