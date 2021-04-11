@@ -2,17 +2,16 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { Button } from "@material-ui/core";
 import recordEvent from "../utils.js";
-
 const upgrades = {
   buy: {
     class: "Connection",
     levels: [
       { cost: 0, name: "28.8 kbps modem", description: "1x buy speed" },
       { cost: 40, name: "DSL", description: "2x buy speed" },
-      { cost: 200, name: "Gigabit fiber", description: "4x buy speed" },
+      { cost: 160, name: "gigabit fiber", description: "4x buy speed" },
       {
-        cost: 1000,
-        name: "Co-located HFT server",
+        cost: 600,
+        name: "co-located HFT server",
         description: "8x buy speed",
       },
     ],
@@ -20,16 +19,16 @@ const upgrades = {
   sell: {
     class: "Hardware",
     levels: [
-      { cost: 0, name: "Dirty keyboard", description: "1x sell/short speed" },
-      { cost: 40, name: "Clean keyboard", description: "2x sell/short speed" },
+      { cost: 0, name: "dirty keyboard", description: "1x sell/short speed" },
+      { cost: 40, name: "clean keyboard", description: "2x sell/short speed" },
       {
-        cost: 200,
-        name: "Gaming keyboard",
+        cost: 160,
+        name: "gaming keyboard",
         description: "4x sell/short speed",
       },
       {
-        cost: 1000,
-        name: "Gaming keyboard w/ LEDs",
+        cost: 600,
+        name: "gaming keyboard w/ LEDs",
         description: "8x sell/short speed",
       },
     ],
@@ -37,20 +36,20 @@ const upgrades = {
   hype: {
     class: "Influence",
     levels: [
-      { cost: 0, name: "Basic TikTak account", description: "1x hype speed" },
-      { cost: 40, name: "High karma account", description: "2x hype speed" },
-      { cost: 200, name: "Moderator account", description: "4x hype speed" },
-      { cost: 1000, name: "Botnet", description: "8x hype speed" },
+      { cost: 0, name: "basic account", description: "1x hype speed" },
+      { cost: 40, name: "high karma account", description: "2x hype speed" },
+      { cost: 160, name: "moderator account", description: "4x hype speed" },
+      { cost: 600, name: "distributed botnet", description: "8x hype speed" },
     ],
   },
   volume: {
     class: "Platform",
     levels: [
       { cost: 0, name: "Nottingham app", description: "1x volume" },
-      { cost: 600, name: "Brokerage account", description: "10x volume" },
+      { cost: 500, name: "brokerage account", description: "10x volume" },
       {
         cost: 2000,
-        name: "Brokerage backchannel",
+        name: "brokerage backchannel",
         description: "100x volume",
       },
     ],

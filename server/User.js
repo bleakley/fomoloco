@@ -2,8 +2,8 @@ const constants = require("./constants");
 const uuid = require("uuid");
 
 const powerupCosts = {
-  "short-selling": 1000,
-  "market-metrics": 400,
+  "short-selling": 800,
+  "market-metrics": 300,
   gift: 10,
   astrologer: 50,
 };
@@ -14,9 +14,9 @@ const upgrades = {
     levels: [
       { cost: 0, name: "28.8 kbps modem", description: "1x buy speed" },
       { cost: 40, name: "DSL", description: "2x buy speed" },
-      { cost: 200, name: "gigabit fiber", description: "4x buy speed" },
+      { cost: 160, name: "gigabit fiber", description: "4x buy speed" },
       {
-        cost: 1000,
+        cost: 600,
         name: "co-located HFT server",
         description: "8x buy speed",
       },
@@ -28,12 +28,12 @@ const upgrades = {
       { cost: 0, name: "dirty keyboard", description: "1x sell/short speed" },
       { cost: 40, name: "clean keyboard", description: "2x sell/short speed" },
       {
-        cost: 200,
+        cost: 160,
         name: "gaming keyboard",
         description: "4x sell/short speed",
       },
       {
-        cost: 1000,
+        cost: 600,
         name: "gaming keyboard w/ LEDs",
         description: "8x sell/short speed",
       },
@@ -44,15 +44,15 @@ const upgrades = {
     levels: [
       { cost: 0, name: "basic account", description: "1x hype speed" },
       { cost: 40, name: "high karma account", description: "2x hype speed" },
-      { cost: 200, name: "moderator account", description: "4x hype speed" },
-      { cost: 1000, name: "distributed botnet", description: "8x hype speed" },
+      { cost: 160, name: "moderator account", description: "4x hype speed" },
+      { cost: 600, name: "distributed botnet", description: "8x hype speed" },
     ],
   },
   volume: {
     class: "Platform",
     levels: [
       { cost: 0, name: "Nottingham app", description: "1x volume" },
-      { cost: 600, name: "brokerage account", description: "10x volume" },
+      { cost: 500, name: "brokerage account", description: "10x volume" },
       {
         cost: 2000,
         name: "brokerage backchannel",

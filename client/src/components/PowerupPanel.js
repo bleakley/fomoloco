@@ -7,16 +7,16 @@ const powerups = [
   {
     id: "market-metrics",
     description: "reveals key metrics",
-    buyCost: 400,
+    buyCost: 300,
     accesible: (upgrades) => upgrades["buy"] >= 1 && upgrades["sell"] >= 1,
-    repeatable: false
+    repeatable: false,
   },
   {
     id: "short-selling",
     description: "unlocks short selling",
-    buyCost: 1000,
+    buyCost: 800,
     accesible: (upgrades) => upgrades["volume"] >= 1,
-    repeatable: false
+    repeatable: false,
   },
   {
     id: "gift",
@@ -34,7 +34,7 @@ const powerups = [
 
 function getName(powerupId, lovedOne) {
   switch (powerupId) {
-    case 'astrologer':
+    case "astrologer":
       return "Consult an astrologer";
     case "short-selling":
       return "ISDA";
@@ -43,7 +43,7 @@ function getName(powerupId, lovedOne) {
     case "gift":
       return `Buy a present for your ${lovedOne}`;
     default:
-      return 'unnamed upgrade';
+      return "unnamed upgrade";
   }
 }
 
@@ -77,7 +77,10 @@ class PowerupPanel extends Component {
                   socket={this.props.socket}
                   cash={this.props.cash}
                   id={powerup.id}
-                  name={getName(powerup.id, this.lovedOnes[this.props.giftCount % this.lovedOnes.length])}
+                  name={getName(
+                    powerup.id,
+                    this.lovedOnes[this.props.giftCount % this.lovedOnes.length]
+                  )}
                   description={powerup.description}
                   buyCost={powerup.buyCost}
                 />
