@@ -98,19 +98,19 @@ class Asset {
       }) announces ${narrativeUtils.generateTechnologyProduct()} for Q${_.sample(
         [1, 2, 3, 4]
       )}`,
-      `${narrativeUtils.generateCelebrity()} reveals purchase of ${_.sample(
-        ["10k", "100k", "500k"]
-      )} \$${Math.ceil(
-        (1.5 + 2 * significance) * this.price
-      )} calls on \$${this.symbol}${_.sample([
+      `${narrativeUtils.generateCelebrity()} reveals purchase of ${_.sample([
+        "10k",
+        "100k",
+        "500k",
+      ])} \$${Math.ceil((1.5 + 2 * significance) * this.price)} calls on \$${
+        this.symbol
+      }${_.sample([
         "",
         "",
         ': "I like the stock"',
         ': "The fundamentals are strong"',
       ])}`,
-      `${this.name} (\$${
-        this.symbol
-      }) receives approval to open ${Math.round(
+      `${this.name} (\$${this.symbol}) receives approval to open ${Math.round(
         significance * 20 + 2
       )} new dispensaries`,
       `Clinical trials show ${this.name} (\$${this.symbol}) ${_.sample([
@@ -128,9 +128,9 @@ class Asset {
       `${Math.round(significance * 40 + 1)} injured in \$${
         this.symbol
       }-related incident`,
-      `${narrativeUtils.generateHackerOrg()} hackers exploit ${
-        this.name
-      } (\$${this.symbol}) zero-day vulnerability`,
+      `${narrativeUtils.generateHackerOrg()} hackers exploit ${this.name} (\$${
+        this.symbol
+      }) zero-day vulnerability`,
       `${this.name} (\$${this.symbol}) announcements draw ${_.sample([
         "SEC",
         "FDA",
@@ -156,27 +156,42 @@ class Asset {
   }
 
   generateCompetitiveNews(enemyAsset, significance) {
-    let court = `${_.sample(['Nevada', 'Florida', 'California', 'U.S.'])} Supreme Court`;
-    let patent = _.sample(['"leftPad"', '"rangeCheck"', '"rightPad"', 'AI', 'blockchain', 'self-driving car', 'drone delivery', '"loot box"']);
+    let court = `${_.sample([
+      "Nevada",
+      "Florida",
+      "California",
+      "U.S.",
+    ])} Supreme Court`;
+    let patent = _.sample([
+      '"leftPad"',
+      '"rangeCheck"',
+      '"rightPad"',
+      "AI",
+      "blockchain",
+      "self-driving car",
+      "drone delivery",
+      '"loot box"',
+    ]);
     return `${court} rules ${enemyAsset.name} (\$${enemyAsset.symbol}) infringed on ${this.name} (\$${this.symbol}) ${patent} patent`;
   }
 
   applyNewsBonus(significance) {
-    this.fundamentalPrice = Math.min(
-      MAX_FUNDAMENTAL_PRICE,
-      this.fundamentalPrice * (1 + significance)
-    );
-    setTimeout(
-      () => (this.hype = 1 - (1 - this.hype) * 0.75),
-      (1 + Math.random()) * 5 * SECOND
-    );
+    setTimeout(() => {
+      this.fundamentalPrice = Math.min(
+        MAX_FUNDAMENTAL_PRICE,
+        this.fundamentalPrice * (1.2 + 0.8 * significance)
+      );
+      this.hype = 1 - (1 - this.hype) * 0.75;
+    }, (2 + Math.random()) * 4 * SECOND);
   }
 
   applyNewsPenalty(significance) {
-    this.fundamentalPrice = Math.max(
-      MIN_FUNDAMENTAL_PRICE,
-      this.fundamentalPrice / (1 + significance)
-    );
+    setTimeout(() => {
+      this.fundamentalPrice = Math.max(
+        MIN_FUNDAMENTAL_PRICE,
+        this.fundamentalPrice / (1.2 + 0.8 * significance)
+      );
+    }, (2 + Math.random()) * 4 * SECOND);
   }
 }
 
