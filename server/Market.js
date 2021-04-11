@@ -8,9 +8,9 @@ const Bot = require("./Bot.js");
 const uuid = require("uuid");
 
 const LEADERBOARD_SIZE = 10;
-const BOT_QUITTING_THRESHOLD = 40;
+const BOT_QUITTING_THRESHOLD = 10;
 const DESIRED_BOT_COUNT = 15;
-const SECONDS_BETWEEN_DIVIDENDS = 60;
+const SECONDS_BETWEEN_DIVIDENDS = 30;
 const SECONDS_BETWEEN_MARGIN_CHECKS = 20;
 const SECONDS_BETWEEN_MARKET_METRICS_BROADCASTS = 5;
 const SECONDS_BROKER_SETTLEMENT = 10;
@@ -33,10 +33,10 @@ class Market {
     }
 
     setInterval(() => this.broadcastPrices(), 1 * SECOND);
-    setInterval(() => this.generateNews(), 15 * SECOND);
+    setInterval(() => this.generateNews(), 20 * SECOND);
     setInterval(() => this.updateMarketMetrics(), 1 * SECOND);
     setInterval(() => this.broadcastLeaderboard(), 5 * SECOND);
-    setInterval(() => this.tickBots(), 2 * SECOND);
+    setInterval(() => this.tickBots(), 1 * SECOND);
     setInterval(() => this.cullBots(), 10 * SECOND);
     setInterval(() => this.payDividends(), SECONDS_BETWEEN_DIVIDENDS * SECOND);
     setInterval(
@@ -423,9 +423,11 @@ class Market {
       asset = _.sample(this.assets);
       let significance = Math.random();
       let chanceOfCompetition = 0.05;
-      let chanceOfGoodNews = asset.boosted ? 0.54 : 0.51;
+      let chanceOfGoodNews = asset.boosted ? 0.8 : 0.7;
       if (Math.random() < chanceOfCompetition) {
-        let enemyAsset = _.sample(this.assets.filter(a => a.symbol !== asset.symbol));
+        let enemyAsset = _.sample(
+          this.assets.filter((a) => a.symbol !== asset.symbol)
+        );
         message = asset.generateCompetitiveNews(enemyAsset, significance);
         asset.applyNewsBonus(significance);
         enemyAsset.applyNewsPenalty(significance);
@@ -529,7 +531,7 @@ class Market {
   }
 
   getDividendRate(asset) {
-    return asset.fundamentalPrice * 0.0075;
+    return asset.fundamentalPrice * 0.2;
   }
 
   payDividends() {

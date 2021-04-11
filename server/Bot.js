@@ -7,7 +7,7 @@ class Bot {
   constructor(market, name) {
     this.name = name;
     this.id = uuid.v4();
-    this.cash = 60;
+    this.cash = 30;
     this.totalSpentOnUpgrades = 0;
     this.totalSpentOnPowerups = 0;
     this.shares = {};
@@ -25,7 +25,7 @@ class Bot {
     this.velocityWeight /= totalWeight;
     this.fundamentalWeight /= totalWeight;
 
-    this.focus = 0.25 * Math.random() + 0.25;
+    this.focus = 0.7 * Math.random() + 0.3;
     this.type = constants.TRADER_TYPE_BOT;
 
     for (let asset of market.assets) {
@@ -34,13 +34,13 @@ class Bot {
   }
 
   tick() {
-    if (Math.random() < 0.3) {
+    if (Math.random() < 0.45) {
       this.sellSomething();
     }
-    if (Math.random() < 0.4) {
+    if (Math.random() < 0.6) {
       this.buySomething();
     }
-    if (Math.random() < 0.1) {
+    if (Math.random() < 0.05) {
       setTimeout(() => this.shillSomething(), Math.random() * 2000);
     }
   }
