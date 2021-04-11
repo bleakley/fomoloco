@@ -34,10 +34,10 @@ class Bot {
   }
 
   tick() {
-    if (Math.random() < 0.45) {
+    if (Math.random() < 0.3) {
       this.sellSomething();
     }
-    if (Math.random() < 0.6) {
+    if (Math.random() < 0.4) {
       this.buySomething();
     }
     if (Math.random() < 0.05) {

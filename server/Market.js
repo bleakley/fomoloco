@@ -531,7 +531,7 @@ class Market {
   }
 
   getDividendRate(asset) {
-    return asset.fundamentalPrice * 0.2;
+    return asset.fundamentalPrice * 0.05;
   }
 
   payDividends() {
