@@ -417,7 +417,7 @@ class Market {
     let asset = utils.sampleWeighted(this.assets, (asset) =>
       this.getExuberance(asset)
     );
-    if (this.getExuberance(asset) > 1 && Math.random() < 0.2) {
+    if (this.getExuberance(asset) > 1 && Math.random() < 0.1) {
       message = asset.generateExuberantNews();
     } else {
       asset = _.sample(this.assets);

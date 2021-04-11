@@ -13,7 +13,7 @@ class MarketManager {
         this.markets = [];
         this.marketsCulled = 0;
 
-        setInterval(() => this.cullMarkets(), 5 * MINUTE);
+        setInterval(() => this.cullMarkets(), 1 * MINUTE);
     }
 
     getStats() {
