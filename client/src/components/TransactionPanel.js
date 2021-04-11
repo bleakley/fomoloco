@@ -3,6 +3,8 @@ import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
 
+const ASSUMED_DIVIDEND_PERIOD = 30;
+
 function CooldownTimer(props) {
   if (!props.current) {
     return null;
@@ -59,7 +61,8 @@ class TransactionPanel extends Component {
       sellTime: 0,
       hypeTime: 0,
       lastDividend: 0,
-      timeToNextDividend: 60,
+      dividendPeriod: ASSUMED_DIVIDEND_PERIOD,
+      timeToNextDividend: ASSUMED_DIVIDEND_PERIOD,
       timeToNextMarginCheck: 20,
       marketMetrics: [],
     };
@@ -83,6 +86,7 @@ class TransactionPanel extends Component {
       this.setState({
         lastDividend: transaction.totalPayout,
         timeToNextDividend: transaction.timeToNextDividend,
+        dividendPeriod: transaction.timeToNextDividend,
       });
     });
 
@@ -393,7 +397,7 @@ class TransactionPanel extends Component {
                     >
                       <CooldownTimer
                         current={this.state.timeToNextDividend}
-                        max={60}
+                        max={this.state.dividendPeriod}
                       />
                     </div>
                   </div>
