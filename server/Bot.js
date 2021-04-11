@@ -17,7 +17,7 @@ class Bot {
 
     // Weights must sum to 1
     this.hypeWeight = Math.random();
-    this.velocityWeight = Math.random();
+    this.velocityWeight = 0.1*Math.random();
     this.fundamentalWeight = Math.random();
     let totalWeight =
       this.hypeWeight + this.velocityWeight + this.fundamentalWeight;
@@ -25,7 +25,7 @@ class Bot {
     this.velocityWeight /= totalWeight;
     this.fundamentalWeight /= totalWeight;
 
-    this.focus = 0.7 * Math.random() + 0.3;
+    this.focus = 0.5 * Math.random() + 0.5;
     this.type = constants.TRADER_TYPE_BOT;
 
     for (let asset of market.assets) {
