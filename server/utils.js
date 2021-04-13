@@ -1,5 +1,7 @@
 const _ = require("lodash");
 
+const forbiddenWords = ['nigger'];
+
 function sampleWeighted(items, weightFunction) {
   var i;
   let weights = items.map((item) => weightFunction(item));
@@ -22,4 +24,13 @@ function sampleWeighted(items, weightFunction) {
   return items[i];
 }
 
-module.exports = { sampleWeighted };
+function usernameIsForbidden(username) {
+  for (let i = 0; i < forbiddenWords.length; i++) {
+    if (username.toLowerCase().includes(forbiddenWords[i].toLowerCase())) {
+      return true;
+    }
+  }
+  return false;
+}
+
+module.exports = { sampleWeighted, usernameIsForbidden };

@@ -1,4 +1,5 @@
 const { strict } = require("assert");
+const utils = require("./utils.js");
 const cors = require("cors");
 const express = require("express");
 const app = express();
@@ -65,6 +66,7 @@ io.on("connection", function (socket) {
   //let requestedRoom = socket.handshake.query.requestedRoom;
   let market = marketManager.getNextMarket();
   let user = new User(market, socket);
+  let address = socket.handshake.address;
   market.addTrader(user);
 
   socket.join(market.id);
@@ -89,7 +91,7 @@ io.on("connection", function (socket) {
 
   market.broadcastLeaderboard();
 
-  console.log(`user ${user.name} has connected`);
+  console.log(`user ${user.name} has connected from ${address}`);
 
   socket.on("buy-asset", (order) => {
     market.buy(order.symbol, user, order.shares, socket);
@@ -120,7 +122,11 @@ io.on("connection", function (socket) {
   });
 
   socket.on("set-username", (username) => {
-    if (market.usernamesUsed.has(username) && username !== user.suggestedName) {
+    if (utils.usernameIsForbidden(username)) {
+      user.name = 'iMaBiGfAtLoSeR';
+      console.log(`${user.name} entered the forbidden name "${username}" from IP ${address}`);
+      market.broadcastLeaderboard();
+    } else if (market.usernamesUsed.has(username) && username !== user.suggestedName) {
       socket.emit("usernameRejected", {});
     } else {
       user.name = username;

@@ -20,6 +20,7 @@ class MarketManager {
         return {
             marketsActive: this.markets.length,
             marketsCulled: this.marketsCulled,
+            playerCount: this.markets.map(market => market.getPlayers().length).reduce((p, c) => p + c, 0),
             markets: this.markets.map(market => ({
                 players: market.getPlayers().map(p => p.name),
                 playerCount: market.getPlayers().length,
