@@ -130,7 +130,7 @@ io.on("connection", function (socket) {
       socket.emit("usernameRejected", {});
     } else {
       user.name = username;
-      console.log(`${user.name} set username to ${username}`);
+      console.log(`${user.name} set username to "${username}" from IP ${address}`);
       market.broadcastLeaderboard();
     }
   });
