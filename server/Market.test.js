@@ -160,3 +160,30 @@ test("margin call", () => {
   expect(asset.price).toBeGreaterThan(0);
   expect(testTrader.cash).toBeLessThan(initialTraderCash);
 });
+
+test("partial close out", () => {
+  // Given
+  let market = getTestMarket();
+  let testTrader = market.traders[0];
+  let asset = market.assets[0];
+  asset.poolShares = 100;
+  asset.poolCash = 100;
+  asset.brokerShares = 0;
+  testTrader.shares[asset.symbol] = -1;
+  testTrader.cash = asset.getBuyValue(-testTrader.shares[asset.symbol] + 2);
+
+  let initialPoolShares = asset.poolShares;
+  let initialTraderShares = testTrader.shares[asset.symbol];
+
+  // When
+  market.closeOut(
+    asset.symbol,
+    testTrader,
+    -testTrader.shares[asset.symbol] + 1
+  );
+
+  // Then
+  expect(asset.poolShares).toBe(initialPoolShares + initialTraderShares);
+  expect(testTrader.shares[asset.symbol]).toBe(0);
+  expect(asset.brokerShares).toBe(-initialTraderShares);
+});

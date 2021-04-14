@@ -214,6 +214,10 @@ class Market {
       numShares = Math.floor(numSharesTraderCanAfford);
     }
 
+    if (numShares > -trader.shares[symbol]) {
+      numShares = -trader.shares[symbol];
+    }
+
     if (numShares <= 0) {
       return;
     }
@@ -589,7 +593,6 @@ class Market {
         let valueToLiquidate =
           (this.maxMargin * totalBorrowed - totalHoldings) /
           (this.maxMargin - 1);
-        let valueToCloseOut = Math.min(valueToLiquidate, totalHoldings);
         let liquidatedCash = 0;
 
         if (trader.cash > valueToLiquidate) {
