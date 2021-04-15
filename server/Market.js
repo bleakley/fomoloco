@@ -337,6 +337,7 @@ class Market {
 
   generateShillMessage(symbol) {
     return _.sample([
+      narrativeUtils.generateLyric(symbol),
       `🤑 \$${symbol} will go 📈${_.sample([
         "VERTICAL",
         "PARABOLIC",

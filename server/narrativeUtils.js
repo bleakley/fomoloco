@@ -55,6 +55,16 @@ function generateHackerOrg() {
   ]);
 }
 
+function generateLyric(symbol) {
+  if (symbol === 'BB') {
+    return `🎵 Hit me $BB one more time! 🎵`;
+  }
+  if (symbol === 'BVR') {
+    return `🎵 When you wish upon a star ⭐ 🎵 it's time to buy more $BVR 🎵`;
+  }
+  return `🎵 There once was a stock that put to sea 🌊⛵ 🎵 and the name of the stock was \$${symbol} 🎵`
+}
+
 function generateCcgCard() {
   let card = _.sample(["holofoil charizard", "alpha black lotus"]);
   if (Math.random() <= 0.3) {
@@ -160,4 +170,5 @@ module.exports = {
   generateTechnologyProduct,
   generateCcgCard,
   generateCelebrity,
+  generateLyric,
 };
