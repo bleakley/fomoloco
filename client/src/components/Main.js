@@ -43,11 +43,15 @@ class Main extends Component {
       });
     });
 
-    socket.on("usernameRejected", () => {
+    socket.on("usernameRejected", (res) => {
       this.setState({
         loginDialogOpen: true,
       });
-      alert("That username is not available. Please pick another one.");
+      let reason = 'not available';
+      if (res && res.reason) {
+        reason = res.reason;
+      }
+      alert(`That username is ${reason}. Please pick another one.`);
     });
 
     socket.on("alert", (message) => {

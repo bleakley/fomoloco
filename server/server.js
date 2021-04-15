@@ -126,8 +126,14 @@ io.on("connection", function (socket) {
       user.name = 'iMaBiGfAtLoSeR';
       console.log(`${user.name} entered the forbidden name "${username}" from IP ${address}`);
       market.broadcastLeaderboard();
+    } else if (username.length > 30) {
+      socket.emit("usernameRejected", {
+        reason: 'too long'
+      });
     } else if (market.usernamesUsed.has(username) && username !== user.suggestedName) {
-      socket.emit("usernameRejected", {});
+      socket.emit("usernameRejected", {
+        reason: 'not available'
+      });
     } else {
       user.name = username;
       console.log(`${user.name} set username to "${username}" from IP ${address}`);
