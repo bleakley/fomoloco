@@ -182,12 +182,12 @@ class Market {
       numShares = Math.floor(numSharesTraderCanAfford);
     }
 
-    if (numShares <= 0) {
+    let buyValue = asset.getBuyValue(numShares);
+    let valid = asset.buy(numShares);
+    if (!valid) {
       return;
     }
 
-    let buyValue = asset.getBuyValue(numShares);
-    asset.buy(numShares);
     trader.shares[symbol] += numShares;
     trader.cash -= buyValue;
 
@@ -218,12 +218,11 @@ class Market {
       numShares = -trader.shares[symbol];
     }
 
-    if (numShares <= 0) {
+    let buyValue = asset.getBuyValue(numShares);
+    let valid = asset.buy(numShares);
+    if (!valid) {
       return;
     }
-
-    let buyValue = asset.getBuyValue(numShares);
-    asset.buy(numShares);
     trader.shares[symbol] += numShares;
     asset.brokerShares += numShares;
     trader.cash -= buyValue;
@@ -285,7 +284,11 @@ class Market {
     numShares = Math.ceil(numShares);
     numShares = Math.min(trader.shares[asset.symbol], numShares);
     let liquidationValue = asset.getSellValue(numShares);
-    asset.sell(numShares);
+    let valid = asset.sell(numShares);
+    if (!valid) {
+      return 0;
+    }
+    
     trader.shares[asset.symbol] -= numShares;
 
     return liquidationValue;
@@ -302,7 +305,10 @@ class Market {
     numShares = Math.min(numShares, -trader.shares[asset.symbol]);
 
     let closeOutValue = asset.getBuyValue(numShares);
-    asset.buy(numShares);
+    let valid = asset.buy(numShares);
+    if (!valid) {
+      return;
+    }
     asset.brokerShares += numShares;
     trader.shares[asset.symbol] += numShares;
     return closeOutValue;
@@ -318,7 +324,10 @@ class Market {
     let asset = this.getAssetBySymbol(symbol);
     let sellValue = asset.getSellValue(numShares);
 
-    asset.sell(numShares);
+    let valid = asset.sell(numShares);
+    if (!valid) {
+      return;
+    }
 
     trader.shares[symbol] -= numShares;
     trader.cash += sellValue;

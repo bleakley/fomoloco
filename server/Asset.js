@@ -37,18 +37,19 @@ class Asset {
   buy(numShares) {
     if (numShares <= 0) {
       console.log(`Invalid request to buy ${numShares} of ${this.symbol}.`);
-      return;
+      return false;
     }
     if (numShares >= this.poolShares) {
       console.log(
         `Invalid request to buy ${numShares} of ${this.symbol}. Only ${this.poolShares} are available.`
       );
-      return;
+      return false;
     }
     let buyValue = this.getBuyValue(numShares);
     this.poolShares -= numShares;
     this.poolCash += buyValue;
     this.price = buyValue / numShares;
+    return true;
   }
 
   getSellValue(numShares) {
@@ -61,12 +62,13 @@ class Asset {
   sell(numShares) {
     if (numShares <= 0) {
       console.log(`Invalid request to sell ${numShares} of ${this.symbol}.`);
-      return;
+      return false;
     }
     let sellValue = this.getSellValue(numShares);
     this.poolShares += numShares;
     this.poolCash -= sellValue;
     this.price = sellValue / numShares;
+    return true;
   }
 
   generateExuberantNews() {

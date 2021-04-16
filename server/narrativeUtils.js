@@ -57,10 +57,10 @@ function generateHackerOrg() {
 
 function generateLyric(symbol) {
   if (symbol === 'BB') {
-    return `🎵 Hit me $BB one more time! 🎵`;
+    return `🎵 Hit me \$${symbol} one more time! 🎵`;
   }
   if (symbol === 'BVR') {
-    return `🎵 When you wish upon a star ⭐ 🎵 it's time to buy more $BVR 🎵`;
+    return `🎵 When you wish upon a star ⭐ 🎵 it's time to buy more \$${symbol} 🎵`;
   }
   return `🎵 There once was a stock that put to sea 🌊⛵ 🎵 and the name of the stock was \$${symbol} 🎵`
 }
