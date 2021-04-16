@@ -39,7 +39,7 @@ class Asset {
       console.log(`Invalid request to buy ${numShares} of ${this.symbol}.`);
       return;
     }
-    if (numShares > this.poolShares) {
+    if (numShares >= this.poolShares) {
       console.log(
         `Invalid request to buy ${numShares} of ${this.symbol}. Only ${this.poolShares} are available.`
       );
