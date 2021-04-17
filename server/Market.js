@@ -4,6 +4,7 @@ const narrativeUtils = require("./narrativeUtils.js");
 const constants = require("./constants");
 const Asset = require("./Asset.js");
 const SECOND = 1000;
+const MINUTE = 60 * SECOND;
 const Bot = require("./Bot.js");
 const uuid = require("uuid");
 
@@ -32,6 +33,7 @@ class Market {
       this.addTrader(new Bot(this, this.getUniqueUserName()));
     }
 
+    setTimeout(() => setInterval(() => this.injectLiquidity(), 2 * MINUTE), 25 * MINUTE)
     setInterval(() => this.broadcastPrices(), 1 * SECOND);
     setInterval(() => this.generateNews(), 20 * SECOND);
     setInterval(() => this.updateMarketMetrics(), 1 * SECOND);
@@ -169,6 +171,10 @@ class Market {
 
   updateMarketMetrics() {
     this.assets.forEach((asset) => asset.updateMarketMetrics());
+  }
+
+  injectLiquidity() {
+    this.assets.forEach((asset) => asset.updateLiquidity(1));
   }
 
   buy(symbol, trader, numShares, socket) {
@@ -465,11 +471,13 @@ class Market {
   }
 
   cullBots() {
+    let cheapestPrice = Math.min(...this.assets.map(a => a.price));
     let quittingTraders = _.remove(
       this.traders,
       (t) =>
         t.type === constants.TRADER_TYPE_BOT &&
-        this.getNetWorth(t) < BOT_QUITTING_THRESHOLD
+        this.getNetWorth(t) < BOT_QUITTING_THRESHOLD || 
+        this.getNetWorth(t) < cheapestPrice
     );
     quittingTraders.forEach((trader) => {
       this.botsCulledCount++;

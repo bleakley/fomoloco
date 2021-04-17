@@ -35,6 +35,9 @@ class Asset {
   }
 
   buy(numShares) {
+    if (numShares == 0) {
+      return false;
+    }
     if (numShares <= 0) {
       console.log(`Invalid request to buy ${numShares} of ${this.symbol}.`);
       return false;
@@ -60,6 +63,9 @@ class Asset {
   }
 
   sell(numShares) {
+    if (numShares == 0) {
+      return false;
+    }
     if (numShares <= 0) {
       console.log(`Invalid request to sell ${numShares} of ${this.symbol}.`);
       return false;
@@ -68,6 +74,21 @@ class Asset {
     this.poolShares += numShares;
     this.poolCash -= sellValue;
     this.price = sellValue / numShares;
+    return true;
+  }
+
+  updateLiquidity(numShares) {
+    if (numShares === 0) {
+      return false;
+    }
+    if (this.poolShares + numShares <= 0) {
+      return false;
+    }
+    const k = this.poolShares * this.poolCash;
+    this.poolShares += numShares;
+    this.poolCash = k / this.poolShares;
+    this.price = this.poolCash / this.poolShares;
+
     return true;
   }
 
