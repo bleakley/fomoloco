@@ -143,6 +143,7 @@ class Asset {
       `Analyst: ${narrativeUtils.generateAstrologicalEvent()} a positive sign for \$${
         this.symbol
       } price`,
+      `${this.name} (\$${this.symbol}) to produce ${narrativeUtils.generateFranchise()} miniseries starring ${narrativeUtils.generateCelebrity()}`,
     ]);
   }
 

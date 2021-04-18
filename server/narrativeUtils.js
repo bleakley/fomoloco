@@ -55,6 +55,25 @@ function generateHackerOrg() {
   ]);
 }
 
+function generateFranchise() {
+  return _.sample([
+    'Star Trek',
+    'Star Wars',
+    'Flash Gordon',
+    'Ghostbusters',
+    'Lord of the Rings',
+    'Silmarillion',
+    'Batman',
+    'Watchmen',
+    'Calvin & Hobbes',
+    'Dilbert',
+    'Starcraft',
+    'Warcraft',
+    'Diablo',
+    'Dungeons & Dragons',
+  ]);
+}
+
 function generateLyric(symbol) {
   if (symbol === 'BB') {
     return `🎵 Hit me \$${symbol} one more time! 🎵`;
@@ -171,4 +190,5 @@ module.exports = {
   generateCcgCard,
   generateCelebrity,
   generateLyric,
+  generateFranchise,
 };
