@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Button } from "@material-ui/core";
-import { recordEvent } from "../utils.js";
+import { recordEvent, isDesktop } from "../utils.js";
 
 const upgrades = {
   buy: {
@@ -52,7 +52,7 @@ const upgrades = {
       { cost: 160, name: "moderator account", description: "4x hype speed" },
       { cost: 600, name: "distributed botnet", description: "8x hype speed" },
     ],
-  }
+  },
 };
 
 class Upgrade extends Component {
@@ -75,28 +75,64 @@ class Upgrade extends Component {
             this.props.upgrades[this.props.type] + 1
           ]
         : null;
-    return (
-      <tr>
-        <td style={{ minWidth: "300px", whiteSpace: "nowrap" }}>
-          {currentLevel.name}{" "}
-          {currentLevel.description ? `(${currentLevel.description})` : ""}
-        </td>
-        <td style={{ minWidth: "100px", whiteSpace: "nowrap" }}>
-          {nextLevel ? (
-            <Button
-              size="small"
-              color="primary"
-              disabled={this.props.cash <= nextLevel.cost}
-              onClick={() => this.buy()}
+    if (isDesktop()) {
+      return (
+        <tr>
+          <td style={{ minWidth: "300px", whiteSpace: "nowrap" }}>
+            {currentLevel.name}{" "}
+            {currentLevel.description ? `(${currentLevel.description})` : ""}
+          </td>
+          <td style={{ minWidth: "100px", whiteSpace: "nowrap" }}>
+            {nextLevel ? (
+              <Button
+                size="small"
+                color="primary"
+                disabled={this.props.cash <= nextLevel.cost}
+                onClick={() => this.buy()}
+              >
+                Upgrade {upgrades[this.props.type].class} ${nextLevel.cost}
+              </Button>
+            ) : (
+              ""
+            )}
+          </td>
+        </tr>
+      );
+    } else {
+      return (
+        <>
+          {" "}
+          <tr>
+            <td style={{ minWidth: "300px", whiteSpace: "nowrap" }}>
+              {currentLevel.name}{" "}
+              {currentLevel.description ? `(${currentLevel.description})` : ""}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style={{
+                minWidth: "100px",
+                whiteSpace: "nowrap",
+                paddingBottom: "8px",
+              }}
             >
-              Upgrade {upgrades[this.props.type].class} ${nextLevel.cost}
-            </Button>
-          ) : (
-            ""
-          )}
-        </td>
-      </tr>
-    );
+              {nextLevel ? (
+                <Button
+                  size="small"
+                  color="primary"
+                  disabled={this.props.cash <= nextLevel.cost}
+                  onClick={() => this.buy()}
+                >
+                  Upgrade {upgrades[this.props.type].class} ${nextLevel.cost}
+                </Button>
+              ) : (
+                ""
+              )}
+            </td>
+          </tr>
+        </>
+      );
+    }
   }
 }
 

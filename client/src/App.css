@@ -40,7 +40,7 @@
 .Main {
   display: grid;
   background-color: gray;
-  grid-template-rows: 250px 415px 60px 275px 250px 270px 275px 60px;
+  grid-template-rows: 250px 415px 60px 365px 250px 270px 275px 60px;
   grid-template-columns: 100%;
   grid-template-areas: 
     "chart"

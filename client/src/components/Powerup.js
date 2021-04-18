@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Button } from "@material-ui/core";
-import { recordEvent } from "../utils.js";
+import { recordEvent, isDesktop } from "../utils.js";
 
 class Powerup extends Component {
   constructor(props) {
@@ -15,29 +15,64 @@ class Powerup extends Component {
   }
 
   render() {
-    return (
-      <tr>
-        <td style={{ minWidth: "300px", whiteSpace: "nowrap" }}>
-          {this.props.name}{" "}
-          {this.props.description ? `(${this.props.description})` : ""}
-        </td>
+    if (isDesktop()) {
+      return (
+        <tr>
+          <td style={{ minWidth: "300px", whiteSpace: "nowrap" }}>
+            {this.props.name}{" "}
+            {this.props.description ? `(${this.props.description})` : ""}
+          </td>
 
-        <td style={{ minWidth: "100px", whiteSpace: "nowrap" }}>
-          {this.state.purchased ? (
-            ""
-          ) : (
-            <Button
-              size="small"
-              color="primary"
-              disabled={this.props.cash <= this.props.buyCost}
-              onClick={() => this.buy()}
+          <td style={{ minWidth: "100px", whiteSpace: "nowrap" }}>
+            {this.state.purchased ? (
+              ""
+            ) : (
+              <Button
+                size="small"
+                color="primary"
+                disabled={this.props.cash <= this.props.buyCost}
+                onClick={() => this.buy()}
+              >
+                Purchase ${this.props.buyCost}
+              </Button>
+            )}
+          </td>
+        </tr>
+      );
+    } else {
+      return (
+        <>
+          <tr>
+            <td style={{ minWidth: "300px", whiteSpace: "nowrap" }}>
+              {this.props.name}{" "}
+              {this.props.description ? `(${this.props.description})` : ""}
+            </td>
+          </tr>
+          <tr>
+            <td
+              style={{
+                minWidth: "100px",
+                whiteSpace: "nowrap",
+                paddingBottom: "8px",
+              }}
             >
-              Purchase ${this.props.buyCost}
-            </Button>
-          )}
-        </td>
-      </tr>
-    );
+              {this.state.purchased ? (
+                ""
+              ) : (
+                <Button
+                  size="small"
+                  color="primary"
+                  disabled={this.props.cash <= this.props.buyCost}
+                  onClick={() => this.buy()}
+                >
+                  Purchase ${this.props.buyCost}
+                </Button>
+              )}
+            </td>
+          </tr>
+        </>
+      );
+    }
   }
 }
 

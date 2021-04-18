@@ -284,7 +284,7 @@ class AssetRows extends Component {
                 </td>
               </tr>
               <tr key={asset.symbol + "-transaction-row"}>
-                <td style={{ whiteSpace: "nowrap", paddingBottom: "10px" }}>
+                <td style={{ whiteSpace: "nowrap", paddingBottom: "8px" }}>
                   {!this.props.playerHoldings[asset.symbol] ||
                   this.props.playerHoldings[asset.symbol] >= 0 ? (
                     <TransactionButton
@@ -306,7 +306,7 @@ class AssetRows extends Component {
                     />
                   )}
                 </td>
-                <td style={{ paddingBottom: "10px" }}>
+                <td style={{ paddingBottom: "8px" }}>
                   {this.props.playerHoldings[asset.symbol] > 0 ||
                   !this.props.shortSellingUnlocked ? (
                     <TransactionButton
@@ -325,7 +325,7 @@ class AssetRows extends Component {
                     />
                   )}
                 </td>
-                <td style={{ paddingBottom: "10px" }}>
+                <td style={{ paddingBottom: "8px" }}>
                   <TransactionButton
                     label="Hype"
                     onClick={() => this.hype(asset.symbol, cooldowns.hype)}
