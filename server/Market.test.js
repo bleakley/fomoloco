@@ -84,6 +84,32 @@ test("liquidate all shares", () => {
   expect(liquidationValue).toBe(initialPoolCash - asset.poolCash);
 });
 
+test("liquidate value exceeding pool cash", () => {
+  // Given
+  let market = getTestMarket();
+  let testTrader = market.traders[0];
+  let asset = market.assets[0];
+  asset.poolShares = 100;
+  asset.poolCash = 100;
+  testTrader.shares[asset.symbol] = 1;
+  testTrader.cash = 0;
+
+  let initialPoolShares = asset.poolShares;
+  let initialTraderShares = testTrader.shares[asset.symbol];
+  let initialPoolCash = asset.poolCash;
+
+  // When
+  liquidationValue = market.liquidate(asset, testTrader, 1000);
+
+  // Then
+  expect(asset.poolShares).toBe(initialPoolShares + initialTraderShares);
+  expect(asset.price).toBe(
+    (initialPoolCash - asset.poolCash) / initialTraderShares
+  );
+  expect(testTrader.shares[asset.symbol]).toBe(0);
+  expect(liquidationValue).toBe(initialPoolCash - asset.poolCash);
+});
+
 test("force close out", () => {
   // Given
   let market = getTestMarket();

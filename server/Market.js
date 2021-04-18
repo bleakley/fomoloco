@@ -33,7 +33,10 @@ class Market {
       this.addTrader(new Bot(this, this.getUniqueUserName()));
     }
 
-    setTimeout(() => setInterval(() => this.injectLiquidity(), 2 * MINUTE), 25 * MINUTE)
+    setTimeout(
+      () => setInterval(() => this.injectLiquidity(), 2 * MINUTE),
+      25 * MINUTE
+    );
     setInterval(() => this.broadcastPrices(), 1 * SECOND);
     setInterval(() => this.generateNews(), 20 * SECOND);
     setInterval(() => this.updateMarketMetrics(), 1 * SECOND);
@@ -284,17 +287,23 @@ class Market {
 
   liquidate(asset, trader, value) {
     if (trader.shares[asset.symbol] <= 0) return 0;
-    let numShares =
-      (asset.poolCash * asset.poolShares) / (asset.poolCash - value) -
-      asset.poolShares;
-    numShares = Math.ceil(numShares);
-    numShares = Math.min(trader.shares[asset.symbol], numShares);
+    let numShares;
+    if (value >= asset.poolCash) {
+      numShares = trader.shares[asset.symbol];
+    } else {
+      numShares =
+        (asset.poolCash * asset.poolShares) / (asset.poolCash - value) -
+        asset.poolShares;
+      numShares = Math.ceil(numShares);
+      numShares = Math.min(trader.shares[asset.symbol], numShares);
+    }
+
     let liquidationValue = asset.getSellValue(numShares);
     let valid = asset.sell(numShares);
     if (!valid) {
       return 0;
     }
-    
+
     trader.shares[asset.symbol] -= numShares;
 
     return liquidationValue;
@@ -471,12 +480,12 @@ class Market {
   }
 
   cullBots() {
-    let cheapestPrice = Math.min(...this.assets.map(a => a.price));
+    let cheapestPrice = Math.min(...this.assets.map((a) => a.price));
     let quittingTraders = _.remove(
       this.traders,
       (t) =>
-        t.type === constants.TRADER_TYPE_BOT &&
-        this.getNetWorth(t) < BOT_QUITTING_THRESHOLD || 
+        (t.type === constants.TRADER_TYPE_BOT &&
+          this.getNetWorth(t) < BOT_QUITTING_THRESHOLD) ||
         this.getNetWorth(t) < cheapestPrice
     );
     quittingTraders.forEach((trader) => {
