@@ -70,7 +70,17 @@ function generateFranchise() {
     'Starcraft',
     'Warcraft',
     'Diablo',
+    'Age of Empires',
+    'Deus Ex',
     'Dungeons & Dragons',
+    'Jurassic Park',
+    'Citizen Kane',
+    'Casablanca',
+    'Young Frankenstein',
+    'Blazing Saddles',
+    'Blade Runner',
+    'Children of Men',
+    'The Big Short',
   ]);
 }
 
