@@ -172,18 +172,22 @@ class SecuritiesDashboard extends Component {
           />
         </Card>
         <Card className="UpgradePanel">
-          <UpgradePanel
-            cash={this.state.cash}
-            upgrades={this.state.upgrades}
-            socket={this.props.socket}
-          />
-          <PowerupPanel
-            cash={this.state.cash}
-            upgrades={this.state.upgrades}
-            powerups={this.state.powerups}
-            socket={this.props.socket}
-            giftCount={this.state.giftCount}
-          />
+          <table>
+            <tbody>
+              <UpgradePanel
+                cash={this.state.cash}
+                upgrades={this.state.upgrades}
+                socket={this.props.socket}
+              />
+              <PowerupPanel
+                cash={this.state.cash}
+                upgrades={this.state.upgrades}
+                powerups={this.state.powerups}
+                socket={this.props.socket}
+                giftCount={this.state.giftCount}
+              />
+            </tbody>
+          </table>  
         </Card>
         <Card className="PriceChart">
           <PriceChart

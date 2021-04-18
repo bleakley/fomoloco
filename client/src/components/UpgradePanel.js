@@ -106,21 +106,17 @@ class UpgradePanel extends Component {
 
   render() {
     return (
-      <div>
-        <table>
-          <tbody>
-            {Object.keys(upgrades).map((type, i) => (
-              <Upgrade
-                key={i}
-                type={type}
-                cash={this.props.cash}
-                upgrades={this.props.upgrades}
-                socket={this.props.socket}
-              />
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <>
+        {Object.keys(upgrades).map((type, i) => (
+          <Upgrade
+            key={i}
+            type={type}
+            cash={this.props.cash}
+            upgrades={this.props.upgrades}
+            socket={this.props.socket}
+          />
+        ))}
+      </>
     );
   }
 }
