@@ -4,7 +4,8 @@ import _ from "lodash";
 
 let serverNews = [];
 
-const getLocalNewsItem = () => _.sample([
+const getLocalNewsItem = () =>
+  _.sample([
     {
       text: `${_.sample([
         "Florida",
@@ -18,8 +19,12 @@ const getLocalNewsItem = () => _.sample([
       ])} after receiving COVID-19 vaccine`,
     },
     {
-      text:
-        `New study links black-rinded futsu squash to ${_.sample(['higher', 'lower', 'lower', 'lower'])} rates of Groat's disease`,
+      text: `New study links black-rinded futsu squash to ${_.sample([
+        "higher",
+        "lower",
+        "lower",
+        "lower",
+      ])} rates of Groat's disease`,
     },
     {
       text: `${_.sample([
@@ -32,11 +37,7 @@ const getLocalNewsItem = () => _.sample([
       ])}`,
     },
     {
-      text: `Video shows ${_.sample([
-        "dog",
-        "goat",
-        "horse",
-      ])} save ${_.sample([
+      text: `Video shows ${_.sample(["dog", "goat", "horse"])} save ${_.sample([
         "cat",
         "guinea pig",
         "baby racoon",
@@ -48,7 +49,6 @@ const getLocalNewsItem = () => _.sample([
       text: "BREAKING NEWS",
     },
   ]);
-
 
 class NewsTicker extends Component {
   constructor(props) {
@@ -113,6 +113,7 @@ class NewsTicker extends Component {
             <span>
               <b>
                 <span
+                  style={{ whiteSpace: "nowrap" }}
                   dangerouslySetInnerHTML={{
                     __html: this.changeSymbolColors(
                       this.getNewsText(index).text
