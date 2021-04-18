@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import c3 from "c3";
 import "c3/c3.css";
+import {isDesktop} from "../utils.js";
 
 class PriceChart extends Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class PriceChart extends Component {
       },
       size: {
         height: 250,
-        width: 960,
+        width: isDesktop() ? 960 : null,
       },
       legend: {
         hide: true,

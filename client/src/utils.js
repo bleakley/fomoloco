@@ -1,4 +1,4 @@
-function recordEvent(eventName, parameters) {
+export function recordEvent(eventName, parameters) {
   window.gtag("event", eventName, {
     ...parameters,
     send_to: "G-XF7G8SENJW",
@@ -9,4 +9,6 @@ function recordEvent(eventName, parameters) {
   });
 }
 
-export default recordEvent;
+export function isDesktop() {
+  return window.matchMedia("only screen and (min-width: 768px)").matches;
+}

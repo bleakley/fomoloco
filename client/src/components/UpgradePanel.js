@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import _ from "lodash";
 import { Button } from "@material-ui/core";
-import recordEvent from "../utils.js";
+import { recordEvent } from "../utils.js";
+
 const upgrades = {
   buy: {
     class: "Connection",

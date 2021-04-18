@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import _ from "lodash";
 import { CircularProgress, Typography, Button, Box } from "@material-ui/core";
 import Tooltip from "@material-ui/core/Tooltip";
+import { isDesktop } from "../utils";
 
 const ASSUMED_DIVIDEND_PERIOD = 30;
 
@@ -193,19 +194,20 @@ class TransactionPanel extends Component {
   componentDidUpdate(prevProps) {
     let cashDelta = this.props.cash - prevProps.cash;
     if (cashDelta) {
-      this.animateCash(cashDelta)
+      this.animateCash(cashDelta);
     }
   }
 
   animateCash(cashDelta) {
-    let deltaString = (cashDelta < 0 ? '' : '+') + cashDelta.toFixed(2);
+    let deltaString = (cashDelta < 0 ? "" : "+") + cashDelta.toFixed(2);
     let positive = cashDelta >= 0;
 
     const b = document.createElement("b");
     b.innerText = deltaString;
-    b.className = positive ? 'cashGainAnimation' : 'cashLossAnimation';
+    b.className = positive ? "cashGainAnimation" : "cashLossAnimation";
 
-    b.onanimationend = () => document.getElementById("cashAnimation").removeChild(b);
+    b.onanimationend = () =>
+      document.getElementById("cashAnimation").removeChild(b);
     document.getElementById("cashAnimation").appendChild(b);
   }
 
@@ -285,15 +287,17 @@ class TransactionPanel extends Component {
     };
 
     const getQuantity = (symbol) => {
-      return `${this.props.playerHoldings[symbol] < 0 ? "−" : ""}${Math.abs(this.props.playerHoldings[symbol]) || 0}`
-    }
+      return `${this.props.playerHoldings[symbol] < 0 ? "−" : ""}${
+        Math.abs(this.props.playerHoldings[symbol]) || 0
+      }`;
+    };
 
     const getTotal = (symbol) => {
       return `${this.props.playerHoldings[symbol] < 0 ? "−" : ""}\$${(
         (Math.abs(this.props.playerHoldings[symbol]) || 0) *
         this.props.currentPrices[symbol]
-      ).toFixed(2)}`
-    }
+      ).toFixed(2)}`;
+    };
 
     return (
       <div style={{ userSelect: "none" }}>
@@ -316,9 +320,7 @@ class TransactionPanel extends Component {
                 <td>
                   ${(this.props.currentPrices[asset.symbol] || 0).toFixed(2)}
                 </td>
-                <td>
-                  x {getQuantity(asset.symbol)}
-                </td>
+                <td>x {getQuantity(asset.symbol)}</td>
                 <td style={{ whiteSpace: "nowrap" }}>
                   = {getTotal(asset.symbol)}
                 </td>
@@ -380,7 +382,7 @@ class TransactionPanel extends Component {
               <td>
                 <span>{`\$${this.props.cash}`}</span>
                 &nbsp;
-                <span id="cashAnimation" style={{position: 'absolute'}} />
+                <span id="cashAnimation" style={{ position: "absolute" }} />
               </td>
             </tr>
             <tr key={"dividend-row"}>
@@ -426,7 +428,7 @@ class TransactionPanel extends Component {
                     }
                     placement="right"
                   >
-                    <div style={{ position: "relative",  marginTop: "5px" }}>
+                    <div style={{ position: "relative", marginTop: "5px" }}>
                       <b>Margin</b>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       <div
                         style={{
