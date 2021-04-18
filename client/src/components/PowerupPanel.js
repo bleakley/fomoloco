@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Powerup from "./Powerup";
 import _ from "lodash";
-import { createGenerateClassName } from "@material-ui/core";
 
 const powerups = [
   {
@@ -15,7 +14,7 @@ const powerups = [
     id: "short-selling",
     description: "unlocks short selling",
     buyCost: 800,
-    accesible: (upgrades) => upgrades["volume"] >= 1,
+    accesible: (upgrades) => upgrades["buy"] >= 2 || upgrades["sell"] >= 2,
     repeatable: false,
   },
   {
