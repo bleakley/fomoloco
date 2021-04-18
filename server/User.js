@@ -20,6 +20,11 @@ const upgrades = {
         name: "co-located HFT server",
         description: "8x buy speed",
       },
+      {
+        cost: 900,
+        name: "brokerage backchannel",
+        description: "no buy cooldown",
+      },
     ],
   },
   sell: {
@@ -37,6 +42,11 @@ const upgrades = {
         name: "gaming keyboard w/ LEDs",
         description: "8x sell/short speed",
       },
+      {
+        cost: 900,
+        name: "unlabeled dvorak keyboard",
+        description: "no sell/short cooldown",
+      },
     ],
   },
   hype: {
@@ -46,18 +56,6 @@ const upgrades = {
       { cost: 40, name: "high karma account", description: "2x hype speed" },
       { cost: 160, name: "moderator account", description: "4x hype speed" },
       { cost: 600, name: "distributed botnet", description: "8x hype speed" },
-    ],
-  },
-  volume: {
-    class: "Platform",
-    levels: [
-      { cost: 0, name: "Nottingham app", description: "1x volume" },
-      { cost: 500, name: "brokerage account", description: "10x volume" },
-      {
-        cost: 2000,
-        name: "brokerage backchannel",
-        description: "100x volume",
-      },
     ],
   },
 };

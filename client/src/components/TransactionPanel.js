@@ -215,6 +215,12 @@ class TransactionPanel extends Component {
       sell: 6 / 2 ** this.props.upgrades.sell,
       hype: 40 / 2 ** this.props.upgrades.hype,
     };
+    if (this.props.upgrades.buy >= 4) {
+      cooldowns.buy = 0;
+    }
+    if (this.props.upgrades.sell >= 4) {
+      cooldowns.sell = 0;
+    }
 
     let margin = this.getMargin();
 
