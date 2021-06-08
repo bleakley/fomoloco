@@ -18,6 +18,7 @@ const io = require("socket.io")(http, {
 });
 
 const port = process.env.PORT || 80;
+const secretCode = process.env.SECRET || "44440570-52bf-4dfc-b81b-f7837528ee8d";
 
 let MarketManager = require("./MarketManager.js");
 let User = require("./User.js");
@@ -43,7 +44,7 @@ app.get("/status", (req, res) => {
 });
 
 app.post("/message", (req, res) => {
-  if (req.body.secret === "44440570-52bf-4dfc-b81b-f7837528ee8d") {
+  if (req.body.secret === secretCode) {
     io.emit("alert", req.body.message);
     res.json({ message: "message sent" });
   } else {
@@ -53,7 +54,7 @@ app.post("/message", (req, res) => {
 });
 
 app.post("/boost", (req, res) => {
-  if (req.body.secret === "44440570-52bf-4dfc-b81b-f7837528ee8d") {
+  if (req.body.secret === secretCode) {
     marketManager.boost(req.body.symbol);
     res.json({ message: `boost applied to \$${req.body.symbol}` });
   } else {
