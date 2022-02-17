@@ -81,14 +81,15 @@ function generateFranchise() {
     'Blade Runner',
     'Children of Men',
     'The Big Short',
+    'Krazam',
   ]);
 }
 
 function generateLyric(symbol) {
-  if (symbol === 'BB') {
+  if (symbol == 'BB') {
     return `🎵 Hit me \$${symbol} one more time! 🎵`;
   }
-  if (symbol === 'BVR') {
+  if (symbol == 'BVR') {
     return `🎵 When you wish upon a star ⭐ 🎵 it's time to buy more \$${symbol} 🎵`;
   }
   return `🎵 There once was a stock that put to sea 🌊⛵ 🎵 and the name of the stock was \$${symbol} 🎵`
@@ -120,8 +121,11 @@ function generateTechnologyProduct() {
     "enterprise",
     "SNP genotyping",
     "predictive",
+    "web3",
+    "self-driving",
   ])} ${_.sample([
     "mainnet",
+    "metaverse",
     "augmented-reality platform",
     "AI platform",
     "smart-contract framework",
@@ -130,6 +134,12 @@ function generateTechnologyProduct() {
     "CRISPR theraputic",
     "protein folding algorithm",
     "deep-learning model",
+    "dating app",
+    "ridesharing service",
+    "productivity suite",
+    "subscription service",
+    "streaming service",
+    "API",
   ])}`;
 }
 
@@ -183,6 +193,15 @@ function generateCelebrity() {
     "Anna Khachiyan",
     "Kim Dotcom",
     "Lil Nas X",
+    "Cathie Wood",
+    "Tyler the Creator",
+    "Jordan Peterson",
+    "Marc Andreessen",
+    "Ben Horowitz",
+    "Matt Christman",
+    "Nick Mullen",
+    "Ken Jennings",
+    "Pat Sajak",
     _.sample([
       "Sporty Spice",
       "Baby Spice",
