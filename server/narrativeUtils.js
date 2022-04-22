@@ -123,6 +123,7 @@ function generateTechnologyProduct() {
     "predictive",
     "web3",
     "self-driving",
+    "zero-knowledge",
   ])} ${_.sample([
     "mainnet",
     "metaverse",
