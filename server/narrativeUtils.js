@@ -141,6 +141,7 @@ function generateTechnologyProduct() {
     "subscription service",
     "streaming service",
     "API",
+    "cold press juicer",
   ])}`;
 }
 
