@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogActions from "@material-ui/core/DialogActions";
 import { recordEvent } from "../utils.js";
 
-const ads = ["BB", "BVR", "MNC", "SDG"];
+const ads = ["BB", "BVR", "MNC", "SDG", 'warpvector'];
 
 class DonateDialog extends Component {
   constructor(props) {
@@ -104,10 +104,20 @@ class AdPlacement extends Component {
     );
   }
 
+  externalUrl(ad) {
+    if (ad == 'warpvector') {
+      return 'https://store.steampowered.com/app/2135870/WarpVector';
+    }
+    return null;
+  }
+
   handleClick() {
     let ad = ads[this.state.adIndex];
-    this.setState({ donateDialogOpen: true, donateTo: ad });
     recordEvent("ad_click", { ad: ad });
+    if (this.externalUrl(ad)) {
+      return;
+    }
+    this.setState({ donateDialogOpen: true, donateTo: ad });
   }
 
   render() {
@@ -122,13 +132,15 @@ class AdPlacement extends Component {
           symbol={this.state.donateTo}
           assetDescriptions={this.props.assetDescriptions}
         />
-        <img
-          src={`${ad.toLowerCase()}_ad.png`}
-          width="380px"
-          height="250px"
-          style={{ cursor: "pointer" }}
-          onClick={() => this.handleClick()}
-        />
+        <a target="_blank" href={this.externalUrl(ad)}>
+          <img
+            src={`${ad.toLowerCase()}_ad.png`}
+            width="380px"
+            height="250px"
+            style={{ cursor: "pointer" }}
+            onClick={() => this.handleClick()}
+          />
+        </a>
       </>
     );
   }
