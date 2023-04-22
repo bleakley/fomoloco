@@ -207,6 +207,7 @@ function generateCelebrity() {
     "Nick Mullen",
     "Ken Jennings",
     "Pat Sajak",
+    "Jonathan Blow",
     _.sample([
       "Sporty Spice",
       "Baby Spice",
